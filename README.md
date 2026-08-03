@@ -1,9 +1,7 @@
 # PromptLabz
 
 **Plataforma de aprendizado de prompt engineering para estudantes e criadores que querem dominar IA sem depender de aulas soltas ou progresso manual.**
-
-→ **[promptlabz.vercel.app](https://promptlabz.vercel.app)** · [Issues](https://github.com/lenixeduardo/promptLab/issues) · [Roadmap](./ROADMAP.md)
-
+→
 ---
 
 ## O que é
