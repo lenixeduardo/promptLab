@@ -102,15 +102,7 @@ export const SPECIAL_QUESTS: SpecialQuest[] = [
     link: "/certificates",
     linkLabel: "Ver certificado",
   },
-  {
-    id: "try-premium",
-    title: "Conheça o Premium",
-    desc: "Visite a página de assinatura e veja os benefícios",
-    action: "try-premium",
-    gems: 50,
-    link: "/premium",
-    linkLabel: "Ver planos",
-  },
+  // Missão "Conheça o Premium" removida temporariamente durante a open beta
 ]
 
 // ── Storage keys ───────────────────────────────────────────────────────────

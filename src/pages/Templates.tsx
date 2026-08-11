@@ -230,23 +230,7 @@ export default function Templates() {
       </div>
 
       <div className="space-y-5 px-4 pt-5">
-        {/* Premium banner */}
-        <div className="overflow-hidden rounded-2xl bg-gradient-to-r from-[#2B5D3A] to-[#3E8E5E] p-4">
-          <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <p className="font-bold text-white">Templates premium</p>
-              <p className="mt-0.5 text-xs leading-relaxed text-white/80">
-                Desbloqueie templates exclusivos e acelere seus projetos.
-              </p>
-            </div>
-            <button
-              onClick={() => navigate("/subscription")}
-              className="shrink-0 rounded-xl border border-white/40 bg-white/20 px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-white/30"
-            >
-              Ver planos
-            </button>
-          </div>
-        </div>
+        {/* Banner de assinatura premium oculto temporariamente durante a open beta */}
 
         {/* Destaques */}
         {featured.length > 0 && !isSearching && (

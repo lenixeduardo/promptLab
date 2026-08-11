@@ -4,7 +4,6 @@ import {
   Bell,
   Globe,
   Volume2,
-  Shield,
   HelpCircle,
   LogOut,
   ChevronRight,
@@ -180,16 +179,7 @@ export default function SettingsPage() {
               </span>
               <ChevronRight className="h-4 w-4 text-foreground-tertiary" />
             </Link>
-            <Link
-              to="/premium"
-              className="flex items-center gap-3 px-4 py-3 hover:bg-surface-soft"
-            >
-              <Shield className="h-5 w-5 text-luxury" />
-              <span className="flex-1 text-sm font-semibold text-foreground-dark">
-                Assinatura Premium
-              </span>
-              <ChevronRight className="h-4 w-4 text-foreground-tertiary" />
-            </Link>
+            {/* Assinatura Premium oculta temporariamente durante a open beta */}
             <button className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-surface-soft">
               <HelpCircle className="h-5 w-5 text-emerald" />
               <span className="flex-1 text-sm font-semibold text-foreground-dark">

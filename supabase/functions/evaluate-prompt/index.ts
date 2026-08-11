@@ -100,7 +100,11 @@ Deno.serve(async (req) => {
       .maybeSingle()
 
     const isPremium = PREMIUM_STATUSES.has(userRow?.premium_status ?? "free")
-    const dailyLimit = isPremium ? PREMIUM_DAILY_LIMIT : FREE_DAILY_LIMIT
+    // TEMPORARY (open beta): premium daily limit applied to everyone regardless
+    // of subscription status. Revert to `isPremium ? PREMIUM_DAILY_LIMIT : FREE_DAILY_LIMIT`
+    // once premium gating comes back.
+    void isPremium
+    const dailyLimit = PREMIUM_DAILY_LIMIT
 
     const today = new Date().toISOString().slice(0, 10)
     const { data: usageRow } = await supabaseAdmin

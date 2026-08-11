@@ -116,24 +116,7 @@ export default function Profile() {
             </p>
           </div>
 
-          {/* Card Torne-se Premium (oculto quando já é premium) */}
-          {!isPremium && (
-            <Link
-              to="/premium"
-              className="flex items-center gap-3 rounded-2xl border border-accent bg-white p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.98]"
-            >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent">
-                <Crown className="h-5 w-5 text-white" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-bold text-primary-dark">Torne-se Premium</p>
-                <p className="text-xs text-foregroundMuted">
-                  Lições ilimitadas, sem anúncios e baús exclusivos
-                </p>
-              </div>
-              <ChevronRight className="h-4 w-4 shrink-0 text-accent" />
-            </Link>
-          )}
+          {/* Card Torne-se Premium oculto temporariamente durante a open beta */}
 
           {/* Modo teste Premium — apenas visível em desenvolvimento */}
           {import.meta.env.DEV && <div
