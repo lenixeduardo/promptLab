@@ -34,14 +34,6 @@ function GoogleIcon() {
   )
 }
 
-function AppleIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
-      <path d="M16.365 1.43c0 1.14-.42 2.06-1.26 2.94-.9.98-2.01 1.56-3.21 1.46-.06-1.14.42-2.28 1.2-3.06C13.98.86 15.42.2 16.38 0c.06.48 0 .96-.015 1.43ZM20.3 17.09c-.42 1-.93 1.94-1.62 2.82-.93 1.2-1.86 2.4-3.33 2.42-1.44.03-1.92-.87-3.6-.87-1.68 0-2.2.84-3.57.9-1.44.06-2.52-1.29-3.48-2.49C2.84 17.47 1.4 13.12 3.32 10.15c.93-1.47 2.61-2.4 4.41-2.43 1.41-.03 2.73.96 3.6.96.87 0 2.46-1.17 4.14-.99.7.03 2.68.28 3.96 2.13-.1.06-2.36 1.38-2.34 4.12.03 3.27 2.85 4.36 2.91 4.15Z" />
-    </svg>
-  )
-}
-
 export default function Login() {
   const navigate = useNavigate()
   const { login, loginWithGoogle, user } = useAuth()
@@ -235,17 +227,6 @@ export default function Login() {
             >
               <GoogleIcon />
               Entrar com Google
-            </Button>
-            <Button
-              type="button"
-              variant="social"
-              size="lg"
-              className="w-full justify-center gap-3 normal-case tracking-normal"
-              onClick={() => sileo.info({ title: "Login com Apple em breve" })}
-              aria-label="Entrar com Apple"
-            >
-              <AppleIcon />
-              Entrar com Apple
             </Button>
           </form>
         </Card>

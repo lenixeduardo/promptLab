@@ -52,14 +52,12 @@
 
 ---
 
-### Phase 5: Social Login (Google & Apple)
+### Phase 5: Social Login (Google)
 - [ ] Setup Google OAuth in Supabase
   - Go to Supabase > Authentication > Providers
   - Add Google Client ID & Secret
   - Set redirect URL: `https://yourproject.supabase.co/auth/v1/callback`
-- [ ] Setup Apple Sign-In in Supabase
 - [x] Test Google login flow
-- [ ] Test Apple login flow
 - [ ] Auto-create user profile on social signup
 - [ ] Link social account to existing email account (optional)
 
