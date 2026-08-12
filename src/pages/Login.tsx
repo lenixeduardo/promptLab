@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { User, Lock, Eye, EyeOff, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Card } from "@/components/ui/card"
 import { CircleRevealEntry } from "@/components/CircleTransition"
 import { useAuth } from "@/hooks/useAuth"
 import { sileo } from "sileo"
@@ -108,8 +109,10 @@ export default function Login() {
     setLoading(false)
   }
 
+  // Classe "dark" fixa: tela do fluxo de login usa sempre a paleta escura,
+  // igual a Signup/ForgotPassword/ResetPassword — evita texto claro sobre fundo branco
   return (
-    <div className="relative min-h-screen overflow-hidden bg-white px-5 py-8 text-foreground">
+    <div className="dark relative min-h-screen overflow-hidden bg-gradient-to-b from-pageBgLight via-gradient-mid to-gradient-end px-5 py-8 text-foreground">
       <PageSEO
         title="Entrar no PromptLabz — Aprenda IA com Gamificacao"
         description="Acesse sua conta PromptLabz e retome seu progresso. Trilha gamificada de engenharia de prompts com sistema de vidas, XP e conquistas. Continue agora."
@@ -127,110 +130,111 @@ export default function Login() {
 
         {/* Welcome heading */}
         <div className="mt-8 text-center">
-          <h1 className="text-2xl font-extrabold text-foreground">
+          <h1 className="text-2xl font-extrabold text-primary-dark">
             Bem-vindo de volta! <span aria-hidden="true">👋</span>
           </h1>
-          <p className="mt-1 text-sm text-foregroundTertiary">
+          <p className="mt-1 text-sm text-foregroundSecondary">
             Entre para continuar sua jornada criativa
           </p>
         </div>
 
         {/* Login form */}
-        <form
-          className="mt-7 flex w-full flex-col gap-4"
-          onSubmit={handleSubmit}
-          role="form"
-          aria-label="Formulário de login"
-        >
-          <Input
-            type="text"
-            placeholder="E-mail ou nome de usuário"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            icon={<User className="h-5 w-5" strokeWidth={2.2} />}
-            autoComplete="username"
-            required
-            disabled={loading}
-            aria-label="E-mail ou nome de usuário"
-            aria-required="true"
-            aria-describedby="email-help-login"
-            className="border-stroke-light text-foreground placeholder:text-foregroundTertiary focus-visible:border-primary focus-visible:ring-primary/25"
-          />
-          <small id="email-help-login" className="sr-only">
-            Insira o e-mail ou nome de usuário da sua conta
-          </small>
-
-          <div className="relative">
+        <Card className="mt-7 w-full border-stroke-muted bg-surface-success p-6 shadow-md sm:p-7">
+          <form
+            className="flex w-full flex-col gap-4"
+            onSubmit={handleSubmit}
+            role="form"
+            aria-label="Formulário de login"
+          >
             <Input
-              type={showPassword ? "text" : "password"}
-              placeholder="Senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              icon={<Lock className="h-5 w-5" strokeWidth={2.2} />}
-              autoComplete="current-password"
+              type="text"
+              placeholder="E-mail ou nome de usuário"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              icon={<User className="h-5 w-5" strokeWidth={2.2} />}
+              autoComplete="username"
               required
               disabled={loading}
-              aria-label="Senha"
+              aria-label="E-mail ou nome de usuário"
               aria-required="true"
-              aria-describedby="password-help-login"
-              className="border-stroke-light pr-12 text-foreground placeholder:text-foregroundTertiary focus-visible:border-primary focus-visible:ring-primary/25"
+              aria-describedby="email-help-login"
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword((v) => !v)}
-              className="absolute right-4 top-1/2 flex -translate-y-1/2 items-center justify-center text-primary"
-              aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
-              tabIndex={-1}
+            <small id="email-help-login" className="sr-only">
+              Insira o e-mail ou nome de usuário da sua conta
+            </small>
+
+            <div className="relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                placeholder="Senha"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                icon={<Lock className="h-5 w-5" strokeWidth={2.2} />}
+                autoComplete="current-password"
+                required
+                disabled={loading}
+                aria-label="Senha"
+                aria-required="true"
+                aria-describedby="password-help-login"
+                className="pr-12"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-4 top-1/2 flex -translate-y-1/2 items-center justify-center text-primary"
+                aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
+            </div>
+            <small id="password-help-login" className="sr-only">
+              Insira sua senha de acesso segura
+            </small>
+
+            <Link
+              to="/forgot-password"
+              className="-mt-1 self-end text-sm font-semibold text-link underline underline-offset-2 hover:text-primary"
             >
-              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-            </button>
-          </div>
-          <small id="password-help-login" className="sr-only">
-            Insira sua senha de acesso segura
-          </small>
+              Esqueceu sua senha?
+            </Link>
 
-          <Link
-            to="/forgot-password"
-            className="-mt-1 self-end text-sm font-semibold text-link hover:text-primary"
-          >
-            Esqueceu sua senha?
-          </Link>
+            <Button
+              type="submit"
+              size="lg"
+              className="mt-1 w-full gap-2"
+              disabled={loading || rateLimitCooldown > 0}
+            >
+              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+              {loading ? "Entrando..." : rateLimitCooldown > 0 ? `Tente em ${rateLimitCooldown}s` : "Entrar"}
+            </Button>
 
-          <Button
-            type="submit"
-            size="lg"
-            className="mt-1 w-full rounded-2xl text-black"
-            disabled={loading || rateLimitCooldown > 0}
-          >
-            {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-            {loading ? "Entrando..." : rateLimitCooldown > 0 ? `Tente em ${rateLimitCooldown}s` : "Entrar"}
-          </Button>
+            {/* Divider */}
+            <div className="my-1 flex items-center gap-3">
+              <span className="h-px flex-1 bg-stroke-light" />
+              <span className="text-sm text-foregroundTertiary">ou</span>
+              <span className="h-px flex-1 bg-stroke-light" />
+            </div>
 
-          {/* Divider */}
-          <div className="my-1 flex items-center gap-3">
-            <span className="h-px flex-1 bg-stroke-light" />
-            <span className="text-sm text-foregroundTertiary">ou</span>
-            <span className="h-px flex-1 bg-stroke-light" />
-          </div>
-
-          {/* Social logins */}
-          <Button
-            type="button"
-            variant="ghost"
-            size="lg"
-            className="w-full justify-center gap-3 rounded-2xl border-2 border-stroke-light bg-transparent normal-case tracking-normal text-foreground hover:bg-surface-soft active:bg-stroke-light"
-            onClick={handleGoogleLogin}
-            disabled={loading || rateLimitCooldown > 0}
-          >
-            <GoogleIcon />
-            Entrar com Google
-          </Button>
-        </form>
+            {/* Social logins */}
+            <Button
+              type="button"
+              variant="social"
+              size="lg"
+              className="w-full justify-center gap-3 normal-case tracking-normal"
+              onClick={handleGoogleLogin}
+              disabled={loading || rateLimitCooldown > 0}
+            >
+              <GoogleIcon />
+              Entrar com Google
+            </Button>
+          </form>
+        </Card>
 
         {/* Footer */}
         <p className="mt-7 text-center text-base text-foregroundDark">
           Ainda não tem uma conta?{" "}
-          <Link to="/signup" className="font-semibold text-link hover:text-primary">
+          <Link to="/signup" className="font-semibold text-link underline underline-offset-2 hover:text-primary">
             Criar conta
           </Link>
         </p>
