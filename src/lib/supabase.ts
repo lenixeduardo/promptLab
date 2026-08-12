@@ -12,7 +12,16 @@ if (!isTest && (!supabaseUrl || !supabaseAnonKey)) {
 
 export const supabase = createClient(
   supabaseUrl || "https://test-only.supabase.co",
-  supabaseAnonKey || "test-only-anon-key"
+  supabaseAnonKey || "test-only-anon-key",
+  {
+    // PKCE is required so OAuth redirects (e.g. Google login) return a
+    // `?code=` param that AuthCallback.tsx exchanges for a session. The
+    // default "implicit" flow returns tokens in the URL hash instead,
+    // which AuthCallback never reads, breaking Google login.
+    auth: {
+      flowType: "pkce",
+    },
+  }
 )
 
 // ── Shared Helpers ───────────────────────────────────────────────────────
