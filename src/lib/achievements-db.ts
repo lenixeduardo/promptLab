@@ -103,22 +103,15 @@ export async function saveAchievementsToDb(
   }
 
   try {
-    const { error } = await supabase
-      .from("user_achievements")
-      .upsert(
-        {
-          user_id: userId,
-          unlocked_achievements: data.unlocked,
-          total_lessons_completed: data.totalLessonsCompleted,
-          perfect_count: data.perfectCount,
-          last_visit_date: data.lastVisitDate,
-          consecutive_days: data.consecutiveDays,
-          longest_streak: data.longestStreak,
-          visited_categories: data.visitedCategories,
-          completed_category_ids: data.completedCategoryIds,
-        },
-        { onConflict: "user_id" },
-      )
+    const { error } = await supabase.rpc("sync_user_achievements", {
+      p_unlocked_achievements: data.unlocked,
+      p_total_lessons_completed: data.totalLessonsCompleted,
+      p_perfect_count: data.perfectCount,
+      p_last_visit_date: data.lastVisitDate,
+      p_consecutive_days: data.consecutiveDays,
+      p_visited_categories: data.visitedCategories,
+      p_completed_category_ids: data.completedCategoryIds,
+    })
 
     if (error) throw error
     return { data: null, error: null }

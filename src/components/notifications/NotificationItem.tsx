@@ -27,8 +27,17 @@ export function NotificationItem({ notification }: NotificationItemProps) {
   const iconName = NOTIFICATION_ICON_MAP[notification.type] || "Bell"
   const IconComp = (Icons as unknown as Record<string, React.ComponentType<{ className?: string; strokeWidth?: number }>>)[iconName]
 
+  const isInteractive = Boolean(notification.href)
+
   const handleClick = () => {
     if (notification.href) {
+      navigate(notification.href)
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if ((e.key === "Enter" || e.key === " ") && notification.href) {
+      e.preventDefault()
       navigate(notification.href)
     }
   }
@@ -36,9 +45,12 @@ export function NotificationItem({ notification }: NotificationItemProps) {
   return (
     <div
       onClick={handleClick}
+      role={isInteractive ? "button" : undefined}
+      tabIndex={isInteractive ? 0 : undefined}
+      onKeyDown={isInteractive ? handleKeyDown : undefined}
       className={cn(
         "flex items-start gap-3 rounded-2xl border bg-white px-4 py-3.5 shadow-sm transition-all hover:bg-surface-soft",
-        notification.href ? "cursor-pointer" : "",
+        isInteractive ? "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald" : "",
         notification.unread ? "border-stroke-muted" : "border-pageBgLight",
       )}
     >

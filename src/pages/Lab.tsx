@@ -285,10 +285,15 @@ function PromptsTab() {
   }, [prompts, search])
 
   const handleCopy = (text: string, title: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedTitle(title)
-      setTimeout(() => setCopiedTitle(null), 2000)
-    })
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setCopiedTitle(title)
+        setTimeout(() => setCopiedTitle(null), 2000)
+      })
+      .catch(() => {
+        // Clipboard permission denied or unavailable — nothing to recover from here.
+      })
   }
 
   return (

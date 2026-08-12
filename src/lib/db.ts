@@ -464,10 +464,10 @@ export async function saveModuleProgress(
 ): Promise<DbResult<void>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase não configurado" }
   try {
-    const { error } = await supabase.from("user_module_progress").upsert(
-      { user_id: userId, track, completed_count: completedCount },
-      { onConflict: "user_id,track" }
-    )
+    const { error } = await supabase.rpc("sync_module_progress", {
+      p_track: track,
+      p_completed_count: completedCount,
+    })
     if (error) throw error
     return { data: null, error: null }
   } catch (err) {
