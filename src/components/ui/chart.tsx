@@ -94,7 +94,7 @@ const ChartTooltip = RechartsPrimitive.Tooltip;
 
 const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   any
 >(
   (
@@ -236,7 +236,7 @@ const ChartLegend = RechartsPrimitive.Legend;
 
 const ChartLegendContent = React.forwardRef<
   HTMLDivElement,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   any
 >(({ className, hideIcon = false, payload, verticalAlign = "bottom", nameKey }: any, ref: any) => {
   const { config } = useChart();

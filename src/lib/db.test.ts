@@ -356,20 +356,20 @@ describe("updateUserGems", () => {
 // ── saveModuleProgress / fetchModuleProgress ───────────────────────────────
 
 describe("saveModuleProgress", () => {
-  it("faz upsert no Supabase com o track e a contagem concluída", async () => {
-    const q = buildQuery({ upsert: vi.fn().mockResolvedValue({ error: null }) })
+  it("chama o RPC sync_module_progress com o track e a contagem concluída", async () => {
+    mockRpc.mockResolvedValue({ data: null, error: null })
 
     const result = await saveModuleProgress("u1", "a1", 3)
 
     expect(result.error).toBeNull()
-    expect(q.upsert).toHaveBeenCalledWith(
-      { user_id: "u1", track: "a1", completed_count: 3 },
-      expect.anything()
-    )
+    expect(mockRpc).toHaveBeenCalledWith("sync_module_progress", {
+      p_track: "a1",
+      p_completed_count: 3,
+    })
   })
 
-  it("retorna erro quando o upsert falha", async () => {
-    buildQuery({ upsert: vi.fn().mockResolvedValue({ error: { message: "Insert failed" } }) })
+  it("retorna erro quando o RPC falha", async () => {
+    mockRpc.mockResolvedValue({ data: null, error: { message: "Insert failed" } })
 
     const result = await saveModuleProgress("u1", "a1", 3)
 

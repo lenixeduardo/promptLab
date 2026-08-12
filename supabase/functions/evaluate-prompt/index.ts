@@ -107,16 +107,19 @@ Deno.serve(async (req) => {
     const dailyLimit = PREMIUM_DAILY_LIMIT
 
     const today = new Date().toISOString().slice(0, 10)
-    const { data: usageRow } = await supabaseAdmin
-      .from("prompt_evaluation_usage")
-      .select("count")
-      .eq("user_id", userId)
-      .eq("usage_date", today)
-      .maybeSingle()
+    // Atomic check-and-increment (see 20260812_020 migration) so concurrent
+    // requests can't all read the same pre-increment count and collectively
+    // exceed the daily quota.
+    const { data: newCount, error: usageError } = await supabaseAdmin.rpc(
+      "increment_prompt_evaluation_usage",
+      { p_user_id: userId, p_usage_date: today, p_daily_limit: dailyLimit },
+    )
 
-    const currentCount = usageRow?.count ?? 0
-
-    if (currentCount >= dailyLimit) {
+    if (usageError) {
+      console.error("evaluate-prompt: failed to record usage:", usageError)
+      // Non-fatal — we still evaluate the prompt rather than block the user
+      // over an internal bookkeeping error.
+    } else if (newCount === null) {
       return jsonResponse(
         {
           error: "Limite diário de avaliações com IA atingido. Assine o Premium para análises ilimitadas.",
@@ -124,24 +127,6 @@ Deno.serve(async (req) => {
         },
         429,
       )
-    }
-
-    const { error: usageError } = await supabaseAdmin
-      .from("prompt_evaluation_usage")
-      .upsert(
-        {
-          user_id: userId,
-          usage_date: today,
-          count: currentCount + 1,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: "user_id,usage_date" },
-      )
-
-    if (usageError) {
-      console.error("evaluate-prompt: failed to record usage:", usageError)
-      // Non-fatal — we still evaluate the prompt rather than block the user
-      // over an internal bookkeeping error.
     }
 
     // ── Call Anthropic ──────────────────────────────────────────────────

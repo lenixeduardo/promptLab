@@ -126,10 +126,15 @@ export default function PromptDetail() {
 
   function handleCopy() {
     if (!prompt) return
-    navigator.clipboard.writeText(prompt.text).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    })
+    navigator.clipboard
+      .writeText(prompt.text)
+      .then(() => {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      })
+      .catch(() => {
+        // Clipboard permission denied or unavailable — nothing to recover from here.
+      })
   }
 
   // Not found state

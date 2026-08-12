@@ -69,7 +69,18 @@ export const SkillCard = memo(function SkillCard({
         />
       </button>
 
-      <div onClick={onClick} className="flex flex-col gap-2 cursor-pointer">
+      <div
+        onClick={onClick}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault()
+            onClick()
+          }
+        }}
+        className="flex flex-col gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald rounded-lg"
+      >
         <div className="flex items-center gap-2.5">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-pageBgLight">
             <SkillIcon iconName={skill.icon} />
