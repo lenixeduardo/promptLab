@@ -183,13 +183,13 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
         </DialogHeader>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-800 rounded">
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-800 rounded dark:bg-red-950/40 dark:border-red-800 dark:text-red-300">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-800 rounded">
+          <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-800 rounded dark:bg-green-950/40 dark:border-green-800 dark:text-green-300">
             {success}
           </div>
         )}

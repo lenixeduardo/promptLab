@@ -171,14 +171,14 @@ export function getRarityColor(rarity: string): string {
 export function getRarityBg(rarity: string): string {
   switch (rarity) {
     case "common":
-      return "bg-gray-100"
+      return "bg-gray-100 dark:bg-gray-800/60"
     case "rare":
-      return "bg-blue-100"
+      return "bg-blue-100 dark:bg-blue-950/40"
     case "epic":
-      return "bg-purple-100"
+      return "bg-purple-100 dark:bg-purple-950/40"
     case "legendary":
-      return "bg-yellow-100"
+      return "bg-yellow-100 dark:bg-yellow-950/40"
     default:
-      return "bg-gray-100"
+      return "bg-gray-100 dark:bg-gray-800/60"
   }
 }

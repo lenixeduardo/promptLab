@@ -160,7 +160,7 @@ export default function LearningLabPage() {
               {completed} de {active.modules.length} módulos · {active.subtitle}
             </p>
           </div>
-          <div className="flex items-center gap-1 rounded-full bg-red-50 px-3 py-1 text-sm font-bold text-red-500">
+          <div className="flex items-center gap-1 rounded-full bg-red-50 px-3 py-1 text-sm font-bold text-red-500 dark:bg-red-950/40 dark:text-red-300">
             <Heart className="h-3.5 w-3.5 fill-red-500" /> <span>{lives}</span>
           </div>
         </div>

@@ -16,7 +16,7 @@ export default function PromptWarsPage() {
       </div>
 
       <div className="flex flex-1 flex-col items-center justify-center gap-6 px-6 text-center">
-        <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-red-50 text-red-400">
+        <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-red-50 text-red-400 dark:bg-red-950/40 dark:text-red-400">
           <Swords className="h-12 w-12" strokeWidth={1.5} />
         </div>
         <div className="space-y-2">
@@ -25,7 +25,7 @@ export default function PromptWarsPage() {
             Os duelos de prompts em tempo real estão chegando. Complete as trilhas A1 e A2 para estar preparado quando os Prompt Wars abrirem!
           </p>
         </div>
-        <div className="flex items-center gap-2 rounded-full bg-red-50 px-4 py-2 text-sm font-semibold text-red-500">
+        <div className="flex items-center gap-2 rounded-full bg-red-50 px-4 py-2 text-sm font-semibold text-red-500 dark:bg-red-950/40 dark:text-red-300">
           <Clock className="h-4 w-4" />
           Disponível na v0.1
         </div>

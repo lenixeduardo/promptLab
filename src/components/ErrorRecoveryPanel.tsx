@@ -30,11 +30,11 @@ export function ErrorRecoveryPanel({
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 space-y-2 p-3">
       {!isOnline && (
-        <div className="flex items-start gap-3 rounded-lg bg-amber-50 border border-amber-200 p-3 shadow-md">
-          <WifiOff className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 rounded-lg bg-amber-50 border border-amber-200 p-3 shadow-md dark:bg-amber-950/40 dark:border-amber-800">
+          <WifiOff className="h-5 w-5 text-amber-600 shrink-0 mt-0.5 dark:text-amber-400" />
           <div className="flex-1">
-            <p className="text-sm font-semibold text-amber-900">Sem conexão</p>
-            <p className="text-xs text-amber-700 mt-1">
+            <p className="text-sm font-semibold text-amber-900 dark:text-amber-300">Sem conexão</p>
+            <p className="text-xs text-amber-700 mt-1 dark:text-amber-400">
               Você está offline. Suas mudanças serão sincronizadas quando estiver online novamente.
             </p>
           </div>
@@ -44,10 +44,10 @@ export function ErrorRecoveryPanel({
       {errors.map((error, index) => {
         const isNetworkError = error.code === "NETWORK_ERROR"
         const isAuthError = error.code === "AUTH_ERROR"
-        const bgColor = isAuthError ? "bg-red-50 border-red-200" : "bg-orange-50 border-orange-200"
-        const iconColor = isAuthError ? "text-red-600" : "text-orange-600"
-        const textColor = isAuthError ? "text-red-900" : "text-orange-900"
-        const textSecondary = isAuthError ? "text-red-700" : "text-orange-700"
+        const bgColor = isAuthError ? "bg-red-50 border-red-200 dark:bg-red-950/40 dark:border-red-800" : "bg-orange-50 border-orange-200 dark:bg-orange-950/40 dark:border-orange-800"
+        const iconColor = isAuthError ? "text-red-600 dark:text-red-400" : "text-orange-600 dark:text-orange-400"
+        const textColor = isAuthError ? "text-red-900 dark:text-red-300" : "text-orange-900 dark:text-orange-300"
+        const textSecondary = isAuthError ? "text-red-700 dark:text-red-400" : "text-orange-700 dark:text-orange-400"
 
         return (
           <div

@@ -172,10 +172,10 @@ export default function QuizResult() {
             <span className="text-[10px] font-medium text-neutral">certas</span>
           </div>
           <div className="flex flex-1 flex-col items-center gap-1 py-4">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100">
-              <X className="h-4 w-4 text-red-600" strokeWidth={2.5} />
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 dark:bg-red-950/40">
+              <X className="h-4 w-4 text-red-600 dark:text-red-400" strokeWidth={2.5} />
             </div>
-            <span className="text-xl font-extrabold text-red-600">{wrong}</span>
+            <span className="text-xl font-extrabold text-red-600 dark:text-red-400">{wrong}</span>
             <span className="text-[10px] font-medium text-neutral">erradas</span>
           </div>
           <div className="flex flex-1 flex-col items-center gap-1 py-4">

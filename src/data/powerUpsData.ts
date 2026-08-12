@@ -15,7 +15,7 @@ export const POWER_UPS: PowerUp[] = [
     name: "Boost XP",
     description: "Dobra o XP ganho na próxima lição",
     icon: "Flame",
-    color: "bg-orange-100",
+    color: "bg-orange-100 dark:bg-orange-950/40",
     storePrice: 50,
   },
   {
@@ -23,7 +23,7 @@ export const POWER_UPS: PowerUp[] = [
     name: "Proteção",
     description: "Protege uma vida em caso de erro",
     icon: "Shield",
-    color: "bg-blue-100",
+    color: "bg-blue-100 dark:bg-blue-950/40",
     storePrice: 40,
   },
   {
@@ -31,7 +31,7 @@ export const POWER_UPS: PowerUp[] = [
     name: "Foca Total",
     description: "Aumenta a concentração na lição",
     icon: "Zap",
-    color: "bg-yellow-100",
+    color: "bg-yellow-100 dark:bg-yellow-950/40",
     storePrice: 10,
   },
 ]

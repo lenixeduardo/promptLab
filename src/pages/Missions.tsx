@@ -61,7 +61,7 @@ export default function MissionsPage() {
                 <Gem className="h-3 w-3 text-luxury inline-block" />
               </p>
             </div>
-            <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-bold text-amber-600">
+            <span className="rounded-full bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 text-[11px] font-bold text-amber-600 dark:text-amber-400">
               {Math.min(doneCount, CHEST_THRESHOLD)}/{CHEST_THRESHOLD}
             </span>
           </div>
@@ -103,7 +103,7 @@ export default function MissionsPage() {
             questCompleted
               ? "border-luxury/40 bg-luxury/5"
               : questAvailable
-              ? "border-amber-400/60 bg-amber-50/50"
+              ? "border-amber-400/60 bg-amber-50/50 dark:bg-amber-950/30"
               : "border-stroke-light bg-card",
           )}
         >
@@ -207,7 +207,7 @@ export default function MissionsPage() {
                   </p>
                 </div>
                 <div className="flex flex-col items-end gap-1">
-                  <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-bold text-amber-600">
+                  <span className="rounded-full bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 text-[11px] font-bold text-amber-600 dark:text-amber-400">
                     +{m.xp} XP
                   </span>
                   {isDone ? (

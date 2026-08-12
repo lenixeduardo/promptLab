@@ -16,13 +16,13 @@ const CATEGORIES: Array<"Todos" | NewsCategory> = [
 ]
 
 const CATEGORY_STYLES: Record<NewsCategory, string> = {
-  OpenAI:    "bg-blue-50 text-blue-700 border border-blue-200",
-  Anthropic: "bg-purple-50 text-purple-700 border border-purple-200",
-  Google:    "bg-amber-50 text-amber-700 border border-amber-200",
-  ChatGPT:   "bg-teal-50 text-teal-700 border border-teal-200",
-  Meta:      "bg-indigo-50 text-indigo-700 border border-indigo-200",
-  Microsoft: "bg-sky-50 text-sky-700 border border-sky-200",
-  General:   "bg-gray-50 text-gray-600 border border-gray-200",
+  OpenAI:    "bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800",
+  Anthropic: "bg-purple-50 text-purple-700 border border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-800",
+  Google:    "bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800",
+  ChatGPT:   "bg-teal-50 text-teal-700 border border-teal-200 dark:bg-teal-950/40 dark:text-teal-300 dark:border-teal-800",
+  Meta:      "bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-800",
+  Microsoft: "bg-sky-50 text-sky-700 border border-sky-200 dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800",
+  General:   "bg-gray-50 text-gray-600 border border-gray-200 dark:bg-gray-800/60 dark:text-gray-300 dark:border-gray-700",
 }
 
 const PT_MONTHS = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"]

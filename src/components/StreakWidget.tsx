@@ -19,12 +19,12 @@ export function StreakWidget({ streak, longestStreak, loading = false, streakBro
 
   if (streakBroken) {
     return (
-      <div className="flex items-center gap-3 rounded-2xl border-2 border-orange-200 bg-orange-50 px-4 py-3">
-        <HeartCrack className="h-6 w-6 text-orange-400" />
+      <div className="flex items-center gap-3 rounded-2xl border-2 border-orange-200 bg-orange-50 px-4 py-3 dark:border-orange-800 dark:bg-orange-950/40">
+        <HeartCrack className="h-6 w-6 text-orange-400 dark:text-orange-300" />
         <div>
-          <p className="text-sm font-bold text-orange-800">Streak zerado — recomeça hoje!</p>
+          <p className="text-sm font-bold text-orange-800 dark:text-orange-300">Streak zerado — recomeça hoje!</p>
           {longestStreak > 0 && (
-            <p className="text-xs text-[#A0714A]">Seu recorde foi de {longestStreak} {longestStreak === 1 ? "dia" : "dias"}</p>
+            <p className="text-xs text-[#A0714A] dark:text-orange-300">Seu recorde foi de {longestStreak} {longestStreak === 1 ? "dia" : "dias"}</p>
           )}
         </div>
       </div>

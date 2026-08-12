@@ -65,7 +65,7 @@ export function EssayCard({ activity, answered, onAnswer }: EssayCardProps) {
 
 export function EssayBadge() {
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-amber-700">
+    <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
       <BookOpen className="h-3 w-3" />
       Revisão dissertativa
     </span>

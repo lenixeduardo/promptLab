@@ -7,10 +7,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { getNotifications, markNotificationsRead, type DbNotification } from "@/lib/db";
 
 const TYPE_CONFIG = {
-  achievement: { icon: Award, iconBg: "bg-emerald-100", iconColor: "text-emerald-700" },
-  mention: { icon: MessageCircle, iconBg: "bg-violet-100", iconColor: "text-violet-600" },
-  system: { icon: Settings, iconBg: "bg-blue-100", iconColor: "text-blue-600" },
-  reminder: { icon: Bell, iconBg: "bg-amber-100", iconColor: "text-amber-500" },
+  achievement: { icon: Award, iconBg: "bg-emerald-100 dark:bg-emerald-950/40", iconColor: "text-emerald-700 dark:text-emerald-400" },
+  mention: { icon: MessageCircle, iconBg: "bg-violet-100 dark:bg-violet-950/40", iconColor: "text-violet-600 dark:text-violet-400" },
+  system: { icon: Settings, iconBg: "bg-blue-100 dark:bg-blue-950/40", iconColor: "text-blue-600 dark:text-blue-400" },
+  reminder: { icon: Bell, iconBg: "bg-amber-100 dark:bg-amber-950/40", iconColor: "text-amber-500 dark:text-amber-400" },
 } as const;
 
 function formatTime(isoDate: string): string {

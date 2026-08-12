@@ -290,7 +290,7 @@ export default function LessonPage() {
             }}
           />
 
-          <div className="mt-4 flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2 text-[11px] text-amber-800">
+          <div className="mt-4 flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2 text-[11px] text-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
             <ImageIcon className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>
               O print fica salvo só no seu dispositivo. Ele serve para você validar sua prática —
@@ -423,7 +423,7 @@ export default function LessonPage() {
             style={{ width: `${progress}%` }}
           />
         </div>
-        <div className="flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-sm font-bold text-red-500">
+        <div className="flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-sm font-bold text-red-500 dark:bg-red-950/40 dark:text-red-300">
           <Heart className="h-3.5 w-3.5 fill-red-500" /> <span>{lives}</span>
         </div>
       </div>

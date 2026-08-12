@@ -241,7 +241,7 @@ export default function Store() {
             <h2 className="text-sm font-bold uppercase tracking-wider text-primary-dark">
               Pacotes especiais
             </h2>
-            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[9px] font-bold uppercase text-amber-700">
+            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[9px] font-bold uppercase text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
               Em breve
             </span>
           </div>
