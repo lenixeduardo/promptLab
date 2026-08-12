@@ -5,9 +5,10 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        /* Duolingo primary CTA — verde com sombra inferior pressionável */
+        /* Duolingo primary CTA — verde com sombra inferior pressionável.
+           Texto preto: branco sobre #58cc02 fica em ~2.1:1 de contraste (falha WCAG AA). */
         primary:
-          "rounded-[12px] bg-[#58cc02] text-white shadow-[0_4px_0_0_#58a700] hover:bg-[#5ad002] active:shadow-none active:translate-y-[4px]",
+          "rounded-[12px] bg-[#58cc02] text-black shadow-[0_4px_0_0_#58a700] hover:bg-[#5ad002] active:shadow-none active:translate-y-[4px]",
         /* Duolingo secondary — borda sutil, texto azul céu */
         outline:
           "rounded-[12px] border-2 border-[#e5e5e5] dark:border-[#3a3a3a] bg-white text-[#1cb0f6] hover:bg-[#f7f7f7] dark:hover:bg-[#2a2a2a] active:translate-y-[2px]",
