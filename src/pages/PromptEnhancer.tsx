@@ -17,15 +17,20 @@ import {
   ThumbsUp,
   FileText,
   AlertTriangle,
+  Sparkle,
+  WifiOff,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { getLocalGems } from "@/lib/xp";
 import {
   enhancePrompt,
+  calculateScore,
+  FOCUS_CONFIGS,
   type EnhancementResult,
   type FocusMode,
 } from "@/lib/promptEnhancer";
+import { enhancePromptWithAI } from "@/lib/enhancePromptAI";
 import { AppBottomNav } from "@/components/AppBottomNav";
 
 // ── Constants ─────────────────────────────────────────────────────────────
@@ -130,12 +135,13 @@ export default function PromptEnhancerPage() {
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
 
-  const enhanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const requestIdRef = useRef(0);
   const toastsTimerRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const resultRef = useRef<HTMLDivElement | null>(null);
 
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [fallbackNotice, setFallbackNotice] = useState<string | null>(null);
 
   useEffect(() => {
     if (userId) setGems(getLocalGems(userId));
@@ -143,7 +149,7 @@ export default function PromptEnhancerPage() {
 
   useEffect(() => {
     return () => {
-      if (enhanceTimerRef.current) clearTimeout(enhanceTimerRef.current);
+      requestIdRef.current += 1;
       toastsTimerRef.current.forEach(clearTimeout);
     };
   }, []);
@@ -154,10 +160,49 @@ export default function PromptEnhancerPage() {
 
     setIsEnhancing(true);
     setResult(null);
+    setFallbackNotice(null);
 
-    enhanceTimerRef.current = setTimeout(() => {
-      enhanceTimerRef.current = null;
-      const enhanced = enhancePrompt(trimmed, focusMode);
+    const requestId = ++requestIdRef.current;
+
+    (async () => {
+      const outcome = await enhancePromptWithAI(trimmed, focusMode);
+      if (requestIdRef.current !== requestId) return;
+
+      let enhanced: EnhancementResult;
+
+      if (outcome.ok === true) {
+        const { enhancedMain, audience, tone, appliedTechniques } = outcome.data;
+        const originalScore = calculateScore(trimmed);
+        const enhancedScore = Math.min(10, calculateScore(enhancedMain) + 0.5);
+
+        enhanced = {
+          original: trimmed,
+          enhancedMain,
+          enhanced: `${enhancedMain}\n\nPúblico-alvo: ${audience}\nTom de voz: ${tone}`,
+          originalScore,
+          enhancedScore,
+          jump: Math.round(Math.max(0, enhancedScore - originalScore) * 10) / 10,
+          focusMode,
+          appliedTechniques:
+            appliedTechniques.length > 0
+              ? appliedTechniques
+              : [...FOCUS_CONFIGS[focusMode].techniques],
+          audience,
+          tone,
+          addedFields: [],
+          presentFields: [],
+          originalFields: [],
+          source: "ai",
+        };
+      } else {
+        enhanced = enhancePrompt(trimmed, focusMode);
+        setFallbackNotice(
+          outcome.error.quotaExceeded
+            ? "Limite diário de aprimoramentos com IA atingido — mostrando versão do motor local."
+            : "IA indisponível no momento — mostrando versão do motor local.",
+        );
+      }
+
       setResult(enhanced);
       setIsEnhancing(false);
 
@@ -175,7 +220,7 @@ export default function PromptEnhancerPage() {
       setTimeout(() => {
         resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
-    }, 600);
+    })();
   }, [promptText, focusMode]);
 
   const handleCopy = useCallback(async () => {
@@ -402,11 +447,19 @@ export default function PromptEnhancerPage() {
           <div className="flex items-center justify-center gap-3 rounded-2xl border-2 border-emerald/30 bg-card py-8">
             <Wand2 className="h-6 w-6 text-emerald animate-pulse" strokeWidth={1.5} />
             <div>
-              <p className="text-sm font-bold text-foreground-dark">Aprimorando seu prompt…</p>
+              <p className="text-sm font-bold text-foreground-dark">Aprimorando com IA…</p>
               <p className="text-xs text-foreground-tertiary">
-                A gatinha engenheira está trabalhando nisso!
+                A gatinha engenheira está consultando o modelo de IA!
               </p>
             </div>
+          </div>
+        )}
+
+        {/* ── Fallback notice ── */}
+        {result && fallbackNotice && (
+          <div className="flex items-start gap-2 rounded-xl border border-amber-300 bg-amber-50 px-3.5 py-2.5">
+            <WifiOff className="h-4 w-4 shrink-0 mt-0.5 text-amber-600" />
+            <p className="text-xs text-amber-800">{fallbackNotice}</p>
           </div>
         )}
 
@@ -420,6 +473,17 @@ export default function PromptEnhancerPage() {
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-white" strokeWidth={2} />
                   <span className="text-sm font-bold text-white">Seu prompt aprimorado</span>
+                  <span
+                    className={cn(
+                      "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider",
+                      result.source === "ai"
+                        ? "bg-white/25 text-white"
+                        : "bg-white/15 text-white/80",
+                    )}
+                  >
+                    <Sparkle className="h-2.5 w-2.5" />
+                    {result.source === "ai" ? "IA" : "Motor local"}
+                  </span>
                 </div>
                 <button
                   onClick={handleCopy}

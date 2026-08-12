@@ -1,9 +1,13 @@
 /**
  * promptEnhancer.ts
  *
- * Local, deterministic prompt enhancement engine.
- * Takes a raw prompt + focus mode and produces a structured,
- * improved version with bullet points. No network calls.
+ * Local, deterministic prompt enhancement engine. No network calls.
+ *
+ * This is the FALLBACK engine for the Prompt Enhancer: the page tries the
+ * real AI-powered enhancement first (`enhancePromptWithAI`, in
+ * `enhancePromptAI.ts`) and only falls back to the fixed templates here when
+ * the AI call is unavailable, unconfigured, or quota-exceeded — so the
+ * feature never fully breaks, but the AI path is what runs by default.
  */
 
 // ── Types ─────────────────────────────────────────────────────────────────
@@ -37,6 +41,8 @@ export interface EnhancementResult {
   addedFields: string[];
   presentFields: string[];
   originalFields: string[];
+  /** Whether this result came from the real AI call or the local fallback. */
+  source: 'ai' | 'local';
 }
 
 // ── Criteria weights ──────────────────────────────────────────────────────
@@ -176,7 +182,7 @@ function detectCriteria(text: string): string[] {
   return CRITERIA.filter((c) => c.detect(lower)).map((c) => c.key);
 }
 
-function calculateScore(text: string): number {
+export function calculateScore(text: string): number {
   const lower = text.toLowerCase();
   let score = 1.0;
 
@@ -233,6 +239,7 @@ export function enhancePrompt(
       addedFields: [],
       presentFields: [],
       originalFields: [],
+      source: 'local',
     };
   }
 
@@ -258,6 +265,7 @@ export function enhancePrompt(
     addedFields: [],
     presentFields,
     originalFields,
+    source: 'local',
   };
 }
 

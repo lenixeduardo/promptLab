@@ -46,9 +46,9 @@ Permitir que o usuário cole ou digite um prompt e receba instantaneamente uma v
 14. Layout mobile fiel à referência e adaptação responsiva para desktop.
 15. Badge fixo "Novo" no header e na Home.
 
-### Fora de escopo
+### Fora de escopo (MVP original — ver atualização na seção 5 e decisão 9)
 
-- Chamada a APIs de IA (OpenAI, Anthropic, Google) para enhancement real.
+- ~~Chamada a APIs de IA (OpenAI, Anthropic, Google) para enhancement real.~~ Implementado posteriormente via `enhance-prompt` (Gemini por padrão), com o motor local como fallback.
 - Upload de arquivos.
 - Análise de histórico de conversas inteiro (é função do Analisador).
 - OCR, PDF, DOCX, imagens.
@@ -134,11 +134,19 @@ O atalho entra **imediatamente após o card "Analisador de Prompts"** e antes do
 
 ---
 
-## 5. Motor local de enhancement
+## 5. Motor de enhancement
 
-### Princípio
+> **Atualização:** o Prompt Enhancer agora chama uma IA real (Edge Function
+> `enhance-prompt`, provedor padrão Gemini — gratuito) para reescrever o
+> prompt. O motor determinístico abaixo passou a ser o **fallback**: entra em
+> ação apenas quando a IA está indisponível, sem chave configurada, ou com a
+> cota diária do usuário esgotada — nesse caso a UI exibe um aviso "Motor
+> local" e o resultado permanece consistente com o restante deste documento.
+> Ver seção 13, decisão 9.
 
-O MVP usa regras determinísticas para reestruturar o prompt. Não usa IA. O motor:
+### Princípio (motor de fallback)
+
+Quando a IA não está disponível, o app usa regras determinísticas para reestruturar o prompt. O motor:
 
 1. **Analisa estrutura atual** do prompt (persona? ação? contexto? formato? restrições? tom? público? exemplos?)
 2. **Identifica campos ausentes** entre os 8 critérios
@@ -326,8 +334,8 @@ Três etapas:
 3. Textarea aceita qualquer texto (sem limite de formato).
 4. Limite de caracteres: 5000 caracteres por prompt.
 5. Campos opcionais: limite de 200 caracteres cada.
-6. Motor é determinístico — mesmo input = mesmo output.
-7. Nenhuma requisição de rede contém o texto digitado.
+6. Modo IA consulta um LLM externo (ver decisão 9) e por isso não é determinístico; o modo fallback (sem IA disponível) continua determinístico — mesmo input = mesmo output.
+7. O prompt digitado só sai do dispositivo quando o modo IA está ativo (chamada autenticada à Edge Function `enhance-prompt`); no fallback local, nenhuma requisição de rede contém o texto digitado.
 8. Histórico em memória, isolado por userId.
 9. Recarga e logout apagam histórico.
 10. "Nova melhoria" preserva histórico.
@@ -406,5 +414,5 @@ Três etapas:
 6. **Resultado lado a lado no desktop.** Facilita comparação direta.
 7. **Histórico não persiste.** Mesma política de privacidade do Analisador.
 8. **Gratuito.** Mesmo modelo do Analisador.
-9. **Contrato preparado para IA futura.** Template engine pode ser substituído por chamada de API.
+9. **IA real com fallback determinístico (atualizado).** O Enhancer chama a Edge Function `enhance-prompt`, que consulta um LLM de verdade (Gemini por padrão — chave gratuita, sem cartão) e reescreve o prompt com base no modo de foco escolhido. Se a chamada falhar (sem chave configurada, erro de rede, ou cota diária por usuário esgotada), a UI cai silenciosamente para o motor local determinístico da seção 5, exibindo um aviso "Motor local" para não fingir uma origem que não ocorreu. Isso resolve a divergência identificada entre a comunicação visual da tela (mascote "trabalhando", texto "com foco em IA") e o comportamento real, que antes era 100% local.
 10. **Asset da gatinha engenheira.** Usar `prompt-asset.png` como ilustração da feature.
