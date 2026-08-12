@@ -16,6 +16,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "smoke:supabase": "node scripts/smoke-supabase.mjs",
+    "seed:test-users": "node scripts/seed-test-users.mjs",
     "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm smoke:supabase",
     "install-deps": "pnpm install --prefer-offline",
     "clean": "rm -rf node_modules .pnpm-store pnpm-lock.yaml && pnpm store prune",
