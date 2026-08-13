@@ -12,7 +12,7 @@ export default function Achievements() {
 
   const progressPct = useMemo(
     () => Math.round((data.totalLessonsCompleted / 50) * 100),
-    [data.totalLessonsCompleted],
+    [data.totalLessonsCompleted]
   )
 
   return (
@@ -96,7 +96,8 @@ export default function Achievements() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 pb-6">
           {allAchievements.map((ach, idx) => {
             const isUnlocked = unlocked.includes(ach.id)
-            const IconComp = Icons[ach.icon as keyof typeof Icons] as React.ComponentType<{ className?: string }> | undefined
+            const IconComp = Icons[ach.icon as keyof typeof Icons] as
+              React.ComponentType<{ className?: string }> | undefined
             const progress = getProgressCount(ach.id, data)
 
             return (
@@ -106,7 +107,7 @@ export default function Achievements() {
                   "animate-rank-entry flex items-center gap-3 rounded-2xl border bg-white p-4 shadow-sm transition-all duration-300",
                   isUnlocked
                     ? "border-stroke-muted scale-100"
-                    : "border-pageBgLight opacity-65 scale-98",
+                    : "border-pageBgLight opacity-65 scale-98"
                 )}
                 style={{ animationDelay: `${idx * 0.06}s` }}
               >
@@ -116,7 +117,7 @@ export default function Achievements() {
                     "relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-all duration-300",
                     isUnlocked
                       ? "animate-achievement-unlock bg-gradient-to-br from-emerald to-emerald shadow-md"
-                      : "bg-gradient-to-br from-[#E8EEE9] to-[#DCEAE3]",
+                      : "bg-gradient-to-br from-[#E8EEE9] to-[#DCEAE3]"
                   )}
                   style={isUnlocked ? { animationDelay: `${idx * 0.06 + 0.15}s` } : undefined}
                   aria-hidden="true"
@@ -140,7 +141,7 @@ export default function Achievements() {
                   <h2
                     className={cn(
                       "text-sm font-bold leading-snug",
-                      isUnlocked ? "text-foregroundDark" : "text-foregroundTertiary",
+                      isUnlocked ? "text-foregroundDark" : "text-foregroundTertiary"
                     )}
                   >
                     {ach.title}
@@ -174,7 +175,7 @@ export default function Achievements() {
                     "shrink-0 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider transition-colors duration-300",
                     isUnlocked
                       ? "bg-surface-success text-primary-dark"
-                      : "bg-[#EEF1EF] text-foregroundPlaceholder",
+                      : "bg-[#EEF1EF] text-foregroundPlaceholder"
                   )}
                 >
                   {isUnlocked ? "✔" : ach.category}
@@ -183,7 +184,6 @@ export default function Achievements() {
             )
           })}
         </div>
-
       </div>
     </div>
   )

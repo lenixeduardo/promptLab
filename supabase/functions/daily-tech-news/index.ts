@@ -9,13 +9,13 @@ type NewsCategory = "OpenAI" | "Anthropic" | "Google" | "ChatGPT" | "Meta" | "Mi
 // Curated stable Unsplash images used as category cover fallbacks.
 // Each URL is a specific photo ID so the image never changes.
 const CATEGORY_COVER_IMAGES: Record<NewsCategory, string> = {
-  OpenAI:    "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80",
+  OpenAI: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80",
   Anthropic: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80",
-  Google:    "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=800&q=80",
-  ChatGPT:   "https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=800&q=80",
-  Meta:      "https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800&q=80",
+  Google: "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=800&q=80",
+  ChatGPT: "https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=800&q=80",
+  Meta: "https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800&q=80",
   Microsoft: "https://images.unsplash.com/photo-1633419461186-7d40a38105ec?w=800&q=80",
-  General:   "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80",
+  General: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80",
 }
 
 interface ArticleInsert {
@@ -31,21 +31,47 @@ interface ArticleInsert {
 
 const CATEGORY_KEYWORDS: [NewsCategory, string[]][] = [
   ["Anthropic", ["anthropic", "claude ai", "claude 3", "claude 4", "claude opus", "claude sonnet"]],
-  ["ChatGPT",   ["chatgpt"]],
-  ["OpenAI",    ["openai", "gpt-4", "gpt-5", "gpt4", "gpt5", "dall-e", "dall·e", "sora", "whisper", "o3-mini", "o4-mini"]],
-  ["Google",    ["google ai", "google deepmind", "gemini", "deepmind", "google bard", "vertex ai", "notebooklm"]],
-  ["Meta",      ["meta ai", "llama 2", "llama 3", "llama 4", "meta llama"]],
+  ["ChatGPT", ["chatgpt"]],
+  [
+    "OpenAI",
+    [
+      "openai",
+      "gpt-4",
+      "gpt-5",
+      "gpt4",
+      "gpt5",
+      "dall-e",
+      "dall·e",
+      "sora",
+      "whisper",
+      "o3-mini",
+      "o4-mini",
+    ],
+  ],
+  [
+    "Google",
+    [
+      "google ai",
+      "google deepmind",
+      "gemini",
+      "deepmind",
+      "google bard",
+      "vertex ai",
+      "notebooklm",
+    ],
+  ],
+  ["Meta", ["meta ai", "llama 2", "llama 3", "llama 4", "meta llama"]],
   ["Microsoft", ["microsoft copilot", "azure openai", "github copilot", "bing ai", "microsoft ai"]],
 ]
 
 const CATEGORY_EMOJIS: Record<NewsCategory, string> = {
-  OpenAI:    "🤖",
+  OpenAI: "🤖",
   Anthropic: "🧠",
-  Google:    "🔍",
-  ChatGPT:   "💬",
-  Meta:      "🦙",
+  Google: "🔍",
+  ChatGPT: "💬",
+  Meta: "🦙",
   Microsoft: "💻",
-  General:   "📰",
+  General: "📰",
 }
 
 function categorize(text: string): { category: NewsCategory; emoji: string } {
@@ -59,10 +85,26 @@ function categorize(text: string): { category: NewsCategory; emoji: string } {
 }
 
 const AI_FILTER_KEYWORDS = [
-  "openai", "anthropic", "claude", "chatgpt", "gpt-4", "gpt-5", "gemini",
-  "llm", "large language model", "generative ai", "llama", "copilot",
-  "sora", "dall-e", "deepmind", "machine learning", "neural network",
-  "artificial intelligence", "ai model", "prompt engineering",
+  "openai",
+  "anthropic",
+  "claude",
+  "chatgpt",
+  "gpt-4",
+  "gpt-5",
+  "gemini",
+  "llm",
+  "large language model",
+  "generative ai",
+  "llama",
+  "copilot",
+  "sora",
+  "dall-e",
+  "deepmind",
+  "machine learning",
+  "neural network",
+  "artificial intelligence",
+  "ai model",
+  "prompt engineering",
 ]
 
 function matchesAiFilter(text: string): boolean {
@@ -72,25 +114,19 @@ function matchesAiFilter(text: string): boolean {
 
 async function fetchHackerNews(): Promise<ArticleInsert[]> {
   const topIds: number[] = await fetch(
-    "https://hacker-news.firebaseio.com/v0/topstories.json",
+    "https://hacker-news.firebaseio.com/v0/topstories.json"
   ).then((r) => r.json())
 
   const stories = await Promise.all(
     topIds.slice(0, 150).map((id) =>
       fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
         .then((r) => r.json())
-        .catch(() => null),
-    ),
+        .catch(() => null)
+    )
   )
 
   return stories
-    .filter(
-      (s) =>
-        s?.type === "story" &&
-        s.url &&
-        s.title &&
-        matchesAiFilter(s.title),
-    )
+    .filter((s) => s?.type === "story" && s.url && s.title && matchesAiFilter(s.title))
     .slice(0, 15)
     .map((s) => {
       const { category, emoji } = categorize(s.title)
@@ -111,17 +147,13 @@ async function fetchHackerNews(): Promise<ArticleInsert[]> {
 
 async function fetchDevTo(): Promise<ArticleInsert[]> {
   const articles: Record<string, unknown>[] = await fetch(
-    "https://dev.to/api/articles?tags=ai,machinelearning,llm&per_page=30&top=1",
+    "https://dev.to/api/articles?tags=ai,machinelearning,llm&per_page=30&top=1"
   )
     .then((r) => r.json())
     .catch(() => [])
 
   return articles
-    .filter(
-      (a) =>
-        a?.title &&
-        matchesAiFilter(`${a.title} ${a.description ?? ""}`),
-    )
+    .filter((a) => a?.title && matchesAiFilter(`${a.title} ${a.description ?? ""}`))
     .slice(0, 15)
     .map((a) => {
       const combinedText = `${a.title} ${a.description ?? ""}`
@@ -163,17 +195,14 @@ Deno.serve(async (req) => {
   try {
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
-    const [hnArticles, devtoArticles] = await Promise.all([
-      fetchHackerNews(),
-      fetchDevTo(),
-    ])
+    const [hnArticles, devtoArticles] = await Promise.all([fetchHackerNews(), fetchDevTo()])
 
     const allArticles = [...hnArticles, ...devtoArticles]
 
     if (allArticles.length === 0) {
       return new Response(
         JSON.stringify({ ok: true, inserted: 0, message: "no articles matched ai filter" }),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { "Content-Type": "application/json" } }
       )
     }
 
@@ -189,7 +218,7 @@ Deno.serve(async (req) => {
     if (newArticles.length === 0) {
       return new Response(
         JSON.stringify({ ok: true, inserted: 0, message: "all articles already exist" }),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { "Content-Type": "application/json" } }
       )
     }
 
@@ -204,13 +233,13 @@ Deno.serve(async (req) => {
         inserted: newArticles.length,
         sources: { hn: hnArticles.length, devto: devtoArticles.length },
       }),
-      { status: 200, headers: { "Content-Type": "application/json" } },
+      { status: 200, headers: { "Content-Type": "application/json" } }
     )
   } catch (err) {
     console.error("daily-tech-news error:", err)
-    return new Response(
-      JSON.stringify({ error: "internal_error", message: String(err) }),
-      { status: 500, headers: { "Content-Type": "application/json" } },
-    )
+    return new Response(JSON.stringify({ error: "internal_error", message: String(err) }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    })
   }
 })

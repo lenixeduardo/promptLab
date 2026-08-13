@@ -52,17 +52,12 @@ export default function ResetPassword() {
     <div className="dark relative min-h-screen overflow-hidden bg-gradient-to-b from-pageBgLight via-gradient-mid to-gradient-end px-5 py-8 text-foreground">
       <div className="mx-auto flex w-full max-w-[420px] flex-col">
         {/* Back */}
-        <Link
-          to="/login"
-          className="mb-2 flex w-fit items-center text-link hover:text-primary"
-        >
+        <Link to="/login" className="mb-2 flex w-fit items-center text-link hover:text-primary">
           <ArrowLeft className="h-6 w-6" strokeWidth={2.2} />
         </Link>
 
         {/* Title */}
-        <h1 className="mb-5 text-center text-4xl font-extrabold text-primary-dark">
-          Nova Senha
-        </h1>
+        <h1 className="mb-5 text-center text-4xl font-extrabold text-primary-dark">Nova Senha</h1>
 
         {/* Mascot + speech bubble */}
         <div className="mb-5 flex items-center justify-center gap-2">
@@ -103,7 +98,12 @@ export default function ResetPassword() {
 
         {/* Card */}
         <Card className="w-full border-stroke-muted bg-surface-success p-6 shadow-md sm:p-7">
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit} role="form" aria-label="Formulário de redefinição de senha">
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handleSubmit}
+            role="form"
+            aria-label="Formulário de redefinição de senha"
+          >
             <Input
               type="password"
               placeholder="Nova senha"

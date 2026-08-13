@@ -29,7 +29,12 @@ class ErrorLogger {
 
     // Log to console in development
     if (import.meta.env.DEV) {
-      const logFn = event.severity === "error" ? console.error : event.severity === "warning" ? console.warn : console.log
+      const logFn =
+        event.severity === "error"
+          ? console.error
+          : event.severity === "warning"
+            ? console.warn
+            : console.log
       logFn(`[${event.eventType.toUpperCase()}]`, event.message, event.metadata)
     }
 
@@ -110,7 +115,7 @@ class ErrorLogger {
 
   getEventsSince(timestamp: string) {
     const cutoff = new Date(timestamp).getTime()
-    return this.events.filter(e => new Date(e.timestamp).getTime() >= cutoff)
+    return this.events.filter((e) => new Date(e.timestamp).getTime() >= cutoff)
   }
 
   clearEvents() {

@@ -20,10 +20,15 @@ function scorePrompt(text: string): FeedbackScore {
   const len = text.length
   return {
     contexto: len >= 50,
-    clareza: /\b(escreva|crie|liste|gere|fa[çc]a|elabore|descreva|explique|analise|sugira|produza|redija)\b/.test(t),
+    clareza:
+      /\b(escreva|crie|liste|gere|fa[çc]a|elabore|descreva|explique|analise|sugira|produza|redija)\b/.test(
+        t
+      ),
     detalhamento:
       len >= 120 ||
-      /\b(formato|estilo|tom|exemplos?|espec[íi]fico|detalhes?|estrutura|bullet|t[óo]picos?|\d+\s*(palavras?|itens?|passos?|etapas?|dicas?))\b/.test(t),
+      /\b(formato|estilo|tom|exemplos?|espec[íi]fico|detalhes?|estrutura|bullet|t[óo]picos?|\d+\s*(palavras?|itens?|passos?|etapas?|dicas?))\b/.test(
+        t
+      ),
     publicoAlvo:
       len >= 40 &&
       /\b(para|sobre|voltado|destina|direcionado|p[úu]blico|iniciantes?|especialistas?|crian[çc]as?|adultos?|profissionais?|estudantes?|empreendedores?)\b/.test(
@@ -46,7 +51,13 @@ const CRITERIA: { key: keyof FeedbackScore; label: string }[] = [
   { key: "publicoAlvo", label: "Público-alvo" },
 ]
 
-const RESULT_LABELS = ["Tente novamente", "Continue praticando", "Bom início!", "Muito bom!", "Excelente!"]
+const RESULT_LABELS = [
+  "Tente novamente",
+  "Continue praticando",
+  "Bom início!",
+  "Muito bom!",
+  "Excelente!",
+]
 const RESULT_ANALYSES = [
   "Continue praticando! Um bom prompt precisa de contexto claro, objetivo bem definido e especificações de saída.",
   "Você está no caminho certo! Foque em clareza e defina melhor o público-alvo para resultados melhores.",
@@ -65,8 +76,8 @@ function buildLabResultState(promptText: string, score: FeedbackScore) {
     stars,
     originalPrompt: promptText,
     analysis: RESULT_ANALYSES[passing],
-    feedback: CRITERIA.map(({ key, label }) =>
-      `${label}: ${score[key] ? "bem definido ✓" : "pode melhorar"}`
+    feedback: CRITERIA.map(
+      ({ key, label }) => `${label}: ${score[key] ? "bem definido ✓" : "pode melhorar"}`
     ),
     aiCompatibility: [
       { name: "GPT-4", ok: true },
@@ -134,14 +145,14 @@ export default function PromptChallenge() {
 
         {/* Task card */}
         <div className="mb-5 rounded-2xl border border-stroke-light bg-pageBgLight px-4 py-4">
-          <p className="mb-1 text-xs font-bold uppercase tracking-wider text-emerald">
-            Sua tarefa
-          </p>
+          <p className="mb-1 text-xs font-bold uppercase tracking-wider text-emerald">Sua tarefa</p>
           <p className="text-sm leading-relaxed text-foregroundDark">{challenge.task}</p>
         </div>
 
         {/* Prompt textarea */}
-        <label htmlFor="prompt-input" className="mb-2 text-base font-bold text-foregroundDark">Seu prompt</label>
+        <label htmlFor="prompt-input" className="mb-2 text-base font-bold text-foregroundDark">
+          Seu prompt
+        </label>
         <div className="relative mb-4">
           <textarea
             id="prompt-input"
@@ -155,11 +166,16 @@ export default function PromptChallenge() {
             aria-describedby="prompt-description char-count"
             className="w-full resize-none rounded-2xl border border-stroke-muted bg-white px-4 py-3 pb-7 text-sm leading-relaxed text-foregroundDark placeholder:text-[#B0C0B5] focus:border-emerald focus:outline-none focus:ring-2 focus:ring-emerald/20"
           />
-          <span id="char-count" className="absolute bottom-3 right-4 text-xs text-foregroundPlaceholder" aria-live="polite">
+          <span
+            id="char-count"
+            className="absolute bottom-3 right-4 text-xs text-foregroundPlaceholder"
+            aria-live="polite"
+          >
             {promptText.length}/{MAX_CHARS} caracteres
           </span>
           <span id="prompt-description" className="sr-only">
-            Digite seu prompt com contexto claro, objetivo bem definido e especificações de saída. Mínimo {MIN_CHARS} caracteres, máximo {MAX_CHARS} caracteres.
+            Digite seu prompt com contexto claro, objetivo bem definido e especificações de saída.
+            Mínimo {MIN_CHARS} caracteres, máximo {MAX_CHARS} caracteres.
           </span>
         </div>
 
@@ -188,10 +204,7 @@ export default function PromptChallenge() {
                   <span className="text-sm text-foregroundDark">
                     {label}:{" "}
                     <span
-                      className={cn(
-                        "font-medium",
-                        score[key] ? "text-emerald" : "text-accent"
-                      )}
+                      className={cn("font-medium", score[key] ? "text-emerald" : "text-accent")}
                     >
                       {score[key] ? "bom" : "pode melhorar"}
                     </span>
@@ -228,11 +241,17 @@ export default function PromptChallenge() {
           onClick={showExample ? handleNext : handleShowExample}
           disabled={!showExample && promptText.length < MIN_CHARS}
         >
-          {showExample
-            ? challenge.step + 1 < CHALLENGES.length
-              ? "Próximo desafio →"
-              : "Ver resultado →"
-            : <span className="flex items-center gap-1.5 justify-center">Ver exemplo aprimorado <Sparkles className="h-4 w-4" /></span>}
+          {showExample ? (
+            challenge.step + 1 < CHALLENGES.length ? (
+              "Próximo desafio →"
+            ) : (
+              "Ver resultado →"
+            )
+          ) : (
+            <span className="flex items-center gap-1.5 justify-center">
+              Ver exemplo aprimorado <Sparkles className="h-4 w-4" />
+            </span>
+          )}
         </Button>
 
         {/* Skip link */}

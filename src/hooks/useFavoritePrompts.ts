@@ -39,7 +39,7 @@ export function useFavoritePrompts() {
 
   const isFavoritePrompt = useCallback(
     (promptId: string) => favorites.includes(promptId),
-    [favorites],
+    [favorites]
   )
 
   return { favoritePrompts: favorites, toggleFavoritePrompt, isFavoritePrompt }

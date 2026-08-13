@@ -92,9 +92,9 @@ describe("LearningLab — trilha de aprendizado", () => {
 
   it("o módulo atual tem link para /lesson", () => {
     renderLearningLab()
-    const lessonLinks = screen.getAllByRole("link").filter(
-      (el) => el.getAttribute("href")?.includes("/lesson")
-    )
+    const lessonLinks = screen
+      .getAllByRole("link")
+      .filter((el) => el.getAttribute("href")?.includes("/lesson"))
     expect(lessonLinks.length).toBeGreaterThan(0)
   })
 

@@ -1,26 +1,26 @@
-import { Link } from "react-router-dom";
-import { Check, Lock, Sparkles, Trophy } from "lucide-react";
+import { Link } from "react-router-dom"
+import { Check, Lock, Sparkles, Trophy } from "lucide-react"
 
 export interface TrailPathModule {
-  label: string;
-  status: "completed" | "current" | "locked";
+  label: string
+  status: "completed" | "current" | "locked"
 }
 
 interface TrailPathProps {
-  trail: TrailPathModule[];
-  trackLabel: string;
-  completedCount: number;
-  totalCount: number;
-  missionsDone: number;
-  missionsTotal: number;
-  missionsPct: number;
+  trail: TrailPathModule[]
+  trackLabel: string
+  completedCount: number
+  totalCount: number
+  missionsDone: number
+  missionsTotal: number
+  missionsPct: number
 }
 
-const ROW_HEIGHT = 108;
-const NODE_SIZE = 60;
+const ROW_HEIGHT = 108
+const NODE_SIZE = 60
 // Gentle left/right sway so the nodes read as a winding map path, like the
 // section-overview artwork this widget is based on.
-const nodeX = (i: number) => 50 + 24 * Math.sin((i + 0.5) * 1.05);
+const nodeX = (i: number) => 50 + 24 * Math.sin((i + 0.5) * 1.05)
 
 const DECORATIONS = [
   { left: "12%", top: "6%", size: 6 },
@@ -29,7 +29,7 @@ const DECORATIONS = [
   { left: "10%", top: "58%", size: 5 },
   { left: "86%", top: "78%", size: 6 },
   { left: "16%", top: "92%", size: 5 },
-];
+]
 
 export function TrailPath({
   trail,
@@ -40,22 +40,22 @@ export function TrailPath({
   missionsTotal,
   missionsPct,
 }: TrailPathProps) {
-  const points = trail.map((_, i) => ({ x: nodeX(i), y: i * ROW_HEIGHT + ROW_HEIGHT / 2 }));
-  const trophyPoint = { x: 50, y: trail.length * ROW_HEIGHT + ROW_HEIGHT / 2 };
-  const allPoints = [...points, trophyPoint];
-  const pathHeight = allPoints[allPoints.length - 1].y + ROW_HEIGHT / 2;
+  const points = trail.map((_, i) => ({ x: nodeX(i), y: i * ROW_HEIGHT + ROW_HEIGHT / 2 }))
+  const trophyPoint = { x: 50, y: trail.length * ROW_HEIGHT + ROW_HEIGHT / 2 }
+  const allPoints = [...points, trophyPoint]
+  const pathHeight = allPoints[allPoints.length - 1].y + ROW_HEIGHT / 2
 
   const pathD = allPoints
     .map((p, i) => {
-      if (i === 0) return `M ${p.x} ${p.y}`;
-      const prev = allPoints[i - 1];
-      const midY = (prev.y + p.y) / 2;
-      return `C ${prev.x} ${midY}, ${p.x} ${midY}, ${p.x} ${p.y}`;
+      if (i === 0) return `M ${p.x} ${p.y}`
+      const prev = allPoints[i - 1]
+      const midY = (prev.y + p.y) / 2
+      return `C ${prev.x} ${midY}, ${p.x} ${midY}, ${p.x} ${p.y}`
     })
-    .join(" ");
+    .join(" ")
 
   const progressFraction =
-    trail.length > 1 ? Math.min(completedCount, trail.length - 1) / (allPoints.length - 1) : 0;
+    trail.length > 1 ? Math.min(completedCount, trail.length - 1) / (allPoints.length - 1) : 0
 
   return (
     <div className="rounded-2xl border-2 border-stroke-light bg-gradient-to-b from-[#0d1512] to-[#05080a] p-5 overflow-hidden">
@@ -110,7 +110,7 @@ export function TrailPath({
         </svg>
 
         {trail.map((m, i) => {
-          const p = points[i];
+          const p = points[i]
           return (
             <div
               key={i}
@@ -150,7 +150,9 @@ export function TrailPath({
                   }`}
                   style={
                     m.status === "current"
-                      ? { boxShadow: "0 5px 0 0 var(--duo-green-press), 0 0 0 4px var(--duo-green)" }
+                      ? {
+                          boxShadow: "0 5px 0 0 var(--duo-green-press), 0 0 0 4px var(--duo-green)",
+                        }
                       : undefined
                   }
                 >
@@ -171,7 +173,7 @@ export function TrailPath({
                 {m.label}
               </span>
             </div>
-          );
+          )
         })}
 
         <Link
@@ -203,5 +205,5 @@ export function TrailPath({
         </Link>
       </div>
     </div>
-  );
+  )
 }

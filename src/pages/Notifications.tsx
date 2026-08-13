@@ -30,12 +30,16 @@ function mapDbToLocal(row: DbNotification): AppNotification {
   }
 }
 
+const PAGE_SIZE = 50
+
 export default function Notifications() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [activeFilter, setActiveFilter] = useState<NotificationsFilter>("all")
   const [notifications, setNotifications] = useState<AppNotification[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [hasMore, setHasMore] = useState(false)
 
   useEffect(() => {
     if (!user?.id) {
@@ -43,21 +47,35 @@ export default function Notifications() {
       return
     }
 
-    getNotifications(user.id).then(({ data }) => {
-      setNotifications(data ? data.map(mapDbToLocal) : [])
-      setLoading(false)
-      if (data && data.some((n) => n.read_at === null)) {
-        markNotificationsRead(user.id!)
-      }
-    }).catch(() => {
-      setLoading(false)
-    })
+    getNotifications(user.id, PAGE_SIZE, 0)
+      .then(({ data }) => {
+        setNotifications(data ? data.map(mapDbToLocal) : [])
+        setHasMore((data?.length ?? 0) === PAGE_SIZE)
+        setLoading(false)
+        if (data && data.some((n) => n.read_at === null)) {
+          markNotificationsRead(user.id!)
+        }
+      })
+      .catch(() => {
+        setLoading(false)
+      })
   }, [user?.id])
+
+  const handleLoadMore = () => {
+    if (!user?.id || loadingMore) return
+    setLoadingMore(true)
+    getNotifications(user.id, PAGE_SIZE, notifications.length)
+      .then(({ data }) => {
+        setNotifications((prev) => [...prev, ...(data ? data.map(mapDbToLocal) : [])])
+        setHasMore((data?.length ?? 0) === PAGE_SIZE)
+      })
+      .finally(() => setLoadingMore(false))
+  }
 
   const counts = useMemo(() => getNotificationsCounts(notifications), [notifications])
   const filtered = useMemo(
     () => filterNotifications(notifications, activeFilter),
-    [notifications, activeFilter],
+    [notifications, activeFilter]
   )
   const groups = useMemo(() => groupNotifications(filtered), [filtered])
 
@@ -113,9 +131,7 @@ export default function Notifications() {
               className="h-24 w-auto object-contain opacity-50"
               style={{ mixBlendMode: "multiply" }}
             />
-            <p className="text-base font-semibold text-foregroundMuted">
-              Nenhuma notificação
-            </p>
+            <p className="text-base font-semibold text-foregroundMuted">Nenhuma notificação</p>
             <p className="text-sm text-foregroundMuted">
               {activeFilter === "unread"
                 ? "Você já leu todas as notificações!"
@@ -133,14 +149,20 @@ export default function Notifications() {
                 </h2>
                 <div className="flex flex-col gap-2">
                   {group.items.map((notification) => (
-                    <NotificationItem
-                      key={notification.id}
-                      notification={notification}
-                    />
+                    <NotificationItem key={notification.id} notification={notification} />
                   ))}
                 </div>
               </section>
             ))}
+            {hasMore && (
+              <button
+                onClick={handleLoadMore}
+                disabled={loadingMore}
+                className="mx-auto mt-2 rounded-full border border-stroke-light px-5 py-2 text-sm font-semibold text-primary-dark transition-colors hover:bg-surface-soft disabled:opacity-50"
+              >
+                {loadingMore ? "Carregando..." : "Carregar mais"}
+              </button>
+            )}
           </div>
         )}
       </div>

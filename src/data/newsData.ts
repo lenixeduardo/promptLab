@@ -1,4 +1,5 @@
-export type NewsCategory = "OpenAI" | "Anthropic" | "Google" | "ChatGPT" | "Meta" | "Microsoft" | "General"
+export type NewsCategory =
+  "OpenAI" | "Anthropic" | "Google" | "ChatGPT" | "Meta" | "Microsoft" | "General"
 
 export interface NewsArticle {
   id: string
@@ -12,13 +13,13 @@ export interface NewsArticle {
 }
 
 export const CATEGORY_COVER_IMAGES: Record<NewsCategory, string> = {
-  OpenAI:    "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80",
+  OpenAI: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80",
   Anthropic: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80",
-  Google:    "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=800&q=80",
-  ChatGPT:   "https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=800&q=80",
-  Meta:      "https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800&q=80",
+  Google: "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=800&q=80",
+  ChatGPT: "https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=800&q=80",
+  Meta: "https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800&q=80",
   Microsoft: "https://images.unsplash.com/photo-1633419461186-7d40a38105ec?w=800&q=80",
-  General:   "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80",
+  General: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80",
 }
 
 export const NEWS_ARTICLES: NewsArticle[] = [

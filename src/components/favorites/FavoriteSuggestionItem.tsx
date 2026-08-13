@@ -11,14 +11,15 @@ interface FavoriteSuggestionItemProps {
  * Single clickable row in the "Dicas para você" section.
  * Renders an icon, title + description, and a trailing chevron.
  */
-export function FavoriteSuggestionItem({
-  suggestion,
-}: FavoriteSuggestionItemProps) {
+export function FavoriteSuggestionItem({ suggestion }: FavoriteSuggestionItemProps) {
   const navigate = useNavigate()
 
-  const IconComp = (Icons as unknown as Record<string, React.ComponentType<{ className?: string; strokeWidth?: number }>>)[
-    suggestion.icon
-  ]
+  const IconComp = (
+    Icons as unknown as Record<
+      string,
+      React.ComponentType<{ className?: string; strokeWidth?: number }>
+    >
+  )[suggestion.icon]
 
   return (
     <button

@@ -19,21 +19,25 @@ function Podium() {
       {TIERS.map((t, i) => (
         <div key={i} className="flex flex-col items-center" style={{ marginTop: i === 0 ? 0 : -1 }}>
           {/* Top face — ellipse */}
-          <div style={{
-            width: t.w,
-            height: t.topH,
-            borderRadius: "50%",
-            background: `radial-gradient(ellipse at 42% 30%, #EAF8F0, ${t.topC})`,
-            boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
-          }} />
+          <div
+            style={{
+              width: t.w,
+              height: t.topH,
+              borderRadius: "50%",
+              background: `radial-gradient(ellipse at 42% 30%, #EAF8F0, ${t.topC})`,
+              boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+            }}
+          />
           {/* Side body */}
-          <div style={{
-            width: t.w,
-            height: t.sideH,
-            marginTop: -1,
-            background: `linear-gradient(to bottom, ${t.topC}, ${t.sideC})`,
-            borderRadius: `0 0 ${t.w / 2}px ${t.w / 2}px`,
-          }} />
+          <div
+            style={{
+              width: t.w,
+              height: t.sideH,
+              marginTop: -1,
+              background: `linear-gradient(to bottom, ${t.topC}, ${t.sideC})`,
+              borderRadius: `0 0 ${t.w / 2}px ${t.w / 2}px`,
+            }}
+          />
         </div>
       ))}
     </div>
@@ -128,41 +132,35 @@ export default function LevelUp() {
   if (!state) {
     const xp = user?.id ? getLocalXP(user.id) : 0
     const level = getLevel(xp)
-    return (
-      <Navigate
-        to="/level-up"
-        state={{ newLevel: level, prevLevel: level - 1 }}
-        replace
-      />
-    )
+    return <Navigate to="/level-up" state={{ newLevel: level, prevLevel: level - 1 }} replace />
   }
 
   const { newLevel } = state
 
-  return introDone
-    ? <LevelUpDetails newLevel={newLevel} onDone={() => navigate("/home")} />
-    : (
-      <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black animate-fade-in"
+  return introDone ? (
+    <LevelUpDetails newLevel={newLevel} onDone={() => navigate("/home")} />
+  ) : (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black animate-fade-in"
+      onClick={() => setIntroDone(true)}
+    >
+      <button
         onClick={() => setIntroDone(true)}
+        className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
+        aria-label="Pular"
       >
-        <button
-          onClick={() => setIntroDone(true)}
-          className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
-          aria-label="Pular"
-        >
-          <X className="h-5 w-5" />
-        </button>
-        <video
-          className="w-full max-w-lg"
-          src="/assets/animations/level-up.mp4"
-          autoPlay
-          muted
-          playsInline
-          onEnded={() => setIntroDone(true)}
-        />
-      </div>
-    )
+        <X className="h-5 w-5" />
+      </button>
+      <video
+        className="w-full max-w-lg"
+        src="/assets/animations/level-up.mp4"
+        autoPlay
+        muted
+        playsInline
+        onEnded={() => setIntroDone(true)}
+      />
+    </div>
+  )
 }
 
 function LevelUpDetails({ newLevel, onDone }: { newLevel: number; onDone: () => void }) {
@@ -222,20 +220,12 @@ function LevelUpDetails({ newLevel, onDone }: { newLevel: number; onDone: () => 
       {/* ── Text + Cards ──────────────────────────────────────────── */}
       <div className="flex flex-1 flex-col gap-4 px-5 pt-3 pb-6">
         {/* Parabéns block */}
-        <div
-          className="animate-podium-rise text-center"
-          style={{ animationDelay: "0.42s" }}
-        >
+        <div className="animate-podium-rise text-center" style={{ animationDelay: "0.42s" }}>
           <p className="text-xl font-extrabold text-[#0D2B1A]">Parabéns!</p>
           <p className="mt-0.5 text-sm font-medium text-foregroundDark">
-            Você alcançou o{" "}
-            <span className="font-extrabold text-emerald">
-              Nível {newLevel}
-            </span>
+            Você alcançou o <span className="font-extrabold text-emerald">Nível {newLevel}</span>
           </p>
-          {levelTitle && (
-            <p className="text-xs font-semibold text-emerald/80">{levelTitle}</p>
-          )}
+          {levelTitle && <p className="text-xs font-semibold text-emerald/80">{levelTitle}</p>}
           <p className="mt-1 text-xs text-foregroundMuted">
             Continue assim e desbloqueie recompensas incríveis!
           </p>
@@ -246,9 +236,7 @@ function LevelUpDetails({ newLevel, onDone }: { newLevel: number; onDone: () => 
           className="animate-podium-rise rounded-2xl border border-stroke-light bg-white px-5 py-4 shadow-sm"
           style={{ animationDelay: "0.52s" }}
         >
-          <p className="mb-3 text-sm font-bold text-foregroundDark">
-            O que foi desbloqueado:
-          </p>
+          <p className="mb-3 text-sm font-bold text-foregroundDark">O que foi desbloqueado:</p>
           <div className="flex flex-col gap-2.5">
             {UNLOCK_ITEMS.map((text, idx) => (
               <div
@@ -257,24 +245,15 @@ function LevelUpDetails({ newLevel, onDone }: { newLevel: number; onDone: () => 
                 style={{ animationDelay: `${0.62 + idx * 0.1}s` }}
               >
                 <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald" />
-                <span className="text-sm text-foregroundDark">
-                  {text(newLevel)}
-                </span>
+                <span className="text-sm text-foregroundDark">{text(newLevel)}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* CTA */}
-        <div
-          className="animate-podium-rise mt-auto"
-          style={{ animationDelay: "1.05s" }}
-        >
-          <Button
-            size="lg"
-            className="w-full text-base font-bold tracking-wide"
-            onClick={onDone}
-          >
+        <div className="animate-podium-rise mt-auto" style={{ animationDelay: "1.05s" }}>
+          <Button size="lg" className="w-full text-base font-bold tracking-wide" onClick={onDone}>
             EXPLORAR NOVO NÍVEL →
           </Button>
         </div>

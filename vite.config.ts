@@ -2,16 +2,16 @@ import path from "path"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vitest/config"
 import { sentryVitePlugin } from "@sentry/vite-plugin"
-import sourceIdentifierPlugin from 'vite-plugin-source-identifier'
+import sourceIdentifierPlugin from "vite-plugin-source-identifier"
 
-const isProd = process.env.BUILD_MODE === 'prod'
+const isProd = process.env.BUILD_MODE === "prod"
 const isTest = process.env.VITEST === "true" || process.env.NODE_ENV === "test"
 
 // Guard: VITE_PREVIEW_MODE must never be enabled in a production build.
-if (isProd && process.env.VITE_PREVIEW_MODE === 'true') {
+if (isProd && process.env.VITE_PREVIEW_MODE === "true") {
   throw new Error(
-    '[security] VITE_PREVIEW_MODE=true is not allowed in production builds. ' +
-    'Unset this variable before running a prod build.'
+    "[security] VITE_PREVIEW_MODE=true is not allowed in production builds. " +
+      "Unset this variable before running a prod build."
   )
 }
 
@@ -20,7 +20,7 @@ export default defineConfig({
     react(),
     sourceIdentifierPlugin({
       enabled: !isProd && !isTest,
-      attributePrefix: 'data-matrix',
+      attributePrefix: "data-matrix",
       includeProps: true,
     }),
     sentryVitePlugin({
@@ -46,7 +46,11 @@ export default defineConfig({
         // Put heavy data files in their own async chunk so the main bundle stays small
         manualChunks: (id: string) => {
           // Vendor: React core — always needed, load first
-          if (id.includes("node_modules/react/") || id.includes("node_modules/react-dom/") || id.includes("node_modules/react-router-dom/")) {
+          if (
+            id.includes("node_modules/react/") ||
+            id.includes("node_modules/react-dom/") ||
+            id.includes("node_modules/react-router-dom/")
+          ) {
             return "vendor-react"
           }
           // Heavy lesson content — only loaded when user opens a lesson
@@ -54,7 +58,11 @@ export default defineConfig({
             return "data-lessons"
           }
           // Trending/prompts data — only loaded on lab/prompts pages
-          if (id.includes("/src/data/trendingSkillsData") || id.includes("/src/data/promptsData") || id.includes("/src/data/templatesData")) {
+          if (
+            id.includes("/src/data/trendingSkillsData") ||
+            id.includes("/src/data/promptsData") ||
+            id.includes("/src/data/templatesData")
+          ) {
             return "data-content"
           }
           // Radix UI components

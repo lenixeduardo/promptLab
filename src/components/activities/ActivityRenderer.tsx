@@ -1,7 +1,13 @@
 import { memo } from "react"
 import { Lightbulb } from "lucide-react"
 import { cn } from "@/lib/utils"
-import type { LessonActivity, FillBlankActivity, MatchActivity, OrderActivity, Question } from "@/lib/lessonContent"
+import type {
+  LessonActivity,
+  FillBlankActivity,
+  MatchActivity,
+  OrderActivity,
+  Question,
+} from "@/lib/lessonContent"
 import { isFillBlank, isMatch, isOrder, isEssay, isContentSlide } from "@/lib/lessonContent"
 import { FillBlankCard } from "./FillBlankCard"
 import { MatchCard } from "./MatchCard"
@@ -47,7 +53,8 @@ export const ActivityRenderer = memo(function ActivityRenderer({
         </div>
         <div className="mb-2 flex items-start gap-3">
           <img
-            src="/assets/mascot-teacher.png" loading="lazy"
+            src="/assets/mascot-teacher.png"
+            loading="lazy"
             alt=""
             className="h-20 w-20 shrink-0 object-contain"
           />
@@ -60,29 +67,34 @@ export const ActivityRenderer = memo(function ActivityRenderer({
     )
   }
 
-  const activityType = isFillBlank(activity) ? "fill-blank"
-    : isMatch(activity) ? "match"
-    : isOrder(activity) ? "order"
-    : "multiple-choice"
+  const activityType = isFillBlank(activity)
+    ? "fill-blank"
+    : isMatch(activity)
+      ? "match"
+      : isOrder(activity)
+        ? "order"
+        : "multiple-choice"
 
   const typeLabel = {
     "multiple-choice": "Múltipla escolha",
     "fill-blank": "Complete a frase",
-    "match": "Ligue as colunas",
-    "order": "Conecte os itens",
+    match: "Ligue as colunas",
+    order: "Conecte os itens",
   }[activityType]
 
   return (
     <div className="flex flex-col gap-4">
       {/* Tag do tipo */}
       <div className="mb-1 flex items-center gap-2">
-        <span className={cn(
-          "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider",
-          activityType === "multiple-choice" && "bg-emerald/15 text-emerald",
-          activityType === "fill-blank" && "bg-luxury/15 text-luxury",
-          activityType === "match" && "bg-blue-100 text-blue-700",
-          activityType === "order" && "bg-purple-100 text-purple-700",
-        )}>
+        <span
+          className={cn(
+            "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider",
+            activityType === "multiple-choice" && "bg-emerald/15 text-emerald",
+            activityType === "fill-blank" && "bg-luxury/15 text-luxury",
+            activityType === "match" && "bg-blue-100 text-blue-700",
+            activityType === "order" && "bg-purple-100 text-purple-700"
+          )}
+        >
           {typeLabel}
         </span>
         <span className="text-[11px] font-semibold text-foreground-tertiary">
@@ -93,7 +105,8 @@ export const ActivityRenderer = memo(function ActivityRenderer({
       {/* Mascot + pergunta/instrução */}
       <div className="mb-2 flex items-start gap-3">
         <img
-          src="/assets/mascot-teacher.png" loading="lazy"
+          src="/assets/mascot-teacher.png"
+          loading="lazy"
           alt=""
           className="h-14 w-14 shrink-0 object-contain"
         />
@@ -102,8 +115,8 @@ export const ActivityRenderer = memo(function ActivityRenderer({
             {isFillBlank(activity)
               ? "Complete a frase abaixo:"
               : isMatch(activity) || isOrder(activity)
-              ? activity.instruction || "Complete a atividade abaixo:"
-              : (activity as Question).prompt}
+                ? activity.instruction || "Complete a atividade abaixo:"
+                : (activity as Question).prompt}
           </p>
         </div>
       </div>
@@ -149,8 +162,12 @@ export const ActivityRenderer = memo(function ActivityRenderer({
                   "rounded-2xl border-2 px-4 py-3 text-left text-sm font-medium transition-all active:scale-[0.99]",
                   !answered && "border-stroke-light bg-card hover:border-emerald",
                   isOptCorrect && "border-emerald bg-surface-success text-emerald-dark",
-                  isOptWrong && "border-red-300 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300",
-                  answered && !isSelected && !isOptCorrect && "border-stroke-light bg-card opacity-60",
+                  isOptWrong &&
+                    "border-red-300 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300",
+                  answered &&
+                    !isSelected &&
+                    !isOptCorrect &&
+                    "border-stroke-light bg-card opacity-60"
                 )}
               >
                 <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-page-bg-light text-xs font-extrabold text-forest">
@@ -172,30 +189,38 @@ export const ActivityRenderer = memo(function ActivityRenderer({
               ? selected === (activity as Question).correct
                 ? "border-emerald bg-surface-success"
                 : "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/40"
-              : "border-emerald bg-surface-success",
+              : "border-emerald bg-surface-success"
           )}
         >
           <div className="flex items-start gap-2">
-            <Lightbulb className={cn(
-              "h-5 w-5 shrink-0",
-              selected === (activity as Question).correct || isMatch(activity) || isOrder(activity)
-                ? "text-emerald-dark" : "text-red-500 dark:text-red-400",
-            )} />
+            <Lightbulb
+              className={cn(
+                "h-5 w-5 shrink-0",
+                selected === (activity as Question).correct ||
+                  isMatch(activity) ||
+                  isOrder(activity)
+                  ? "text-emerald-dark"
+                  : "text-red-500 dark:text-red-400"
+              )}
+            />
             <div>
-              <p className={cn(
-                "text-sm font-bold",
-                selected === (activity as Question).correct || isMatch(activity) || isOrder(activity)
-                  ? "text-emerald-dark" : "text-red-700 dark:text-red-300",
-              )}>
+              <p
+                className={cn(
+                  "text-sm font-bold",
+                  selected === (activity as Question).correct ||
+                    isMatch(activity) ||
+                    isOrder(activity)
+                    ? "text-emerald-dark"
+                    : "text-red-700 dark:text-red-300"
+                )}
+              >
                 {activityType === "match" || activityType === "order"
                   ? "Atividade concluída!"
                   : selected === (activity as Question).correct
                     ? "Mandou bem!"
                     : "Quase lá!"}
               </p>
-              <p className="mt-1 text-xs text-foreground-secondary">
-                {activity.explanation}
-              </p>
+              <p className="mt-1 text-xs text-foreground-secondary">{activity.explanation}</p>
             </div>
           </div>
         </div>

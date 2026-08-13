@@ -67,9 +67,7 @@ describe("AuthProvider", () => {
       </AuthProvider>
     )
 
-    await waitFor(() =>
-      expect(screen.getByText("logado: user@test.com")).toBeInTheDocument()
-    )
+    await waitFor(() => expect(screen.getByText("logado: user@test.com")).toBeInTheDocument())
   })
 
   it("lança erro ao usar useAuthContext fora do AuthProvider", () => {

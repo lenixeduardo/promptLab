@@ -52,10 +52,7 @@ export function ErrorRecoveryPanel({
         return (
           <div
             key={error.timestamp}
-            className={cn(
-              "flex items-start gap-3 rounded-lg border p-3 shadow-md",
-              bgColor
-            )}
+            className={cn("flex items-start gap-3 rounded-lg border p-3 shadow-md", bgColor)}
             role="alert"
             aria-live="assertive"
             aria-label={`Erro: ${error.message}`}

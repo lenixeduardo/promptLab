@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
-import { CheckCircle2, Circle, Gift, Sparkles, ArrowRight, Star, Gem } from "lucide-react";
-import { AppBottomNav } from "@/components/AppBottomNav";
-import { AppPageHeader } from "@/components/AppPageHeader";
-import { cn } from "@/lib/utils";
-import { useDailyMissions } from "@/hooks/useDailyMissions";
+import { Link } from "react-router-dom"
+import { CheckCircle2, Circle, Gift, Sparkles, ArrowRight, Star, Gem } from "lucide-react"
+import { AppBottomNav } from "@/components/AppBottomNav"
+import { AppPageHeader } from "@/components/AppPageHeader"
+import { cn } from "@/lib/utils"
+import { useDailyMissions } from "@/hooks/useDailyMissions"
 
 export default function MissionsPage() {
   const {
@@ -20,7 +20,7 @@ export default function MissionsPage() {
     CHEST_REWARD_GEMS,
     CHEST_REWARD_XP,
     SPECIAL_QUEST_COOLDOWN_DAYS,
-  } = useDailyMissions();
+  } = useDailyMissions()
 
   return (
     <div className="flex min-h-screen flex-col bg-white pb-24 lg:pb-8">
@@ -37,7 +37,7 @@ export default function MissionsPage() {
             "mb-5 overflow-hidden rounded-2xl border-2 p-4 transition-colors",
             chestUnlocked
               ? "border-luxury bg-gradient-to-br from-luxury/20 to-luxury/5"
-              : "border-stroke-light bg-card",
+              : "border-stroke-light bg-card"
           )}
         >
           <div className="flex items-center gap-3">
@@ -46,18 +46,18 @@ export default function MissionsPage() {
                 "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl",
                 chestUnlocked
                   ? "bg-luxury text-luxury-foreground animate-pulse"
-                  : "bg-page-bg-light text-foreground-tertiary",
+                  : "bg-page-bg-light text-foreground-tertiary"
               )}
             >
               <Gift className="h-6 w-6" strokeWidth={2.4} />
             </div>
             <div className="flex-1">
               <p className="text-sm font-extrabold text-foreground-dark">
-                Baú diário{" "}
-                {chestOpened ? "aberto!" : chestUnlocked ? "disponível" : "em progresso"}
+                Baú diário {chestOpened ? "aberto!" : chestUnlocked ? "disponível" : "em progresso"}
               </p>
               <p className="flex items-center gap-0.5 text-[11px] text-foreground-tertiary flex-wrap">
-                Conclua {CHEST_THRESHOLD} missões para ganhar +{CHEST_REWARD_XP} XP e +{CHEST_REWARD_GEMS}
+                Conclua {CHEST_THRESHOLD} missões para ganhar +{CHEST_REWARD_XP} XP e +
+                {CHEST_REWARD_GEMS}
                 <Gem className="h-3 w-3 text-luxury inline-block" />
               </p>
             </div>
@@ -79,7 +79,7 @@ export default function MissionsPage() {
                 "mt-3 flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-bold transition-colors",
                 chestOpened
                   ? "bg-emerald/20 text-emerald-dark cursor-default"
-                  : "bg-luxury text-luxury-foreground hover:brightness-105",
+                  : "bg-luxury text-luxury-foreground hover:brightness-105"
               )}
             >
               {chestOpened ? (
@@ -103,8 +103,8 @@ export default function MissionsPage() {
             questCompleted
               ? "border-luxury/40 bg-luxury/5"
               : questAvailable
-              ? "border-amber-400/60 bg-amber-50/50"
-              : "border-stroke-light bg-card",
+                ? "border-amber-400/60 bg-amber-50/50"
+                : "border-stroke-light bg-card"
           )}
         >
           <div className="mb-2 flex items-center gap-2">
@@ -114,8 +114,8 @@ export default function MissionsPage() {
                 questCompleted
                   ? "fill-luxury text-luxury"
                   : questAvailable
-                  ? "text-amber-500"
-                  : "text-foreground-tertiary",
+                    ? "text-amber-500"
+                    : "text-foreground-tertiary"
               )}
             />
             <span className="text-[11px] font-bold uppercase tracking-wider text-foreground-tertiary">
@@ -137,9 +137,7 @@ export default function MissionsPage() {
               <p
                 className={cn(
                   "text-sm font-bold",
-                  questCompleted
-                    ? "line-through text-foreground-tertiary"
-                    : "text-foreground-dark",
+                  questCompleted ? "line-through text-foreground-tertiary" : "text-foreground-dark"
                 )}
               >
                 {specialQuest.title}
@@ -169,61 +167,61 @@ export default function MissionsPage() {
             <p className="text-xs text-foreground-tertiary">Volte amanhã para novas missões!</p>
           </div>
         ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          {missions.map((m) => {
-            const Icon = m.icon;
-            const isDone = completed[m.id];
-            return (
-              <div
-                key={m.id}
-                className={cn(
-                  "flex w-full items-center gap-3 rounded-2xl border-2 p-4",
-                  isDone
-                    ? "border-emerald/40 bg-surface-success/60"
-                    : "border-stroke-light bg-card",
-                )}
-              >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            {missions.map((m) => {
+              const Icon = m.icon
+              const isDone = completed[m.id]
+              return (
                 <div
+                  key={m.id}
                   className={cn(
-                    "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl",
-                    isDone ? "bg-emerald text-white" : "bg-page-bg-light text-forest",
+                    "flex w-full items-center gap-3 rounded-2xl border-2 p-4",
+                    isDone
+                      ? "border-emerald/40 bg-surface-success/60"
+                      : "border-stroke-light bg-card"
                   )}
                 >
-                  <Icon className="h-5 w-5" />
-                </div>
-                <div className="flex-1">
-                  <p
+                  <div
                     className={cn(
-                      "text-sm font-bold",
-                      isDone
-                        ? "text-emerald-dark line-through decoration-2"
-                        : "text-foreground-dark",
+                      "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl",
+                      isDone ? "bg-emerald text-white" : "bg-page-bg-light text-forest"
                     )}
                   >
-                    {m.title}
-                  </p>
-                  <p className="text-[11px] text-foreground-tertiary">
-                    {isDone ? m.desc : m.hint}
-                  </p>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1">
+                    <p
+                      className={cn(
+                        "text-sm font-bold",
+                        isDone
+                          ? "text-emerald-dark line-through decoration-2"
+                          : "text-foreground-dark"
+                      )}
+                    >
+                      {m.title}
+                    </p>
+                    <p className="text-[11px] text-foreground-tertiary">
+                      {isDone ? m.desc : m.hint}
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-bold text-amber-600">
+                      +{m.xp} XP
+                    </span>
+                    {isDone ? (
+                      <CheckCircle2 className="h-5 w-5 text-emerald" />
+                    ) : m.link ? (
+                      <Link to={m.link} aria-label={`Ir para ${m.title}`}>
+                        <ArrowRight className="h-5 w-5 text-forest transition-colors hover:text-emerald" />
+                      </Link>
+                    ) : (
+                      <Circle className="h-5 w-5 text-stroke-light" />
+                    )}
+                  </div>
                 </div>
-                <div className="flex flex-col items-end gap-1">
-                  <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-bold text-amber-600">
-                    +{m.xp} XP
-                  </span>
-                  {isDone ? (
-                    <CheckCircle2 className="h-5 w-5 text-emerald" />
-                  ) : m.link ? (
-                    <Link to={m.link} aria-label={`Ir para ${m.title}`}>
-                      <ArrowRight className="h-5 w-5 text-forest transition-colors hover:text-emerald" />
-                    </Link>
-                  ) : (
-                    <Circle className="h-5 w-5 text-stroke-light" />
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              )
+            })}
+          </div>
         )}
 
         <Link
@@ -236,5 +234,5 @@ export default function MissionsPage() {
 
       <AppBottomNav />
     </div>
-  );
+  )
 }

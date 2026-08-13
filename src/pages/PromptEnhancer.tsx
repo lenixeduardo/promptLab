@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useRef, useCallback, useEffect } from "react"
+import { Link, useLocation } from "react-router-dom"
 import {
   ArrowLeft,
   Sparkles,
@@ -17,28 +17,24 @@ import {
   ThumbsUp,
   FileText,
   AlertTriangle,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useAuth } from "@/hooks/useAuth";
-import { getLocalGems } from "@/lib/xp";
-import {
-  enhancePrompt,
-  type EnhancementResult,
-  type FocusMode,
-} from "@/lib/promptEnhancer";
-import { AppBottomNav } from "@/components/AppBottomNav";
+} from "lucide-react"
+import { cn } from "@/lib/utils"
+import { useAuth } from "@/hooks/useAuth"
+import { getLocalGems } from "@/lib/xp"
+import { enhancePrompt, type EnhancementResult, type FocusMode } from "@/lib/promptEnhancer"
+import { AppBottomNav } from "@/components/AppBottomNav"
 
 // ── Constants ─────────────────────────────────────────────────────────────
 
-const MAX_CHARS = 5000;
+const MAX_CHARS = 5000
 
 // ── Focus mode definitions ────────────────────────────────────────────────
 
 interface FocusOption {
-  mode: FocusMode;
-  label: string;
-  description: string;
-  icon: React.ReactNode;
+  mode: FocusMode
+  label: string
+  description: string
+  icon: React.ReactNode
 }
 
 const FOCUS_OPTIONS: FocusOption[] = [
@@ -66,27 +62,27 @@ const FOCUS_OPTIONS: FocusOption[] = [
     description: "Gera mais detalhes e especificações",
     icon: <AlignLeft className="h-4 w-4" />,
   },
-];
+]
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
 interface HistoryItem {
-  id: string;
-  snippet: string;
-  timestamp: string;
-  result: EnhancementResult;
+  id: string
+  snippet: string
+  timestamp: string
+  result: EnhancementResult
 }
 
 function formatTime(): string {
-  const now = new Date();
-  return now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  const now = new Date()
+  return now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })
 }
 
 // ── Circular Score ────────────────────────────────────────────────────────
 
 function CircularScore({ score }: { score: number }) {
-  const pct = Math.round(score * 10);
-  const displayScore = Math.round(score);
+  const pct = Math.round(score * 10)
+  const displayScore = Math.round(score)
 
   return (
     <div className="relative inline-flex items-center justify-center">
@@ -106,62 +102,60 @@ function CircularScore({ score }: { score: number }) {
           strokeLinecap="round"
         />
       </svg>
-      <span className="absolute text-2xl font-extrabold text-foreground-dark">
-        {displayScore}
-      </span>
+      <span className="absolute text-2xl font-extrabold text-foreground-dark">{displayScore}</span>
     </div>
-  );
+  )
 }
 
 // ── Main Page ─────────────────────────────────────────────────────────────
 
 export default function PromptEnhancerPage() {
-  const { user } = useAuth();
-  const userId = user?.id ?? null;
-  const [gems, setGems] = useState(0);
-  const location = useLocation();
+  const { user } = useAuth()
+  const userId = user?.id ?? null
+  const [gems, setGems] = useState(0)
+  const location = useLocation()
 
   const [promptText, setPromptText] = useState(
     (location.state as { initialPrompt?: string } | null)?.initialPrompt ?? ""
-  );
-  const [focusMode, setFocusMode] = useState<FocusMode>("general");
-  const [isEnhancing, setIsEnhancing] = useState(false);
-  const [result, setResult] = useState<EnhancementResult | null>(null);
-  const [copied, setCopied] = useState(false);
-  const [copyError, setCopyError] = useState(false);
+  )
+  const [focusMode, setFocusMode] = useState<FocusMode>("general")
+  const [isEnhancing, setIsEnhancing] = useState(false)
+  const [result, setResult] = useState<EnhancementResult | null>(null)
+  const [copied, setCopied] = useState(false)
+  const [copyError, setCopyError] = useState(false)
 
-  const enhanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const toastsTimerRef = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const resultRef = useRef<HTMLDivElement | null>(null);
+  const enhanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const toastsTimerRef = useRef<ReturnType<typeof setTimeout>[]>([])
+  const resultRef = useRef<HTMLDivElement | null>(null)
 
-  const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [historyOpen, setHistoryOpen] = useState(false);
+  const [history, setHistory] = useState<HistoryItem[]>([])
+  const [historyOpen, setHistoryOpen] = useState(false)
 
   useEffect(() => {
-    if (userId) setGems(getLocalGems(userId));
-  }, [userId]);
+    if (userId) setGems(getLocalGems(userId))
+  }, [userId])
 
   useEffect(() => {
     return () => {
-      if (enhanceTimerRef.current) clearTimeout(enhanceTimerRef.current);
-      toastsTimerRef.current.forEach(clearTimeout);
-    };
-  }, []);
+      if (enhanceTimerRef.current) clearTimeout(enhanceTimerRef.current)
+      toastsTimerRef.current.forEach(clearTimeout)
+    }
+  }, [])
 
   const handleEnhance = useCallback(() => {
-    const trimmed = promptText.trim();
-    if (!trimmed || trimmed.length > MAX_CHARS) return;
+    const trimmed = promptText.trim()
+    if (!trimmed || trimmed.length > MAX_CHARS) return
 
-    setIsEnhancing(true);
-    setResult(null);
+    setIsEnhancing(true)
+    setResult(null)
 
     enhanceTimerRef.current = setTimeout(() => {
-      enhanceTimerRef.current = null;
-      const enhanced = enhancePrompt(trimmed, focusMode);
-      setResult(enhanced);
-      setIsEnhancing(false);
+      enhanceTimerRef.current = null
+      const enhanced = enhancePrompt(trimmed, focusMode)
+      setResult(enhanced)
+      setIsEnhancing(false)
 
-      const snippet = trimmed.length > 60 ? trimmed.slice(0, 60) + "…" : trimmed;
+      const snippet = trimmed.length > 60 ? trimmed.slice(0, 60) + "…" : trimmed
       setHistory((prev) => [
         {
           id: Date.now().toString(36),
@@ -170,51 +164,49 @@ export default function PromptEnhancerPage() {
           result: enhanced,
         },
         ...prev,
-      ]);
+      ])
 
       setTimeout(() => {
-        resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
-    }, 600);
-  }, [promptText, focusMode]);
+        resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+      }, 100)
+    }, 600)
+  }, [promptText, focusMode])
 
   const handleCopy = useCallback(async () => {
-    if (!result) return;
-    setCopyError(false);
-    toastsTimerRef.current.forEach(clearTimeout);
-    toastsTimerRef.current = [];
+    if (!result) return
+    setCopyError(false)
+    toastsTimerRef.current.forEach(clearTimeout)
+    toastsTimerRef.current = []
 
     try {
-      await navigator.clipboard.writeText(result.enhanced);
-      setCopied(true);
-      const t = setTimeout(() => setCopied(false), 2000);
-      toastsTimerRef.current.push(t);
+      await navigator.clipboard.writeText(result.enhanced)
+      setCopied(true)
+      const t = setTimeout(() => setCopied(false), 2000)
+      toastsTimerRef.current.push(t)
     } catch {
-      setCopyError(true);
-      const t = setTimeout(() => setCopyError(false), 3000);
-      toastsTimerRef.current.push(t);
+      setCopyError(true)
+      const t = setTimeout(() => setCopyError(false), 3000)
+      toastsTimerRef.current.push(t)
     }
-  }, [result]);
+  }, [result])
 
   const handleReset = useCallback(() => {
-    setResult(null);
-    setPromptText("");
-    setCopied(false);
-    setCopyError(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+    setResult(null)
+    setPromptText("")
+    setCopied(false)
+    setCopyError(false)
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }, [])
 
   const handleOpenHistory = useCallback((item: HistoryItem) => {
-    setResult(item.result);
-    setPromptText(item.result.original);
-    setFocusMode(item.result.focusMode);
-    setHistoryOpen(false);
-  }, []);
+    setResult(item.result)
+    setPromptText(item.result.original)
+    setFocusMode(item.result.focusMode)
+    setHistoryOpen(false)
+  }, [])
 
   const canEnhance =
-    promptText.trim().length > 0 &&
-    promptText.trim().length <= MAX_CHARS &&
-    !isEnhancing;
+    promptText.trim().length > 0 && promptText.trim().length <= MAX_CHARS && !isEnhancing
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
@@ -229,9 +221,7 @@ export default function PromptEnhancerPage() {
         </Link>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h1 className="text-base font-extrabold text-primary-dark truncate">
-              Prompt Enhancer
-            </h1>
+            <h1 className="text-base font-extrabold text-primary-dark truncate">Prompt Enhancer</h1>
             <span className="inline-flex items-center rounded-full bg-emerald/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-emerald shrink-0">
               Novo
             </span>
@@ -248,14 +238,13 @@ export default function PromptEnhancerPage() {
 
       {/* ── Content ── */}
       <div className="mx-auto w-full max-w-2xl flex-1 px-4 py-5 space-y-4 pb-32">
-
         {/* ── Hero Banner ── */}
         <div className="flex items-end justify-between rounded-2xl border border-emerald/20 bg-gradient-to-r from-emerald/5 to-emerald/10 pl-5 pr-0 pt-5">
           <div className="flex-1 pb-5 pr-2">
             <p className="text-sm leading-relaxed text-foreground-dark">
               Transforme seu prompt em instruções{" "}
-              <strong className="text-foreground-dark">claras, detalhadas e otimizadas</strong>{" "}
-              para IA.
+              <strong className="text-foreground-dark">claras, detalhadas e otimizadas</strong> para
+              IA.
             </p>
           </div>
           <img
@@ -298,7 +287,7 @@ export default function PromptEnhancerPage() {
                   "text-[11px] font-semibold",
                   promptText.length > MAX_CHARS * 0.9
                     ? "text-red-400"
-                    : "text-foreground-placeholder",
+                    : "text-foreground-placeholder"
                 )}
                 role="status"
                 aria-live="polite"
@@ -316,7 +305,8 @@ export default function PromptEnhancerPage() {
               )}
             </div>
             <p id="prompt-enhancer-help" className="sr-only">
-              Digite ou cole um prompt existente. Você pode colar prompts de até {MAX_CHARS} caracteres. Use qualquer idioma.
+              Digite ou cole um prompt existente. Você pode colar prompts de até {MAX_CHARS}{" "}
+              caracteres. Use qualquer idioma.
             </p>
           </div>
         </div>
@@ -341,7 +331,7 @@ export default function PromptEnhancerPage() {
           {/* Focus cards — single row of 4 */}
           <div className="grid grid-cols-4 gap-2 px-5 py-4">
             {FOCUS_OPTIONS.map((opt) => {
-              const selected = focusMode === opt.mode;
+              const selected = focusMode === opt.mode
               return (
                 <button
                   key={opt.mode}
@@ -350,7 +340,7 @@ export default function PromptEnhancerPage() {
                     "flex flex-col items-center gap-1.5 rounded-xl border-2 px-1.5 py-3 text-center transition-all active:scale-95",
                     selected
                       ? "border-emerald bg-emerald/5"
-                      : "border-stroke-light bg-surface-soft hover:border-emerald/40",
+                      : "border-stroke-light bg-surface-soft hover:border-emerald/40"
                   )}
                 >
                   <div
@@ -358,7 +348,7 @@ export default function PromptEnhancerPage() {
                       "flex h-7 w-7 items-center justify-center rounded-lg transition-colors",
                       selected
                         ? "bg-emerald/20 text-emerald"
-                        : "bg-surface-muted text-foreground-tertiary",
+                        : "bg-surface-muted text-foreground-tertiary"
                     )}
                   >
                     {opt.icon}
@@ -366,7 +356,7 @@ export default function PromptEnhancerPage() {
                   <p
                     className={cn(
                       "text-[10px] font-extrabold leading-tight",
-                      selected ? "text-emerald" : "text-foreground-dark",
+                      selected ? "text-emerald" : "text-foreground-dark"
                     )}
                   >
                     {opt.label}
@@ -375,7 +365,7 @@ export default function PromptEnhancerPage() {
                     {opt.description}
                   </p>
                 </button>
-              );
+              )
             })}
           </div>
         </div>
@@ -389,7 +379,7 @@ export default function PromptEnhancerPage() {
               "flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold text-white transition-all active:scale-[0.98]",
               canEnhance
                 ? "bg-emerald hover:bg-emerald-dark"
-                : "bg-stroke-light text-foreground-placeholder cursor-not-allowed",
+                : "bg-stroke-light text-foreground-placeholder cursor-not-allowed"
             )}
           >
             <Zap className="h-4 w-4" />
@@ -449,12 +439,9 @@ export default function PromptEnhancerPage() {
                 </p>
                 <div className="mt-3 space-y-1">
                   <p className="text-xs text-foreground-dark">
-                    <span className="font-semibold">Público-alvo:</span>{" "}
-                    {result.audience}
+                    <span className="font-semibold">Público-alvo:</span> {result.audience}
                   </p>
-                  <p className="text-xs font-semibold text-emerald">
-                    Tom de voz: {result.tone}
-                  </p>
+                  <p className="text-xs font-semibold text-emerald">Tom de voz: {result.tone}</p>
                 </div>
               </div>
             </div>
@@ -467,28 +454,44 @@ export default function PromptEnhancerPage() {
                   Pontuação do prompt
                 </p>
                 <CircularScore score={result.enhancedScore} />
-                <p className={cn(
-                  "mt-3 text-sm font-extrabold",
-                  result.enhancedScore >= 85 ? "text-emerald" :
-                  result.enhancedScore >= 65 ? "text-yellow-500" :
-                  result.enhancedScore >= 40 ? "text-orange-400" :
-                  "text-red-400"
-                )}>
+                <p
+                  className={cn(
+                    "mt-3 text-sm font-extrabold",
+                    result.enhancedScore >= 85
+                      ? "text-emerald"
+                      : result.enhancedScore >= 65
+                        ? "text-yellow-500"
+                        : result.enhancedScore >= 40
+                          ? "text-orange-400"
+                          : "text-red-400"
+                  )}
+                >
                   {result.enhancedScore >= 85 ? (
-                    <span className="flex items-center gap-1">Excelente! <Sparkles className="h-4 w-4" /></span>
+                    <span className="flex items-center gap-1">
+                      Excelente! <Sparkles className="h-4 w-4" />
+                    </span>
                   ) : result.enhancedScore >= 65 ? (
-                    <span className="flex items-center gap-1">Bom trabalho! <ThumbsUp className="h-4 w-4" /></span>
+                    <span className="flex items-center gap-1">
+                      Bom trabalho! <ThumbsUp className="h-4 w-4" />
+                    </span>
                   ) : result.enhancedScore >= 40 ? (
-                    <span className="flex items-center gap-1">Pode melhorar <FileText className="h-4 w-4" /></span>
+                    <span className="flex items-center gap-1">
+                      Pode melhorar <FileText className="h-4 w-4" />
+                    </span>
                   ) : (
-                    <span className="flex items-center gap-1">Prompt fraco <AlertTriangle className="h-4 w-4" /></span>
+                    <span className="flex items-center gap-1">
+                      Prompt fraco <AlertTriangle className="h-4 w-4" />
+                    </span>
                   )}
                 </p>
                 <p className="mt-1 px-1 text-[9px] leading-tight text-foreground-tertiary text-center">
-                  {result.enhancedScore >= 85 ? "Seu prompt está com ótima qualidade." :
-                   result.enhancedScore >= 65 ? "Seu prompt tem boas práticas, mas pode melhorar." :
-                   result.enhancedScore >= 40 ? "Seu prompt precisa de ajustes para ser mais eficaz." :
-                   "Revise a estrutura do seu prompt seguindo as sugestões."}
+                  {result.enhancedScore >= 85
+                    ? "Seu prompt está com ótima qualidade."
+                    : result.enhancedScore >= 65
+                      ? "Seu prompt tem boas práticas, mas pode melhorar."
+                      : result.enhancedScore >= 40
+                        ? "Seu prompt precisa de ajustes para ser mais eficaz."
+                        : "Revise a estrutura do seu prompt seguindo as sugestões."}
                 </p>
               </div>
 
@@ -560,7 +563,7 @@ export default function PromptEnhancerPage() {
           className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm"
           onClick={() => setHistoryOpen(false)}
           onKeyDown={(e) => {
-            if (e.key === "Escape") setHistoryOpen(false);
+            if (e.key === "Escape") setHistoryOpen(false)
           }}
           role="dialog"
           aria-modal="true"
@@ -626,5 +629,5 @@ export default function PromptEnhancerPage() {
 
       <AppBottomNav />
     </div>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-export const GEMS_UPDATE_EVENT = "promptlabz:gems-updated";
-export const XP_UPDATE_EVENT = "promptlabz:xp-updated";
+export const GEMS_UPDATE_EVENT = "promptlabz:gems-updated"
+export const XP_UPDATE_EVENT = "promptlabz:xp-updated"
 
 // Cumulative XP required to reach each level (index = level - 1).
 // Early levels are intentionally easy; from level 6 onward each level costs 500 XP.

@@ -14,7 +14,11 @@ interface LearningPathTrailProps {
   totalCount: number
 }
 
-export const LearningPathTrail = memo(function LearningPathTrail({ modules, completedCount, totalCount }: LearningPathTrailProps) {
+export const LearningPathTrail = memo(function LearningPathTrail({
+  modules,
+  completedCount,
+  totalCount,
+}: LearningPathTrailProps) {
   return (
     <div>
       <div className="flex items-baseline justify-between mb-3">
@@ -30,25 +34,26 @@ export const LearningPathTrail = memo(function LearningPathTrail({ modules, comp
         <div className="flex items-start gap-0 min-w-max pb-2">
           {modules.map((mod, idx) => {
             const isLast = idx === modules.length - 1
-            const Icon = mod.status === "completed"
-              ? Check
-              : mod.status === "current"
-              ? (mod.icon ?? PenLine)
-              : Lock
+            const Icon =
+              mod.status === "completed"
+                ? Check
+                : mod.status === "current"
+                  ? (mod.icon ?? PenLine)
+                  : Lock
 
             const nodeColor =
               mod.status === "completed"
                 ? "bg-primary-dark border-primary-dark"
                 : mod.status === "current"
-                ? "bg-card border-primary-dark"
-                : "bg-card border-stroke-light"
+                  ? "bg-card border-primary-dark"
+                  : "bg-card border-stroke-light"
 
             const iconColor =
               mod.status === "completed"
                 ? "text-white"
                 : mod.status === "current"
-                ? "text-primary-dark"
-                : "text-[#A0AFA5]"
+                  ? "text-primary-dark"
+                  : "text-[#A0AFA5]"
 
             const lineColor =
               mod.status === "completed" || (idx > 0 && modules[idx - 1]?.status === "completed")
@@ -69,8 +74,8 @@ export const LearningPathTrail = memo(function LearningPathTrail({ modules, comp
                       mod.status === "current"
                         ? "font-bold text-foregroundDark"
                         : mod.status === "completed"
-                        ? "font-medium text-emerald"
-                        : "font-medium text-foregroundPlaceholder"
+                          ? "font-medium text-emerald"
+                          : "font-medium text-foregroundPlaceholder"
                     }`}
                   >
                     {mod.title}

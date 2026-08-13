@@ -7,7 +7,7 @@ const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
 })
 const supabaseAdmin = createClient(
   Deno.env.get("SUPABASE_URL")!,
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 )
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!
 const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!
@@ -58,19 +58,14 @@ Deno.serve(async (req) => {
         metadata: { supabase_uid: userId },
       })
       customerId = customer.id
-      await supabaseAdmin
-        .from("users")
-        .update({ stripe_customer_id: customerId })
-        .eq("id", userId)
+      await supabaseAdmin.from("users").update({ stripe_customer_id: customerId }).eq("id", userId)
     }
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: "subscription",
       payment_method_types: ["card"],
-      line_items: [
-        { price: Deno.env.get("STRIPE_PRICE_ID")!, quantity: 1 },
-      ],
+      line_items: [{ price: Deno.env.get("STRIPE_PRICE_ID")!, quantity: 1 }],
       subscription_data: { trial_period_days: 30 },
       success_url: `${Deno.env.get("APP_URL")}/community?subscribed=true`,
       cancel_url: `${Deno.env.get("APP_URL")}/community`,

@@ -38,16 +38,12 @@ beforeEach(() => vi.clearAllMocks())
 describe("ForgotPassword — renderização", () => {
   it("exibe campo de e-mail", () => {
     renderForgotPassword()
-    expect(
-      screen.getByPlaceholderText("Digite seu e-mail cadastrado")
-    ).toBeInTheDocument()
+    expect(screen.getByPlaceholderText("Digite seu e-mail cadastrado")).toBeInTheDocument()
   })
 
   it("exibe botão 'Enviar link de redefinição'", () => {
     renderForgotPassword()
-    expect(
-      screen.getByRole("button", { name: /enviar link de redefinição/i })
-    ).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /enviar link de redefinição/i })).toBeInTheDocument()
   })
 
   it("exibe link 'Voltar para o login'", () => {
@@ -65,16 +61,10 @@ describe("ForgotPassword — submissão", () => {
       screen.getByPlaceholderText("Digite seu e-mail cadastrado"),
       "user@test.com"
     )
-    await userEvent.click(
-      screen.getByRole("button", { name: /enviar link de redefinição/i })
-    )
+    await userEvent.click(screen.getByRole("button", { name: /enviar link de redefinição/i }))
 
-    await waitFor(() =>
-      expect(screen.getByText("E-mail enviado!")).toBeInTheDocument()
-    )
-    expect(
-      screen.getByText(/verifique sua caixa de entrada/i)
-    ).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByText("E-mail enviado!")).toBeInTheDocument())
+    expect(screen.getByText(/verifique sua caixa de entrada/i)).toBeInTheDocument()
   })
 
   it("exibe mensagem de erro quando reset falha", async () => {
@@ -85,13 +75,9 @@ describe("ForgotPassword — submissão", () => {
       screen.getByPlaceholderText("Digite seu e-mail cadastrado"),
       "nao@existe.com"
     )
-    await userEvent.click(
-      screen.getByRole("button", { name: /enviar link de redefinição/i })
-    )
+    await userEvent.click(screen.getByRole("button", { name: /enviar link de redefinição/i }))
 
-    await waitFor(() =>
-      expect(sileo.error).toHaveBeenCalledWith({ title: "Email não encontrado" })
-    )
+    await waitFor(() => expect(sileo.error).toHaveBeenCalledWith({ title: "Email não encontrado" }))
   })
 
   it("exibe 'Enviando...' enquanto request está em andamento", async () => {
@@ -102,9 +88,7 @@ describe("ForgotPassword — submissão", () => {
       screen.getByPlaceholderText("Digite seu e-mail cadastrado"),
       "user@test.com"
     )
-    await userEvent.click(
-      screen.getByRole("button", { name: /enviar link de redefinição/i })
-    )
+    await userEvent.click(screen.getByRole("button", { name: /enviar link de redefinição/i }))
 
     expect(screen.getByRole("button", { name: /enviando/i })).toBeDisabled()
   })

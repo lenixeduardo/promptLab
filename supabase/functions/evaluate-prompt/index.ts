@@ -3,10 +3,7 @@ import { resolveCorsHeaders } from "../_shared/cors.ts"
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!
 const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!
-const supabaseAdmin = createClient(
-  supabaseUrl,
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-)
+const supabaseAdmin = createClient(supabaseUrl, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!)
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 const ANTHROPIC_MODEL = "claude-sonnet-5"
@@ -83,7 +80,7 @@ Deno.serve(async (req) => {
     if (prompt.length > MAX_PROMPT_LENGTH) {
       return jsonResponse(
         { error: `Prompt muito longo. Máximo de ${MAX_PROMPT_LENGTH} caracteres.` },
-        400,
+        400
       )
     }
 
@@ -114,7 +111,7 @@ Deno.serve(async (req) => {
     // exceed the daily quota.
     const { data: newCount, error: usageError } = await supabaseAdmin.rpc(
       "increment_prompt_evaluation_usage",
-      { p_user_id: userId, p_usage_date: today, p_daily_limit: dailyLimit },
+      { p_user_id: userId, p_usage_date: today, p_daily_limit: dailyLimit }
     )
 
     if (usageError) {
@@ -124,10 +121,11 @@ Deno.serve(async (req) => {
     } else if (newCount === null) {
       return jsonResponse(
         {
-          error: "Limite diário de avaliações com IA atingido. Assine o Premium para análises ilimitadas.",
+          error:
+            "Limite diário de avaliações com IA atingido. Assine o Premium para análises ilimitadas.",
           quotaExceeded: true,
         },
-        429,
+        429
       )
     }
 

@@ -2,9 +2,24 @@ import { useMemo, useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { sileo } from "sileo"
 import {
-  ChevronLeft, ChevronRight, Search, SlidersHorizontal, X, Bookmark,
-  Lightbulb, Megaphone, Code2, Apple, ClipboardList, BarChart3,
-  MessageSquare, Settings, Briefcase, Palette, Headphones, Users,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  SlidersHorizontal,
+  X,
+  Bookmark,
+  Lightbulb,
+  Megaphone,
+  Code2,
+  Apple,
+  ClipboardList,
+  BarChart3,
+  MessageSquare,
+  Settings,
+  Briefcase,
+  Palette,
+  Headphones,
+  Users,
   type LucideIcon,
 } from "lucide-react"
 import { type PromptCard } from "@/data/promptsData"
@@ -23,15 +38,38 @@ const DIFF_LABELS: Record<DiffFilter, string> = {
   Avancado: "Avançado",
 }
 
-const DIFF_BADGE: Record<PromptCard["difficulty"], { dot: string; label: string; bg: string; text: string }> = {
-  Iniciante:    { dot: "bg-primary-dark", label: "Iniciante",     bg: "bg-pageBgLight", text: "text-primary-dark" },
-  Intermediario:{ dot: "bg-amber-600", label: "Intermediário",  bg: "bg-[#FFF7ED]", text: "text-amber-800" },
-  Avancado:     { dot: "bg-red-600", label: "Avançado",       bg: "bg-[#FEF2F2]", text: "text-red" },
+const DIFF_BADGE: Record<
+  PromptCard["difficulty"],
+  { dot: string; label: string; bg: string; text: string }
+> = {
+  Iniciante: {
+    dot: "bg-primary-dark",
+    label: "Iniciante",
+    bg: "bg-pageBgLight",
+    text: "text-primary-dark",
+  },
+  Intermediario: {
+    dot: "bg-amber-600",
+    label: "Intermediário",
+    bg: "bg-[#FFF7ED]",
+    text: "text-amber-800",
+  },
+  Avancado: { dot: "bg-red-600", label: "Avançado", bg: "bg-[#FEF2F2]", text: "text-red" },
 }
 
 const ICON_MAP: Record<string, LucideIcon> = {
-  Lightbulb, Megaphone, Code2, Apple, ClipboardList, BarChart3,
-  MessageSquare, Settings, Briefcase, Palette, Headphones, Users,
+  Lightbulb,
+  Megaphone,
+  Code2,
+  Apple,
+  ClipboardList,
+  BarChart3,
+  MessageSquare,
+  Settings,
+  Briefcase,
+  Palette,
+  Headphones,
+  Users,
 }
 
 function PromptListCard({
@@ -124,19 +162,15 @@ export default function PromptCategoryPage() {
   const label = catMeta?.label.replace("\n", " ") ?? categoryId ?? "Categoria"
   const CategoryIcon = ICON_MAP[catMeta?.icon ?? ""] ?? Lightbulb
 
-  const basePrompts = useMemo(
-    () => prompts,
-    [prompts],
-  )
+  const basePrompts = useMemo(() => prompts, [prompts])
 
   const filtered = useMemo(() => {
-    let result = activeDiff === "Todos" ? basePrompts : basePrompts.filter((p) => p.difficulty === activeDiff)
+    let result =
+      activeDiff === "Todos" ? basePrompts : basePrompts.filter((p) => p.difficulty === activeDiff)
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase()
       result = result.filter(
-        (p) =>
-          p.title.toLowerCase().includes(q) ||
-          p.description.toLowerCase().includes(q),
+        (p) => p.title.toLowerCase().includes(q) || p.description.toLowerCase().includes(q)
       )
     }
     return result
@@ -169,7 +203,9 @@ export default function PromptCategoryPage() {
             </button>
             <div>
               <h1 className="text-lg font-extrabold text-foregroundDark">{label}</h1>
-              <p className="text-xs text-foregroundMuted">{basePrompts.length} prompts disponíveis</p>
+              <p className="text-xs text-foregroundMuted">
+                {basePrompts.length} prompts disponíveis
+              </p>
             </div>
           </div>
           {catMeta && (
@@ -191,7 +227,10 @@ export default function PromptCategoryPage() {
               className="flex-1 bg-transparent text-sm text-foregroundDark placeholder:text-foregroundPlaceholder focus:outline-none"
             />
             {searchQuery && (
-              <button onClick={() => setSearchQuery("")} className="rounded-full p-0.5 text-foregroundMuted">
+              <button
+                onClick={() => setSearchQuery("")}
+                className="rounded-full p-0.5 text-foregroundMuted"
+              >
                 <X className="h-3.5 w-3.5" />
               </button>
             )}

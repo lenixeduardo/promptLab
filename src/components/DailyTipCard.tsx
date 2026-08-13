@@ -1,7 +1,7 @@
-import { memo } from "react";
+import { memo } from "react"
 
 interface DailyTipCardProps {
-  tip: string;
+  tip: string
 }
 
 export const DailyTipCard = memo(function DailyTipCard({ tip }: DailyTipCardProps) {
@@ -22,10 +22,8 @@ export const DailyTipCard = memo(function DailyTipCard({ tip }: DailyTipCardProp
         >
           Dica do dia
         </h2>
-        <p className="mt-1 text-sm font-semibold leading-snug text-foreground-dark">
-          {tip}
-        </p>
+        <p className="mt-1 text-sm font-semibold leading-snug text-foreground-dark">{tip}</p>
       </div>
     </section>
-  );
+  )
 })

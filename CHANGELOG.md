@@ -7,6 +7,7 @@ Para o detalhamento completo por item e estimativas de esforço, veja [ROADMAP.m
 ## [v0.3] — Em andamento
 
 ### Adicionado
+
 - Suite de Prompt Tools: `PromptLab`, `PromptAnalyzer`, `PromptEnhancer`, `PromptChallenge`, `PromptWars`
 - App Android via Capacitor com build nativo automatizado (`android-build.yml`)
 - Feed de Notícias (`News`) com workflow diário automatizado (`daily-tech-news.yml`)
@@ -22,19 +23,27 @@ Para o detalhamento completo por item e estimativas de esforço, veja [ROADMAP.m
 - Fluxo de Assinatura Premium (UI; sem gateway de pagamento real ainda)
 
 ### Corrigido
+
 - RLS de conquistas e progresso de módulo: revogado `INSERT`/`UPDATE` direto do client, substituído por funções `SECURITY DEFINER` com validação de deltas máximos e não-decréscimo (`20260812_020`)
 - RLS de XP/gems e leaderboard: mesma classe de correção (`20260704_014`)
 - Vazamento de e-mail completo em log de falha de login (`Login.tsx`)
 - Integração `errorLogging.ts` → Sentry: referência a `window.Sentry` (nunca definida) trocada por import direto do SDK
+- CORS multi-origem (`resolveCorsHeaders()`) conectado de fato nas Edge Functions `evaluate-prompt`, `stripe-checkout` e `stripe-webhook` (a primeira versão só tinha a função pronta, sem nenhum call site)
+- Paginação real (`.range()`) em `getReviews`, `getNewsArticles` e `getNotifications`, com UI de "carregar mais" em `News.tsx` e `Notifications.tsx`
+- Repositório inteiro formatado com Prettier e `format:check` promovido a gate no CI (estava configurado mas não aplicado)
+- MVP (v0.1) isolado como seção própria em `PRODUCT.md`, separado do estado atual do produto (v0.3)
 
 ### Pendente
-- Paginação/infinite scroll no histórico de lições
+
+- Paginação em `getLeaderboard` e no histórico de lições
+- Upload persistido em Supabase Storage (issue #151)
 - Testes de integração reais contra Supabase local (RLS + migrations)
 - Seeds/dados de demonstração para loja, missões e ranking
 
 ## [v0.2] — Concluída
 
 ### Adicionado
+
 - Notificações in-app com histórico persistido (conquistas, streaks, atualizações de conteúdo)
 - Streak semanal com `StreakWidget` e `StreakFlame`
 - Compartilhamento de skills via link direto (`/skill/nome`)
@@ -43,11 +52,13 @@ Para o detalhamento completo por item e estimativas de esforço, veja [ROADMAP.m
 - SEO básico por página (`PageSEO`)
 
 ### Técnico
+
 - Tipagem TypeScript consistente em todos os módulos principais
 
 ## [v0.1] — MVP publicado
 
 ### Adicionado
+
 - Autenticação completa (email/senha, Google OAuth, Apple OAuth)
 - Trilhas de aprendizado com módulos e lições
 - Central de Skills com 80+ skills catalogadas, busca, filtro por categoria e ranking

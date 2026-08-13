@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { Swords, ArrowLeft, Clock } from "lucide-react";
+import { Link } from "react-router-dom"
+import { Swords, ArrowLeft, Clock } from "lucide-react"
 import { AppBottomNav } from "@/components/AppBottomNav"
 
 export default function PromptWarsPage() {
@@ -22,7 +22,8 @@ export default function PromptWarsPage() {
         <div className="space-y-2">
           <h2 className="text-2xl font-extrabold text-primary-dark">Em breve</h2>
           <p className="text-sm text-foreground-tertiary max-w-xs">
-            Os duelos de prompts em tempo real estão chegando. Complete as trilhas A1 e A2 para estar preparado quando os Prompt Wars abrirem!
+            Os duelos de prompts em tempo real estão chegando. Complete as trilhas A1 e A2 para
+            estar preparado quando os Prompt Wars abrirem!
           </p>
         </div>
         <div className="flex items-center gap-2 rounded-full bg-red-50 px-4 py-2 text-sm font-semibold text-red-500">
@@ -39,5 +40,5 @@ export default function PromptWarsPage() {
 
       <AppBottomNav />
     </div>
-  );
+  )
 }

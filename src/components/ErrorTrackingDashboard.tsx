@@ -21,7 +21,8 @@ interface ErrorTrackingDashboardProps {
 }
 
 export function ErrorTrackingDashboard({ metrics, className }: ErrorTrackingDashboardProps) {
-  const errorPercentage = metrics.totalErrors > 0 ? (metrics.networkErrors / metrics.totalErrors) * 100 : 0
+  const errorPercentage =
+    metrics.totalErrors > 0 ? (metrics.networkErrors / metrics.totalErrors) * 100 : 0
 
   const formatTime = (ms: number): string => {
     if (ms < 1000) return `${Math.round(ms)}ms`
@@ -45,7 +46,12 @@ export function ErrorTrackingDashboard({ metrics, className }: ErrorTrackingDash
         {/* Total Errors */}
         <Card className="p-3 border-stroke-light">
           <p className="text-xs text-foreground-secondary mb-1">Total de Erros</p>
-          <p className={cn("text-lg font-bold", metrics.totalErrors > 5 ? "text-red-600" : "text-foreground-dark")}>
+          <p
+            className={cn(
+              "text-lg font-bold",
+              metrics.totalErrors > 5 ? "text-red-600" : "text-foreground-dark"
+            )}
+          >
             {metrics.totalErrors}
           </p>
           <p className="text-[10px] text-foreground-tertiary mt-1">última sessão</p>
@@ -105,7 +111,12 @@ export function ErrorTrackingDashboard({ metrics, className }: ErrorTrackingDash
           <div className="flex items-start justify-between">
             <div>
               <p className="text-xs text-foreground-secondary mb-2">Status do Sistema</p>
-              <p className={cn("text-lg font-bold", metrics.totalErrors === 0 ? "text-emerald-600" : "text-amber-600")}>
+              <p
+                className={cn(
+                  "text-lg font-bold",
+                  metrics.totalErrors === 0 ? "text-emerald-600" : "text-amber-600"
+                )}
+              >
                 {metrics.totalErrors === 0 ? "Operacional" : "Com Problemas"}
               </p>
             </div>
@@ -130,7 +141,9 @@ export function ErrorTrackingDashboard({ metrics, className }: ErrorTrackingDash
           <div>
             <div className="flex justify-between mb-1">
               <span className="text-xs text-foreground-secondary">Rede</span>
-              <span className="text-xs font-bold text-foreground-dark">{metrics.networkErrors}</span>
+              <span className="text-xs font-bold text-foreground-dark">
+                {metrics.networkErrors}
+              </span>
             </div>
             <div className="w-full bg-surface-soft rounded-full h-1.5">
               <div

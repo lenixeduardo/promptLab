@@ -21,7 +21,11 @@ const DEMO_CERTIFICATES: StoredCertificate[] = [
   {
     id: "cert-demo-001",
     courseName: "Engenharia de Prompts para Iniciantes",
-    completionDate: new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" }),
+    completionDate: new Date().toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }),
     hours: 4,
     track: "A1",
   },
@@ -60,7 +64,7 @@ export default function Certificates() {
   const displayName = user?.user_metadata?.full_name || levelTitle
 
   const [certs] = useState<StoredCertificate[]>(() =>
-    user?.id ? loadCertificates(user.id) : DEMO_CERTIFICATES,
+    user?.id ? loadCertificates(user.id) : DEMO_CERTIFICATES
   )
   const [downloading, setDownloading] = useState<string | null>(null)
 
@@ -128,7 +132,9 @@ export default function Certificates() {
                 <div className="px-4 py-4">
                   <div className="flex items-start gap-3">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-dark">
-                      <span className="text-xs font-extrabold text-white">{cert.track ?? "PL"}</span>
+                      <span className="text-xs font-extrabold text-white">
+                        {cert.track ?? "PL"}
+                      </span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-semibold uppercase tracking-widest text-emerald">

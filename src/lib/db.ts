@@ -50,7 +50,10 @@ export async function getUserProfile(userId: string): Promise<DbResult<Profile>>
   }
 }
 
-export async function updateUserProfile(userId: string, fullName: string): Promise<DbResult<Profile>> {
+export async function updateUserProfile(
+  userId: string,
+  fullName: string
+): Promise<DbResult<Profile>> {
   if (!isSupabaseConfigured()) {
     return { data: null, error: "Supabase não configurado" }
   }
@@ -68,7 +71,10 @@ export async function updateUserProfile(userId: string, fullName: string): Promi
   }
 }
 
-export async function updateUserAvatar(userId: string, avatarUrl: string): Promise<DbResult<Profile>> {
+export async function updateUserAvatar(
+  userId: string,
+  avatarUrl: string
+): Promise<DbResult<Profile>> {
   if (!isSupabaseConfigured()) {
     return { data: null, error: "Supabase não configurado" }
   }
@@ -89,29 +95,23 @@ export async function updateUserAvatar(userId: string, avatarUrl: string): Promi
 
 // ── Progress Operations ────────────────────────────────────────────────────────
 
-export async function saveProgress(
-  userId: string,
-  categoryId: string,
-  progress: CategoryProgress
-) {
+export async function saveProgress(userId: string, categoryId: string, progress: CategoryProgress) {
   // Always update local storage
   updateLocalProgress(userId, categoryId, progress)
 
   if (!isSupabaseConfigured()) return { error: "Supabase não configurado" }
 
   try {
-    const { error } = await supabase
-      .from("user_progress")
-      .upsert(
-        {
-          user_id: userId,
-          category_id: categoryId,
-          completed_lessons: progress.completedLessonIds,
-          current_module_index: progress.currentModuleIndex,
-          current_lesson_index: progress.currentLessonIndex,
-        },
-        { onConflict: "user_id,category_id" }
-      )
+    const { error } = await supabase.from("user_progress").upsert(
+      {
+        user_id: userId,
+        category_id: categoryId,
+        completed_lessons: progress.completedLessonIds,
+        current_module_index: progress.currentModuleIndex,
+        current_lesson_index: progress.currentLessonIndex,
+      },
+      { onConflict: "user_id,category_id" }
+    )
 
     if (error) throw error
     return { error: null }
@@ -145,13 +145,16 @@ export async function loadProgress(userId: string): Promise<Record<string, Categ
           completedLessonIds: row.completed_lessons || [],
         }
       })
-      
+
       // Update local storage to stay in sync
       localStorage.setItem(getProgressStorageKey(userId), JSON.stringify(dbProgress))
       return dbProgress
     }
   } catch (err) {
-    console.error("Error loading progress from Supabase:", getErrorMessage(err, "Erro ao carregar progresso"))
+    console.error(
+      "Error loading progress from Supabase:",
+      getErrorMessage(err, "Erro ao carregar progresso")
+    )
   }
 
   return localData
@@ -164,18 +167,16 @@ export async function syncLocalProgressToSupabase(userId: string) {
   try {
     const localData = getLocalProgress(userId)
     const promises = Object.entries(localData).map(([catId, progress]) => {
-      return supabase
-        .from("user_progress")
-        .upsert(
-          {
-            user_id: userId,
-            category_id: catId,
-            completed_lessons: progress.completedLessonIds,
-            current_module_index: progress.currentModuleIndex,
-            current_lesson_index: progress.currentLessonIndex,
-          },
-          { onConflict: "user_id,category_id" }
-        )
+      return supabase.from("user_progress").upsert(
+        {
+          user_id: userId,
+          category_id: catId,
+          completed_lessons: progress.completedLessonIds,
+          current_module_index: progress.currentModuleIndex,
+          current_lesson_index: progress.currentLessonIndex,
+        },
+        { onConflict: "user_id,category_id" }
+      )
     })
 
     const results = await Promise.all(promises)
@@ -217,7 +218,10 @@ function updateLocalProgress(userId: string, categoryId: string, progress: Categ
     data[categoryId] = progress
     localStorage.setItem(key, JSON.stringify(data))
   } catch (err) {
-    console.error("Error updating local progress storage:", getErrorMessage(err, "Erro ao atualizar storage local"))
+    console.error(
+      "Error updating local progress storage:",
+      getErrorMessage(err, "Erro ao atualizar storage local")
+    )
   }
 }
 
@@ -303,7 +307,11 @@ export async function getLeaderboard(limit = 20): Promise<DbResult<LeaderboardEn
   }
 }
 
-export async function updateUserXP(userId: string, xp: number, gems?: number): Promise<DbResult<void>> {
+export async function updateUserXP(
+  userId: string,
+  xp: number,
+  gems?: number
+): Promise<DbResult<void>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase não configurado" }
   try {
     // The client no longer has UPDATE grant on users.xp/gems. Syncing goes
@@ -335,7 +343,7 @@ export interface DbNewsArticle {
   published_at: string
 }
 
-export async function getNewsArticles(limit = 30): Promise<DbResult<DbNewsArticle[]>> {
+export async function getNewsArticles(limit = 30, offset = 0): Promise<DbResult<DbNewsArticle[]>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase não configurado" }
   try {
     const { data, error } = await supabase
@@ -343,7 +351,7 @@ export async function getNewsArticles(limit = 30): Promise<DbResult<DbNewsArticl
       .select("id,title,description,category,image_emoji,image_url,source_url,published_at")
       .eq("visible", true)
       .order("published_at", { ascending: false })
-      .limit(limit)
+      .range(offset, offset + limit - 1)
     if (error) throw error
     return { data: data as DbNewsArticle[], error: null }
   } catch (err) {
@@ -366,7 +374,11 @@ export interface DbNotification {
   created_at: string
 }
 
-export async function getNotifications(userId: string, limit = 50): Promise<DbResult<DbNotification[]>> {
+export async function getNotifications(
+  userId: string,
+  limit = 50,
+  offset = 0
+): Promise<DbResult<DbNotification[]>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase não configurado" }
   try {
     const { data, error } = await supabase
@@ -374,7 +386,7 @@ export async function getNotifications(userId: string, limit = 50): Promise<DbRe
       .select("id,user_id,type,title,description,action_label,href,mention,read_at,created_at")
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
-      .limit(limit)
+      .range(offset, offset + limit - 1)
     if (error) throw error
     return { data: data as DbNotification[], error: null }
   } catch (err) {
@@ -477,7 +489,9 @@ export async function saveModuleProgress(
 
 // Hydrates module progress from Supabase (útil ao logar em um dispositivo novo ou
 // após perda de localStorage). Caller merges with local data, taking the max per track.
-export async function fetchModuleProgress(userId: string): Promise<DbResult<Record<string, number>>> {
+export async function fetchModuleProgress(
+  userId: string
+): Promise<DbResult<Record<string, number>>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase não configurado" }
   try {
     const { data, error } = await supabase
@@ -498,7 +512,10 @@ export async function fetchModuleProgress(userId: string): Promise<DbResult<Reco
 // Sends the current local inventory (power-ups + avatares comprados) to Supabase.
 // Called as an additional side-effect after a purchase; local storage remains the
 // source of truth for offline/degraded mode.
-export async function syncInventoryToServer(userId: string, inv: StoredInventory): Promise<DbResult<void>> {
+export async function syncInventoryToServer(
+  userId: string,
+  inv: StoredInventory
+): Promise<DbResult<void>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase não configurado" }
   try {
     const { error } = await supabase.from("user_inventory").upsert(
@@ -539,7 +556,9 @@ export async function fetchInventoryFromServer(userId: string): Promise<DbResult
         protection: Math.max(local.powerUps["protection"] ?? 0, data.protection ?? 0),
         "focus-total": Math.max(local.powerUps["focus-total"] ?? 0, data.focus_total ?? 0),
       },
-      ownedAvatarIds: Array.from(new Set([...local.ownedAvatarIds, ...(data.owned_avatar_ids ?? [])])),
+      ownedAvatarIds: Array.from(
+        new Set([...local.ownedAvatarIds, ...(data.owned_avatar_ids ?? [])])
+      ),
     }
     saveInventory(userId, merged)
     return { data: merged, error: null }
@@ -645,7 +664,10 @@ export async function getTrendingSkills(category?: string): Promise<DbResult<DbT
 export async function getSkillTrailCategories(): Promise<DbResult<DbSkillTrailCategory[]>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase not configured" }
   try {
-    const { data, error } = await supabase.from("skill_trail_categories").select("*, skill_trail_items(*)").order("sort_order")
+    const { data, error } = await supabase
+      .from("skill_trail_categories")
+      .select("*, skill_trail_items(*)")
+      .order("sort_order")
     if (error) throw error
     return { data: data ?? [], error: null }
   } catch (err) {
@@ -653,7 +675,10 @@ export async function getSkillTrailCategories(): Promise<DbResult<DbSkillTrailCa
   }
 }
 
-export async function getPrompts(category?: string, difficulty?: string): Promise<DbResult<DbPrompt[]>> {
+export async function getPrompts(
+  category?: string,
+  difficulty?: string
+): Promise<DbResult<DbPrompt[]>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase not configured" }
   try {
     let query = supabase.from("prompts").select("*").order("sort_order")
@@ -692,7 +717,10 @@ export async function getLabConfig(): Promise<DbResult<DbLabConfig>> {
 export async function getAchievementDefinitions(): Promise<DbResult<DbAchievementDefinition[]>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase not configured" }
   try {
-    const { data, error } = await supabase.from("achievement_definitions").select("*").order("sort_order")
+    const { data, error } = await supabase
+      .from("achievement_definitions")
+      .select("*")
+      .order("sort_order")
     if (error) throw error
     return { data: data ?? [], error: null }
   } catch (err) {
@@ -707,14 +735,14 @@ export interface ReviewInput {
   comment: string | null
 }
 
-export async function getReviews(limit = 50): Promise<DbResult<DbReview[]>> {
+export async function getReviews(limit = 50, offset = 0): Promise<DbResult<DbReview[]>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase not configured" }
   try {
     const { data, error } = await supabase
       .from("reviews")
       .select("id,user_id,rating,comment,created_at,updated_at")
       .order("created_at", { ascending: false })
-      .limit(limit)
+      .range(offset, offset + limit - 1)
     if (error) throw error
     return { data: data as DbReview[], error: null }
   } catch (err) {
@@ -737,7 +765,10 @@ export async function getUserReview(userId: string): Promise<DbResult<DbReview>>
   }
 }
 
-export async function insertReview(userId: string, review: ReviewInput): Promise<DbResult<DbReview>> {
+export async function insertReview(
+  userId: string,
+  review: ReviewInput
+): Promise<DbResult<DbReview>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase not configured" }
   try {
     const { data, error } = await supabase
@@ -756,7 +787,11 @@ export async function insertReview(userId: string, review: ReviewInput): Promise
   }
 }
 
-export async function updateReview(reviewId: string, userId: string, review: ReviewInput): Promise<DbResult<DbReview>> {
+export async function updateReview(
+  reviewId: string,
+  userId: string,
+  review: ReviewInput
+): Promise<DbResult<DbReview>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase not configured" }
   try {
     const { data, error } = await supabase

@@ -13,9 +13,12 @@ interface PremiumBenefitCardProps {
  * "card" is a standalone bordered tile; "row" is a divider-separated list row.
  */
 export function PremiumBenefitCard({ feature, variant = "card" }: PremiumBenefitCardProps) {
-  const IconComp = (Icons as unknown as Record<string, React.ComponentType<{ className?: string; strokeWidth?: number }>>)[
-    feature.icon
-  ]
+  const IconComp = (
+    Icons as unknown as Record<
+      string,
+      React.ComponentType<{ className?: string; strokeWidth?: number }>
+    >
+  )[feature.icon]
 
   return (
     <div
@@ -23,13 +26,13 @@ export function PremiumBenefitCard({ feature, variant = "card" }: PremiumBenefit
         "flex items-start gap-3",
         variant === "card"
           ? "rounded-2xl border border-pageBgLight bg-white px-4 py-3.5 shadow-sm"
-          : "py-3.5 first:pt-0 last:pb-0",
+          : "py-3.5 first:pt-0 last:pb-0"
       )}
     >
       <span
         className={cn(
           "flex h-9 w-9 shrink-0 items-center justify-center bg-surface-success",
-          variant === "card" ? "rounded-xl" : "rounded-full",
+          variant === "card" ? "rounded-xl" : "rounded-full"
         )}
       >
         {IconComp ? (

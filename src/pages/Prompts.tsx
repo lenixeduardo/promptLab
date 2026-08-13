@@ -1,9 +1,21 @@
 import { useState, useEffect, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 import {
-  ArrowRight, Briefcase, Search, X,
-  Lightbulb, Megaphone, Code2, Apple, ClipboardList, BarChart3,
-  MessageSquare, Settings, Palette, Headphones, Users,
+  ArrowRight,
+  Briefcase,
+  Search,
+  X,
+  Lightbulb,
+  Megaphone,
+  Code2,
+  Apple,
+  ClipboardList,
+  BarChart3,
+  MessageSquare,
+  Settings,
+  Palette,
+  Headphones,
+  Users,
   type LucideIcon,
 } from "lucide-react"
 import { sileo } from "sileo"
@@ -22,8 +34,18 @@ const DIFF_LABELS: Record<DiffFilter, string> = {
 }
 
 const ICON_MAP: Record<string, LucideIcon> = {
-  Lightbulb, Megaphone, Code2, Apple, ClipboardList, BarChart3,
-  MessageSquare, Settings, Briefcase, Palette, Headphones, Users,
+  Lightbulb,
+  Megaphone,
+  Code2,
+  Apple,
+  ClipboardList,
+  BarChart3,
+  MessageSquare,
+  Settings,
+  Briefcase,
+  Palette,
+  Headphones,
+  Users,
 }
 
 function CategoryCard({ cat, onClick }: { cat: LabCategory; onClick: () => void }) {
@@ -67,10 +89,14 @@ export default function Prompts() {
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <h1 className="text-2xl font-extrabold leading-tight text-foregroundDark">
-              Laboratório de<br />Prompts
+              Laboratório de
+              <br />
+              Prompts
             </h1>
             <p className="mt-1.5 text-sm text-[#3E6B50]">
-              Experimente, aprimore e domine a arte<br />de criar prompts incríveis.
+              Experimente, aprimore e domine a arte
+              <br />
+              de criar prompts incríveis.
             </p>
           </div>
           <img

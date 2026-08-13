@@ -41,10 +41,7 @@ export function useFavorites() {
     })
   }, [])
 
-  const isFavorite = useCallback(
-    (skillName: string) => favorites.includes(skillName),
-    [favorites]
-  )
+  const isFavorite = useCallback((skillName: string) => favorites.includes(skillName), [favorites])
 
   return { favorites, toggleFavorite, isFavorite }
 }

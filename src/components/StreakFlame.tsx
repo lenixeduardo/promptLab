@@ -1,13 +1,15 @@
-import { memo } from "react";
-import { Flame } from "lucide-react";
+import { memo } from "react"
+import { Flame } from "lucide-react"
 
 export const StreakFlame = memo(function StreakFlame({ streak }: { streak: number }) {
-  const isHighStreak = streak >= 7;
-  const isRecord = streak >= 12;
+  const isHighStreak = streak >= 7
+  const isRecord = streak >= 12
 
   return (
     <div className="relative inline-flex items-center gap-1.5">
-      <div className={`relative ${isHighStreak ? "animate-flame-flicker will-change-transform" : ""}`}>
+      <div
+        className={`relative ${isHighStreak ? "animate-flame-flicker will-change-transform" : ""}`}
+      >
         <Flame
           className={`h-6 w-6 ${
             isRecord
@@ -25,14 +27,12 @@ export const StreakFlame = memo(function StreakFlame({ streak }: { streak: numbe
           </>
         )}
       </div>
-      <span className="text-xl font-extrabold text-foreground-dark">
-        {streak} dias
-      </span>
+      <span className="text-xl font-extrabold text-foreground-dark">{streak} dias</span>
       {isRecord && (
         <span className="absolute -top-1 -right-6 text-[9px] font-extrabold text-amber-500 animate-bounce-slow">
           RECORDE!
         </span>
       )}
     </div>
-  );
+  )
 })

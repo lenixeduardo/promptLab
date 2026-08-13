@@ -7,7 +7,11 @@ interface ProgressCardProps {
   targetXP: number
 }
 
-export const ProgressCard = memo(function ProgressCard({ level, currentXP, targetXP }: ProgressCardProps) {
+export const ProgressCard = memo(function ProgressCard({
+  level,
+  currentXP,
+  targetXP,
+}: ProgressCardProps) {
   const percent = Math.min((currentXP / targetXP) * 100, 100)
 
   return (
@@ -19,7 +23,10 @@ export const ProgressCard = memo(function ProgressCard({ level, currentXP, targe
 
       <div className="flex items-center gap-4">
         {/* Hexagon badge */}
-        <div className="relative flex-shrink-0 flex items-center justify-center" style={{ width: 52, height: 52 }}>
+        <div
+          className="relative flex-shrink-0 flex items-center justify-center"
+          style={{ width: 52, height: 52 }}
+        >
           <div
             className="absolute inset-0 bg-primary-dark"
             style={{
@@ -27,7 +34,9 @@ export const ProgressCard = memo(function ProgressCard({ level, currentXP, targe
             }}
           />
           <div className="relative z-10 flex flex-col items-center leading-none">
-            <span className="text-[9px] font-semibold text-white/80 uppercase tracking-wide">Nível</span>
+            <span className="text-[9px] font-semibold text-white/80 uppercase tracking-wide">
+              Nível
+            </span>
             <span className="text-xl font-extrabold text-white">{level}</span>
           </div>
         </div>

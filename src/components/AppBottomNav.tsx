@@ -28,7 +28,9 @@ interface AppBottomNavProps {
  * Mobile bottom navigation bar.
  * Shows 6 items with icons and labels. The active route is highlighted.
  */
-export const AppBottomNav = memo(function AppBottomNav({ items = BOTTOM_NAV_ITEMS }: AppBottomNavProps) {
+export const AppBottomNav = memo(function AppBottomNav({
+  items = BOTTOM_NAV_ITEMS,
+}: AppBottomNavProps) {
   const { pathname } = useLocation()
 
   // Resolve icon components once per render (only changes when items changes)
@@ -36,7 +38,12 @@ export const AppBottomNav = memo(function AppBottomNav({ items = BOTTOM_NAV_ITEM
     () =>
       items.map((item) => ({
         ...item,
-        IconComp: (Icons as unknown as Record<string, React.ComponentType<{ className?: string; strokeWidth?: number }>>)[item.icon],
+        IconComp: (
+          Icons as unknown as Record<
+            string,
+            React.ComponentType<{ className?: string; strokeWidth?: number }>
+          >
+        )[item.icon],
       })),
     [items]
   )
@@ -57,31 +64,24 @@ export const AppBottomNav = memo(function AppBottomNav({ items = BOTTOM_NAV_ITEM
               to={item.href}
               className={cn(
                 "flex flex-col items-center gap-0.5 rounded-xl px-3 py-1.5 transition-colors focus-visible:ring-2 focus-visible:ring-primary-dark focus-visible:outline-none",
-                isActive
-                  ? "text-primary-dark"
-                  : "text-foreground-muted hover:text-forest",
+                isActive ? "text-primary-dark" : "text-foreground-muted hover:text-forest"
               )}
               aria-label={item.label}
               aria-current={isActive ? "page" : undefined}
             >
               <IconComp
-                className={cn(
-                  "h-6 w-6",
-                  isActive ? "fill-primary-dark/10" : "",
-                )}
+                className={cn("h-6 w-6", isActive ? "fill-primary-dark/10" : "")}
                 strokeWidth={isActive ? 2.5 : 2}
               />
               <span
                 className={cn(
                   "text-[10px] font-semibold leading-none",
-                  isActive && "font-extrabold",
+                  isActive && "font-extrabold"
                 )}
               >
                 {item.label}
               </span>
-              {isActive && (
-                <span className="mt-0.5 h-1 w-1 rounded-full bg-primary-dark" />
-              )}
+              {isActive && <span className="mt-0.5 h-1 w-1 rounded-full bg-primary-dark" />}
             </Link>
           )
         })}

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import {
   Bell,
   Globe,
@@ -13,65 +13,65 @@ import {
   Smartphone,
   Star,
   Heart,
-} from "lucide-react";
-import { AppBottomNav } from "@/components/AppBottomNav";
-import { AppPageHeader } from "@/components/AppPageHeader";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { Switch } from "@/components/ui/switch";
-import { ReviewModal } from "@/components/ReviewModal";
-import { useAuth } from "@/hooks/useAuth";
-import { getReminderEnabled, setReminderEnabled } from "@/hooks/useInactiveReminder";
-import { getLocalXP, XP_UPDATE_EVENT } from "@/lib/xp";
-import { getLevelTitle } from "@/lib/levelTitles";
-import { SOUND_KEY, playCorrectSound } from "@/lib/sound";
+} from "lucide-react"
+import { AppBottomNav } from "@/components/AppBottomNav"
+import { AppPageHeader } from "@/components/AppPageHeader"
+import { ThemeToggle } from "@/components/ThemeToggle"
+import { Switch } from "@/components/ui/switch"
+import { ReviewModal } from "@/components/ReviewModal"
+import { useAuth } from "@/hooks/useAuth"
+import { getReminderEnabled, setReminderEnabled } from "@/hooks/useInactiveReminder"
+import { getLocalXP, XP_UPDATE_EVENT } from "@/lib/xp"
+import { getLevelTitle } from "@/lib/levelTitles"
+import { SOUND_KEY, playCorrectSound } from "@/lib/sound"
 
-const NOTIF_KEY = "promptlabz:settings:notif";
+const NOTIF_KEY = "promptlabz:settings:notif"
 
 export default function SettingsPage() {
-  const navigate = useNavigate();
-  const { logout, user } = useAuth();
-  const userId = user?.id ?? null;
-  const [xp, setXp] = useState(0);
+  const navigate = useNavigate()
+  const { logout, user } = useAuth()
+  const userId = user?.id ?? null
+  const [xp, setXp] = useState(0)
   useEffect(() => {
-    const readXP = () => setXp(userId ? getLocalXP(userId) : 0);
-    readXP();
-    window.addEventListener(XP_UPDATE_EVENT, readXP);
-    window.addEventListener("storage", readXP);
+    const readXP = () => setXp(userId ? getLocalXP(userId) : 0)
+    readXP()
+    window.addEventListener(XP_UPDATE_EVENT, readXP)
+    window.addEventListener("storage", readXP)
     return () => {
-      window.removeEventListener(XP_UPDATE_EVENT, readXP);
-      window.removeEventListener("storage", readXP);
-    };
-  }, [userId]);
-  const XP_PER_LEVEL = 500;
-  const level = Math.floor(xp / XP_PER_LEVEL) + 1;
-  const currentXPInLevel = xp % XP_PER_LEVEL;
-  const xpPct = Math.round((currentXPInLevel / XP_PER_LEVEL) * 100);
+      window.removeEventListener(XP_UPDATE_EVENT, readXP)
+      window.removeEventListener("storage", readXP)
+    }
+  }, [userId])
+  const XP_PER_LEVEL = 500
+  const level = Math.floor(xp / XP_PER_LEVEL) + 1
+  const currentXPInLevel = xp % XP_PER_LEVEL
+  const xpPct = Math.round((currentXPInLevel / XP_PER_LEVEL) * 100)
 
-  const [notif, setNotifState] = useState(() => localStorage.getItem(NOTIF_KEY) !== "false");
-  const [sound, setSoundState] = useState(() => localStorage.getItem(SOUND_KEY) !== "false");
-  const [reminders, setReminders] = useState(() => getReminderEnabled());
-  const [loggingOut, setLoggingOut] = useState(false);
-  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [notif, setNotifState] = useState(() => localStorage.getItem(NOTIF_KEY) !== "false")
+  const [sound, setSoundState] = useState(() => localStorage.getItem(SOUND_KEY) !== "false")
+  const [reminders, setReminders] = useState(() => getReminderEnabled())
+  const [loggingOut, setLoggingOut] = useState(false)
+  const [showReviewModal, setShowReviewModal] = useState(false)
 
   function setNotif(value: boolean) {
-    setNotifState(value);
-    localStorage.setItem(NOTIF_KEY, String(value));
+    setNotifState(value)
+    localStorage.setItem(NOTIF_KEY, String(value))
   }
 
   function setSound(value: boolean) {
-    setSoundState(value);
-    localStorage.setItem(SOUND_KEY, String(value));
-    if (value) playCorrectSound();
+    setSoundState(value)
+    localStorage.setItem(SOUND_KEY, String(value))
+    if (value) playCorrectSound()
   }
 
   useEffect(() => {
-    setReminderEnabled(reminders);
-  }, [reminders]);
+    setReminderEnabled(reminders)
+  }, [reminders])
 
   async function handleLogout() {
-    setLoggingOut(true);
-    await logout();
-    navigate("/login");
+    setLoggingOut(true)
+    await logout()
+    navigate("/login")
   }
 
   return (
@@ -139,12 +139,8 @@ export default function SettingsPage() {
             </div>
             <div className="flex items-center gap-3 px-4 py-3">
               <Globe className="h-5 w-5 text-emerald" />
-              <span className="flex-1 text-sm font-semibold text-foreground-dark">
-                Idioma
-              </span>
-              <span className="text-xs font-semibold text-foreground-tertiary">
-                Português (BR)
-              </span>
+              <span className="flex-1 text-sm font-semibold text-foreground-dark">Idioma</span>
+              <span className="text-xs font-semibold text-foreground-tertiary">Português (BR)</span>
             </div>
             <div className="flex items-center gap-3 px-4 py-3">
               <span className="flex-1 text-sm font-semibold text-foreground-dark">Tema</span>
@@ -169,10 +165,7 @@ export default function SettingsPage() {
               </span>
               <ChevronRight className="h-4 w-4 text-foreground-tertiary" />
             </Link>
-            <Link
-              to="/roadmap"
-              className="flex items-center gap-3 px-4 py-3 hover:bg-surface-soft"
-            >
+            <Link to="/roadmap" className="flex items-center gap-3 px-4 py-3 hover:bg-surface-soft">
               <Map className="h-5 w-5 text-emerald" />
               <span className="flex-1 text-sm font-semibold text-foreground-dark">
                 Roadmap do produto
@@ -239,7 +232,11 @@ export default function SettingsPage() {
             <span className="flex-1 text-sm font-extrabold uppercase tracking-wide text-white">
               Avalie nosso projeto
             </span>
-            <Star className="h-5 w-5 flex-shrink-0 text-luxury" fill="currentColor" strokeWidth={0} />
+            <Star
+              className="h-5 w-5 flex-shrink-0 text-luxury"
+              fill="currentColor"
+              strokeWidth={0}
+            />
           </button>
         </section>
 
@@ -248,5 +245,5 @@ export default function SettingsPage() {
 
       <AppBottomNav />
     </div>
-  );
+  )
 }

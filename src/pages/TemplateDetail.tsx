@@ -1,8 +1,13 @@
 import { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import {
-  Bell, ArrowRight, ExternalLink,
-  TrendingUp, Users, BarChart3, Zap,
+  Bell,
+  ArrowRight,
+  ExternalLink,
+  TrendingUp,
+  Users,
+  BarChart3,
+  Zap,
   type LucideIcon,
 } from "lucide-react"
 import { AppBottomNav } from "@/components/AppBottomNav"
@@ -20,7 +25,10 @@ const TABS: { key: Tab; label: string }[] = [
 ]
 
 const STAT_ICON_MAP: Record<string, LucideIcon> = {
-  TrendingUp, Users, BarChart3, Zap,
+  TrendingUp,
+  Users,
+  BarChart3,
+  Zap,
 }
 
 function MiniDashboardPreview() {
@@ -73,9 +81,7 @@ function TabContent({ tab, template }: { tab: Tab; template: Template }) {
             Prompt do Template
           </p>
           <div className="rounded-xl bg-[#F5FBF7] p-3">
-            <p className="text-xs leading-relaxed text-foregroundDark">
-              {template.promptContent}
-            </p>
+            <p className="text-xs leading-relaxed text-foregroundDark">{template.promptContent}</p>
           </div>
         </div>
       </div>
@@ -87,7 +93,9 @@ function TabContent({ tab, template }: { tab: Tab; template: Template }) {
       <div className="px-4 pt-4">
         <div className="rounded-2xl border border-stroke-muted bg-white p-4 shadow-sm text-center">
           <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-pageBgLight">
-            <span className="text-2xl font-extrabold text-primary-dark">{template.resultScore}</span>
+            <span className="text-2xl font-extrabold text-primary-dark">
+              {template.resultScore}
+            </span>
           </div>
           <p className="text-sm font-bold text-foregroundDark">Excelente resultado!</p>
           <p className="mt-1 text-xs text-foregroundMuted">
@@ -148,7 +156,10 @@ function LivePreview({ template }: { template: Template }) {
                 <div className="mb-2 h-2 w-24 rounded-full bg-stroke-light" />
                 <div className="grid grid-cols-2 gap-2">
                   {template.webSections.slice(0, 4).map((section) => (
-                    <div key={section} className="rounded-lg border border-stroke-light bg-white p-2">
+                    <div
+                      key={section}
+                      className="rounded-lg border border-stroke-light bg-white p-2"
+                    >
                       <div className="mb-1.5 h-1.5 w-14 rounded-full bg-stroke-light" />
                       <div className="space-y-1">
                         <div className="h-1.5 w-full rounded-full bg-stroke-light/70" />
@@ -168,7 +179,10 @@ function LivePreview({ template }: { template: Template }) {
 
             <div className="grid grid-cols-2 gap-2">
               {template.webSections.slice(4, 7).map((section) => (
-                <div key={section} className="rounded-xl border border-stroke-light bg-[#F5FBF7] p-3">
+                <div
+                  key={section}
+                  className="rounded-xl border border-stroke-light bg-[#F5FBF7] p-3"
+                >
                   <div className="mb-2 h-2 w-20 rounded-full bg-primary-dark/20" />
                   <div className="space-y-1.5">
                     <div className="h-1.5 w-full rounded-full bg-stroke-light/80" />
@@ -284,12 +298,8 @@ export default function TemplateDetail() {
       <div className="relative overflow-hidden bg-gradient-to-br from-primary-dark via-emerald to-[#46996a] px-5 py-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <h1 className="text-xl font-extrabold leading-tight text-white">
-              {template.headline}
-            </h1>
-            <p className="mt-1.5 text-xs leading-relaxed text-white/80">
-              {template.subheadline}
-            </p>
+            <h1 className="text-xl font-extrabold leading-tight text-white">{template.headline}</h1>
+            <p className="mt-1.5 text-xs leading-relaxed text-white/80">{template.subheadline}</p>
             {/* Stats */}
             <div className="mt-4 flex gap-4">
               {template.stats.map(({ icon, value, label }) => {

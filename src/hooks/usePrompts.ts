@@ -21,7 +21,7 @@ function mapDbPrompt(p: DbPrompt): PromptCard {
 }
 
 export function usePrompts(category?: string, difficulty?: string) {
-  const fallback = category ? PROMPTS.filter(p => p.category === category) : PROMPTS
+  const fallback = category ? PROMPTS.filter((p) => p.category === category) : PROMPTS
   const [prompts, setPrompts] = useState<PromptCard[]>(fallback)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

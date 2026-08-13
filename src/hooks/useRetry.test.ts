@@ -45,7 +45,9 @@ describe("useRetry — retry() com sucesso", () => {
 
 describe("useRetry — retry() com falha", () => {
   it("incrementa retryCount e aplica backoff exponencial", async () => {
-    const { result } = renderHook(() => useRetry({ delayMs: 100, backoffMultiplier: 2, maxAttempts: 3 }))
+    const { result } = renderHook(() =>
+      useRetry({ delayMs: 100, backoffMultiplier: 2, maxAttempts: 3 })
+    )
     const fn = vi.fn().mockRejectedValue(new Error("falhou"))
 
     await act(async () => {

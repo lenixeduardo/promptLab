@@ -25,7 +25,12 @@ interface NotificationItemProps {
 export function NotificationItem({ notification }: NotificationItemProps) {
   const navigate = useNavigate()
   const iconName = NOTIFICATION_ICON_MAP[notification.type] || "Bell"
-  const IconComp = (Icons as unknown as Record<string, React.ComponentType<{ className?: string; strokeWidth?: number }>>)[iconName]
+  const IconComp = (
+    Icons as unknown as Record<
+      string,
+      React.ComponentType<{ className?: string; strokeWidth?: number }>
+    >
+  )[iconName]
 
   const isInteractive = Boolean(notification.href)
 
@@ -50,17 +55,16 @@ export function NotificationItem({ notification }: NotificationItemProps) {
       onKeyDown={isInteractive ? handleKeyDown : undefined}
       className={cn(
         "flex items-start gap-3 rounded-2xl border bg-white px-4 py-3.5 shadow-sm transition-all hover:bg-surface-soft",
-        isInteractive ? "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald" : "",
-        notification.unread ? "border-stroke-muted" : "border-pageBgLight",
+        isInteractive
+          ? "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+          : "",
+        notification.unread ? "border-stroke-muted" : "border-pageBgLight"
       )}
     >
       {/* Icon */}
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-pageBgLight">
         {IconComp ? (
-          <IconComp
-            className="h-5 w-5 text-emerald"
-            strokeWidth={2}
-          />
+          <IconComp className="h-5 w-5 text-emerald" strokeWidth={2} />
         ) : (
           <Icons.Bell className="h-5 w-5 text-emerald" strokeWidth={2} />
         )}
@@ -73,7 +77,7 @@ export function NotificationItem({ notification }: NotificationItemProps) {
             "text-sm leading-snug",
             notification.unread
               ? "font-bold text-foregroundDark"
-              : "font-semibold text-foregroundDark",
+              : "font-semibold text-foregroundDark"
           )}
         >
           {notification.title}

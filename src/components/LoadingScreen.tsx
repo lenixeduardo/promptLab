@@ -21,7 +21,7 @@ export function LoadingScreen({
     <div
       className={cn(
         "flex h-screen flex-col items-center justify-center gap-6 bg-white px-6 text-center",
-        className,
+        className
       )}
     >
       <div className="relative">
@@ -56,9 +56,18 @@ export function LoadingScreen({
       <p className="text-sm font-medium text-foregroundMuted">{subtitle}</p>
 
       <div className="flex items-center gap-1.5" role="status" aria-label={title}>
-        <span className="h-2 w-2 animate-dot-pulse rounded-full bg-primary" style={{ animationDelay: "0s" }} />
-        <span className="h-2 w-2 animate-dot-pulse rounded-full bg-primary" style={{ animationDelay: "0.2s" }} />
-        <span className="h-2 w-2 animate-dot-pulse rounded-full bg-primary" style={{ animationDelay: "0.4s" }} />
+        <span
+          className="h-2 w-2 animate-dot-pulse rounded-full bg-primary"
+          style={{ animationDelay: "0s" }}
+        />
+        <span
+          className="h-2 w-2 animate-dot-pulse rounded-full bg-primary"
+          style={{ animationDelay: "0.2s" }}
+        />
+        <span
+          className="h-2 w-2 animate-dot-pulse rounded-full bg-primary"
+          style={{ animationDelay: "0.4s" }}
+        />
       </div>
 
       <div className="mt-2 flex flex-col items-center gap-1">

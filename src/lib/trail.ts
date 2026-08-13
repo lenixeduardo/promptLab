@@ -18,16 +18,13 @@ export function computeTrailModules(
   let foundCurrent = false
 
   return categories.map((category): TrailModule => {
-    const allLessonIds = category.modules.flatMap((mod) =>
-      mod.lessons.map((lesson) => lesson.id)
-    )
+    const allLessonIds = category.modules.flatMap((mod) => mod.lessons.map((lesson) => lesson.id))
 
     const categoryProgress = progress[category.id]
     const completedLessonIds = categoryProgress?.completedLessonIds ?? []
 
     const isCompleted =
-      allLessonIds.length > 0 &&
-      allLessonIds.every((id) => completedLessonIds.includes(id))
+      allLessonIds.length > 0 && allLessonIds.every((id) => completedLessonIds.includes(id))
 
     if (isCompleted) {
       return { id: category.id, title: category.title, status: "completed" }

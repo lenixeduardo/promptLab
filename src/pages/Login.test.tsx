@@ -128,16 +128,12 @@ describe("Login — navegação", () => {
   it("navega para /forgot-password ao clicar em 'Esqueceu sua senha'", async () => {
     renderLogin()
     await userEvent.click(screen.getByText(/esqueceu sua senha/i))
-    await waitFor(() =>
-      expect(screen.getByText("esqueci senha")).toBeInTheDocument()
-    )
+    await waitFor(() => expect(screen.getByText("esqueci senha")).toBeInTheDocument())
   })
 
   it("navega para /signup ao clicar em 'Criar conta'", async () => {
     renderLogin()
     await userEvent.click(screen.getByText(/criar conta/i))
-    await waitFor(() =>
-      expect(screen.getByText("cadastro")).toBeInTheDocument()
-    )
+    await waitFor(() => expect(screen.getByText("cadastro")).toBeInTheDocument())
   })
 })

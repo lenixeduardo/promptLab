@@ -114,9 +114,7 @@ describe("Signup — submissão", () => {
     await fillForm()
     await userEvent.click(screen.getByRole("button", { name: /criar conta/i }))
 
-    await waitFor(() =>
-      expect(sileo.error).toHaveBeenCalledWith({ title: "Email já cadastrado" })
-    )
+    await waitFor(() => expect(sileo.error).toHaveBeenCalledWith({ title: "Email já cadastrado" }))
   })
 
   it("exibe 'Criando...' enquanto request está em andamento", async () => {

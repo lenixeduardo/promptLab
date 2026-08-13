@@ -53,7 +53,8 @@ export function useTrendingSkills(category?: string) {
           fetchSkillsWithRetry(attemptNum + 1)
         }, delay)
       } else {
-        const errorMsg = err instanceof Error ? err.message : "Falha ao carregar habilidades em trending"
+        const errorMsg =
+          err instanceof Error ? err.message : "Falha ao carregar habilidades em trending"
         setError(errorMsg)
         errorLogger.logError(err, "useTrendingSkills.fetchSkills")
       }

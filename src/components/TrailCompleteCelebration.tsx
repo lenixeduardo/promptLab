@@ -1,28 +1,32 @@
-import { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { useEffect, useState } from "react"
+import { X } from "lucide-react"
 
 interface TrailCompleteCelebrationProps {
-  active: boolean;
-  trackLabel: string;
-  onClose: () => void;
+  active: boolean
+  trackLabel: string
+  onClose: () => void
 }
 
-export function TrailCompleteCelebration({ active, trackLabel, onClose }: TrailCompleteCelebrationProps) {
-  const [show, setShow] = useState(false);
-  const [videoEnded, setVideoEnded] = useState(false);
+export function TrailCompleteCelebration({
+  active,
+  trackLabel,
+  onClose,
+}: TrailCompleteCelebrationProps) {
+  const [show, setShow] = useState(false)
+  const [videoEnded, setVideoEnded] = useState(false)
 
   useEffect(() => {
     if (active) {
-      setShow(true);
-      setVideoEnded(false);
+      setShow(true)
+      setVideoEnded(false)
     }
-  }, [active]);
+  }, [active])
 
-  if (!active && !show) return null;
+  if (!active && !show) return null
 
   function close() {
-    setShow(false);
-    onClose();
+    setShow(false)
+    onClose()
   }
 
   return (
@@ -63,5 +67,5 @@ export function TrailCompleteCelebration({ active, trackLabel, onClose }: TrailC
         </div>
       </div>
     </div>
-  );
+  )
 }

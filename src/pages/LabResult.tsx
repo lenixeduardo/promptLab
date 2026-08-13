@@ -23,9 +23,7 @@ function StarRating({ stars }: { stars: number }) {
         return (
           <span
             key={i}
-            className={
-              filled ? "text-accent" : half ? "text-accent opacity-60" : "text-[#D1D5DB]"
-            }
+            className={filled ? "text-accent" : half ? "text-accent opacity-60" : "text-[#D1D5DB]"}
             style={{ fontSize: 16 }}
           >
             ★
@@ -56,7 +54,10 @@ export default function LabResult() {
   if (!result) return null
 
   const handleSaveResult = () => {
-    sileo.info({ title: "Em breve", description: "Salvar resultados do laboratório estará disponível em breve." })
+    sileo.info({
+      title: "Em breve",
+      description: "Salvar resultados do laboratório estará disponível em breve.",
+    })
   }
 
   return (
@@ -75,11 +76,11 @@ export default function LabResult() {
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <h1 className="text-xl font-extrabold leading-tight text-foregroundDark">
-              Resultado do<br />Laboratório
+              Resultado do
+              <br />
+              Laboratório
             </h1>
-            <p className="mt-1 text-xs text-[#3E6B50]">
-              Análise completa do seu prompt pela IA
-            </p>
+            <p className="mt-1 text-xs text-[#3E6B50]">Análise completa do seu prompt pela IA</p>
           </div>
           <img
             src="/assets/mascot-login-new.png"

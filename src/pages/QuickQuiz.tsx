@@ -21,10 +21,10 @@ interface OptionButtonProps {
 
 function OptionButton({ option, selected, confirmed, correct, onSelect }: OptionButtonProps) {
   const isSelected = selected === option.letter
-  const isCorrect  = option.letter === correct
+  const isCorrect = option.letter === correct
   const showCorrect = confirmed && isCorrect
-  const showWrong   = confirmed && isSelected && !isCorrect
-  const dimmed      = confirmed && !isSelected && !isCorrect
+  const showWrong = confirmed && isSelected && !isCorrect
+  const dimmed = confirmed && !isSelected && !isCorrect
 
   return (
     <button
@@ -32,21 +32,23 @@ function OptionButton({ option, selected, confirmed, correct, onSelect }: Option
       disabled={confirmed}
       className={cn(
         "flex items-center gap-3 rounded-2xl border bg-white px-4 py-3.5 text-left transition-all",
-        !confirmed && !isSelected && "border-stroke-muted hover:border-emerald hover:bg-surface-soft",
-        !confirmed && isSelected  && "border-emerald bg-pageBgLight",
+        !confirmed &&
+          !isSelected &&
+          "border-stroke-muted hover:border-emerald hover:bg-surface-soft",
+        !confirmed && isSelected && "border-emerald bg-pageBgLight",
         showCorrect && "border-emerald bg-surface-success",
-        showWrong   && "border-red-400 bg-red-50 dark:border-red-800 dark:bg-red-950/40",
-        dimmed      && "border-stroke-muted opacity-50"
+        showWrong && "border-red-400 bg-red-50 dark:border-red-800 dark:bg-red-950/40",
+        dimmed && "border-stroke-muted opacity-50"
       )}
     >
       <span
         className={cn(
           "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold",
           !confirmed && !isSelected && "border-stroke-muted text-foregroundTertiary",
-          !confirmed && isSelected  && "border-emerald bg-emerald text-white",
+          !confirmed && isSelected && "border-emerald bg-emerald text-white",
           showCorrect && "border-emerald bg-emerald text-white",
-          showWrong   && "border-red-500 bg-red-500 text-white dark:border-red-600 dark:bg-red-600",
-          dimmed      && "border-stroke-muted text-[#A0A8A3]"
+          showWrong && "border-red-500 bg-red-500 text-white dark:border-red-600 dark:bg-red-600",
+          dimmed && "border-stroke-muted text-[#A0A8A3]"
         )}
       >
         {option.letter}
@@ -55,10 +57,10 @@ function OptionButton({ option, selected, confirmed, correct, onSelect }: Option
         className={cn(
           "flex-1 text-sm font-medium leading-snug",
           !confirmed && !isSelected && "text-foregroundDark",
-          !confirmed && isSelected  && "font-semibold text-primary-dark",
+          !confirmed && isSelected && "font-semibold text-primary-dark",
           showCorrect && "font-semibold text-primary-dark",
-          showWrong   && "text-red-700 dark:text-red-300",
-          dimmed      && "text-[#A0A8A3]"
+          showWrong && "text-red-700 dark:text-red-300",
+          dimmed && "text-[#A0A8A3]"
         )}
       >
         {option.text}

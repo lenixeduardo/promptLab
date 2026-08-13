@@ -1,20 +1,20 @@
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
-import QRCode from "qrcode";
-import frameUrl from "@/assets/certificate-frame.png";
-import mascotUrl from "@/assets/certificate-mascot-laurels.png";
+import { jsPDF } from "jspdf"
+import html2canvas from "html2canvas"
+import QRCode from "qrcode"
+import frameUrl from "@/assets/certificate-frame.png"
+import mascotUrl from "@/assets/certificate-mascot-laurels.png"
 
 interface CertificateData {
-  recipient: string;
-  title: string;
-  issuedAt: string;
-  hours: string;
-  id: string;
+  recipient: string
+  title: string
+  issuedAt: string
+  hours: string
+  id: string
 }
 
 interface CertificateDownload {
-  filename: string;
-  url: string;
+  filename: string
+  url: string
 }
 
 function filenameFor(data: CertificateData) {
@@ -23,18 +23,18 @@ function filenameFor(data: CertificateData) {
     .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-  return `certificado-${slug || data.id}.pdf`;
+    .replace(/^-|-$/g, "")
+  return `certificado-${slug || data.id}.pdf`
 }
 
 async function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = src;
-  });
+    const img = new Image()
+    img.crossOrigin = "anonymous"
+    img.onload = () => resolve(img)
+    img.onerror = reject
+    img.src = src
+  })
 }
 
 function escapeHtml(s: string) {
@@ -42,59 +42,59 @@ function escapeHtml(s: string) {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/"/g, "&quot;")
 }
 
 const FONTS_HREF =
-  "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500;1,600&family=Great+Vibes&display=swap";
+  "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500;1,600&family=Great+Vibes&display=swap"
 
-let fontsPromise: Promise<void> | null = null;
+let fontsPromise: Promise<void> | null = null
 function ensureFontsLoaded(): Promise<void> {
-  if (fontsPromise) return fontsPromise;
+  if (fontsPromise) return fontsPromise
   fontsPromise = new Promise((resolve) => {
-    if (typeof document === "undefined") return resolve();
-    const existing = document.querySelector(`link[data-cert-fonts]`);
+    if (typeof document === "undefined") return resolve()
+    const existing = document.querySelector(`link[data-cert-fonts]`)
     if (!existing) {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = FONTS_HREF;
-      link.setAttribute("data-cert-fonts", "1");
-      document.head.appendChild(link);
+      const link = document.createElement("link")
+      link.rel = "stylesheet"
+      link.href = FONTS_HREF
+      link.setAttribute("data-cert-fonts", "1")
+      document.head.appendChild(link)
     }
-    const ready = (document as Document & { fonts?: { ready: Promise<unknown> } }).fonts?.ready;
+    const ready = (document as Document & { fonts?: { ready: Promise<unknown> } }).fonts?.ready
     if (ready) {
-      ready.then(() => resolve()).catch(() => resolve());
+      ready.then(() => resolve()).catch(() => resolve())
     } else {
-      setTimeout(resolve, 600);
+      setTimeout(resolve, 600)
     }
-  });
-  return fontsPromise;
+  })
+  return fontsPromise
 }
 
 // Paleta de verdes do certificado
-const GREEN_PRIMARY = "#307818"; // verde principal
-const GREEN_SUPPORT = "#4B8636"; // verde médio de apoio
-const GREEN_LIGHT = "#6FAE55"; // verde claro (próximo da gatinha)
-const GREEN_DARK = "#1F5E17"; // verde escuro para contraste
+const GREEN_PRIMARY = "#307818" // verde principal
+const GREEN_SUPPORT = "#4B8636" // verde médio de apoio
+const GREEN_LIGHT = "#6FAE55" // verde claro (próximo da gatinha)
+const GREEN_DARK = "#1F5E17" // verde escuro para contraste
 
 function dividerHtml(withLines: boolean) {
-  const line = `<span style="width:40px;height:1px;background:${GREEN_LIGHT};opacity:0.5;"></span>`;
+  const line = `<span style="width:40px;height:1px;background:${GREEN_LIGHT};opacity:0.5;"></span>`
   return `
     <div style="margin-top:18px;display:flex;align-items:center;justify-content:center;gap:8px;">
       ${withLines ? line : ""}
       <span style="width:7px;height:7px;transform:rotate(45deg);background:${GREEN_SUPPORT};opacity:0.7;"></span>
       ${withLines ? line : ""}
-    </div>`;
+    </div>`
 }
 
-const MUTED = "#666666";
-const SCRIPT_FONT = "'Great Vibes', cursive";
+const MUTED = "#666666"
+const SCRIPT_FONT = "'Great Vibes', cursive"
 
 export function buildCertificateHtml(
   data: CertificateData,
   frame: string,
   mascot: string,
-  qr: string,
+  qr: string
 ) {
   return `
 <div style="
@@ -143,7 +143,7 @@ export function buildCertificateHtml(
       </div>
     </div>
   </div>
-</div>`.trim();
+</div>`.trim()
 }
 
 export async function createCertificatePdfBlob(data: CertificateData): Promise<Blob> {
@@ -151,61 +151,61 @@ export async function createCertificatePdfBlob(data: CertificateData): Promise<B
     ensureFontsLoaded(),
     loadImage(frameUrl),
     loadImage(mascotUrl),
-    QRCode.toDataURL(
-      `https://promptlabz.app/verify/${encodeURIComponent(data.id)}`,
-      { margin: 0, color: { dark: GREEN_DARK, light: "#FFFDF8" } },
-    ),
-  ]);
+    QRCode.toDataURL(`https://promptlabz.app/verify/${encodeURIComponent(data.id)}`, {
+      margin: 0,
+      color: { dark: GREEN_DARK, light: "#FFFDF8" },
+    }),
+  ])
 
-  const host = document.createElement("div");
-  host.style.position = "fixed";
-  host.style.left = "-10000px";
-  host.style.top = "0";
-  host.style.zIndex = "-1";
-  host.style.pointerEvents = "none";
-  host.innerHTML = buildCertificateHtml(data, frameImg.src, mascotImg.src, qrDataUrl);
-  document.body.appendChild(host);
+  const host = document.createElement("div")
+  host.style.position = "fixed"
+  host.style.left = "-10000px"
+  host.style.top = "0"
+  host.style.zIndex = "-1"
+  host.style.pointerEvents = "none"
+  host.innerHTML = buildCertificateHtml(data, frameImg.src, mascotImg.src, qrDataUrl)
+  document.body.appendChild(host)
 
   try {
-    const node = host.firstElementChild as HTMLElement;
+    const node = host.firstElementChild as HTMLElement
     const canvas = await html2canvas(node, {
       scale: 2,
       backgroundColor: "#FFFDF8",
       useCORS: true,
       logging: false,
-    });
+    })
 
-    const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-    const pageW = pdf.internal.pageSize.getWidth();
-    const pageH = pdf.internal.pageSize.getHeight();
-    const imgRatio = canvas.width / canvas.height;
-    const pageRatio = pageW / pageH;
-    let drawW = pageW;
-    let drawH = pageH;
+    const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" })
+    const pageW = pdf.internal.pageSize.getWidth()
+    const pageH = pdf.internal.pageSize.getHeight()
+    const imgRatio = canvas.width / canvas.height
+    const pageRatio = pageW / pageH
+    let drawW = pageW
+    let drawH = pageH
     if (imgRatio > pageRatio) {
-      drawH = pageW / imgRatio;
+      drawH = pageW / imgRatio
     } else {
-      drawW = pageH * imgRatio;
+      drawW = pageH * imgRatio
     }
-    const offsetX = (pageW - drawW) / 2;
-    const offsetY = (pageH - drawH) / 2;
-    pdf.addImage(canvas.toDataURL("image/jpeg", 0.95), "JPEG", offsetX, offsetY, drawW, drawH);
-    return pdf.output("blob");
+    const offsetX = (pageW - drawW) / 2
+    const offsetY = (pageH - drawH) / 2
+    pdf.addImage(canvas.toDataURL("image/jpeg", 0.95), "JPEG", offsetX, offsetY, drawW, drawH)
+    return pdf.output("blob")
   } finally {
-    host.remove();
+    host.remove()
   }
 }
 
 export async function downloadCertificatePdf(data: CertificateData): Promise<CertificateDownload> {
-  const filename = filenameFor(data);
-  const blob = await createCertificatePdfBlob(data);
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  link.rel = "noopener";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  return { filename, url };
+  const filename = filenameFor(data)
+  const blob = await createCertificatePdfBlob(data)
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement("a")
+  link.href = url
+  link.download = filename
+  link.rel = "noopener"
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  return { filename, url }
 }

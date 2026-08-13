@@ -57,9 +57,7 @@ export function MascotGlow({ size = 260, className, children }: MascotGlowProps)
       />
 
       {/* Mascot */}
-      <div className="relative z-10 flex items-center justify-center">
-        {children}
-      </div>
+      <div className="relative z-10 flex items-center justify-center">{children}</div>
     </div>
   )
 }

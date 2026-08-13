@@ -23,7 +23,14 @@ import { AppLayout } from "@/components/AppLayout"
 import { ErrorRecoveryPanel } from "@/components/ErrorRecoveryPanel"
 import { useErrorRecovery } from "@/hooks/useErrorRecovery"
 import { getUserProfile, loadProgress } from "@/lib/db"
-import { getLocalXP, getLocalGems, saveLocalXP, saveLocalGems, XP_UPDATE_EVENT, GEMS_UPDATE_EVENT } from "@/lib/xp"
+import {
+  getLocalXP,
+  getLocalGems,
+  saveLocalXP,
+  saveLocalGems,
+  XP_UPDATE_EVENT,
+  GEMS_UPDATE_EVENT,
+} from "@/lib/xp"
 import { syncModuleProgressFromServer } from "@/lib/moduleProgress"
 
 // Initialize user-scoped localStorage namespacing
@@ -154,10 +161,14 @@ function ProfileSyncTracker() {
     }
 
     // Sync category progress from DB → localStorage (loadProgress already does this)
-    loadProgress(uid).catch(() => {/* silent — localStorage remains as fallback */})
+    loadProgress(uid).catch(() => {
+      /* silent — localStorage remains as fallback */
+    })
 
     // Sync Trilha (module) progress from DB → localStorage, merging the higher count
-    syncModuleProgressFromServer(uid).catch(() => {/* silent — localStorage remains as fallback */})
+    syncModuleProgressFromServer(uid).catch(() => {
+      /* silent — localStorage remains as fallback */
+    })
   }, [user?.id])
   return null
 }
@@ -209,359 +220,445 @@ export default function App() {
       <AuthProvider>
         <AvatarProvider>
           <PremiumProvider>
-        <LivesProvider>
-          <AchievementsProvider>
-          <AnalyticsTracker />
-          <ActivityTracker />
-          <MissionTracker />
-          <ProfileSyncTracker />
-          <WelcomeBackTracker />
-          <OfflineIndicator />
-          <Toaster position="top-right" />
-          <QuickEnhanceModal />
-          <Suspense fallback={<LoadingScreen />}>
-            <Routes>
-              <Route path="/" element={<Hero />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/auth/callback" element={<AuthCallback />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              {/* ── Authenticated app routes — wrapped with desktop sidebar layout ── */}
-              <Route
-                path="/profile"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Profile /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/avatars"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><AvatarScreen /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/home"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Home /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/learn"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><LearningLab /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/lesson"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Lesson /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route path="/skills" element={<Navigate to="/lab" replace />} />
-              <Route
-                path="/skill/:skillName"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><SkillDetail /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/mission"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><MissionComplete /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route path="/daily-missions" element={<Navigate to="/missions" replace />} />
-              <Route
-                path="/favorites"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Favorites /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/notifications"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Notifications /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/premium"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Premium /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/achievements"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Achievements /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/prompts"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Prompts /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/challenge"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><PromptChallenge /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/subscription"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Subscription /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/learn/category/:categoryId"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><SkillCategoryPage /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/prompts/category/:categoryId"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><PromptCategoryPage /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/level-up"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><LevelUp /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/news"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><News /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/quiz"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><QuickQuiz /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/inventory"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Inventory /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/store"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Store /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/ranking"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Ranking /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/quiz-result"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><QuizResult /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/certificates"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Certificates /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/certificate"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Certificate /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/prompt/:promptId"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><PromptDetail /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/templates"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Templates /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/template/:templateId"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><TemplateDetail /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/lab-result"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><LabResult /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route path="/onboarding" element={
-                <PrivateRoute>
-                  <AppLayout><Onboarding /></AppLayout>
-                </PrivateRoute>
-              } />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route
-                path="/lab"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Lab /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/prompt-lab"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><PromptLab /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/missions"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Missions /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/module-exam"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><ModuleExam /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route path="/prompt-wars"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><PromptWars /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/prompt-analyzer"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><PromptAnalyzer /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/prompt-enhancer"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><PromptEnhancer /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/roadmap"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Roadmap /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/settings"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Settings /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/settings/back-tap"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><BackTapConfig /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/community"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Community /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
-              <Route path="/verify/:id" element={<Verify />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </Suspense>
-          </AchievementsProvider>
-        </LivesProvider>
+            <LivesProvider>
+              <AchievementsProvider>
+                <AnalyticsTracker />
+                <ActivityTracker />
+                <MissionTracker />
+                <ProfileSyncTracker />
+                <WelcomeBackTracker />
+                <OfflineIndicator />
+                <Toaster position="top-right" />
+                <QuickEnhanceModal />
+                <Suspense fallback={<LoadingScreen />}>
+                  <Routes>
+                    <Route path="/" element={<Hero />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/auth/callback" element={<AuthCallback />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
+                    {/* ── Authenticated app routes — wrapped with desktop sidebar layout ── */}
+                    <Route
+                      path="/profile"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Profile />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/avatars"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <AvatarScreen />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/home"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Home />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/learn"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <LearningLab />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/lesson"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Lesson />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route path="/skills" element={<Navigate to="/lab" replace />} />
+                    <Route
+                      path="/skill/:skillName"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <SkillDetail />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/mission"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <MissionComplete />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route path="/daily-missions" element={<Navigate to="/missions" replace />} />
+                    <Route
+                      path="/favorites"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Favorites />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/notifications"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Notifications />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/premium"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Premium />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/achievements"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Achievements />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/prompts"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Prompts />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/challenge"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <PromptChallenge />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/subscription"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Subscription />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/learn/category/:categoryId"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <SkillCategoryPage />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/prompts/category/:categoryId"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <PromptCategoryPage />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/level-up"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <LevelUp />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/news"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <News />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/quiz"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <QuickQuiz />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/inventory"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Inventory />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/store"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Store />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/ranking"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Ranking />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/quiz-result"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <QuizResult />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/certificates"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Certificates />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/certificate"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Certificate />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/prompt/:promptId"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <PromptDetail />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/templates"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Templates />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/template/:templateId"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <TemplateDetail />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/lab-result"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <LabResult />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/onboarding"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Onboarding />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route
+                      path="/lab"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Lab />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/prompt-lab"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <PromptLab />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/missions"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Missions />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/module-exam"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <ModuleExam />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/prompt-wars"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <PromptWars />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/prompt-analyzer"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <PromptAnalyzer />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/prompt-enhancer"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <PromptEnhancer />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/roadmap"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Roadmap />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/settings"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Settings />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/settings/back-tap"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <BackTapConfig />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/community"
+                      element={
+                        <PrivateRoute>
+                          <AppLayout>
+                            <Community />
+                          </AppLayout>
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route path="/verify/:id" element={<Verify />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </Suspense>
+              </AchievementsProvider>
+            </LivesProvider>
           </PremiumProvider>
         </AvatarProvider>
       </AuthProvider>

@@ -51,7 +51,7 @@ export default function Login() {
 
   useEffect(() => {
     if (rateLimitCooldown > 0) {
-      const timer = setTimeout(() => setRateLimitCooldown(c => c - 1), 1000)
+      const timer = setTimeout(() => setRateLimitCooldown((c) => c - 1), 1000)
       return () => clearTimeout(timer)
     }
   }, [rateLimitCooldown])
@@ -62,7 +62,8 @@ export default function Login() {
       errorLogger.logRateLimit("/auth/login", rateLimitCooldown)
       sileo.error({
         title: `Aguarde ${rateLimitCooldown}s`,
-        description: "Você tentou fazer login muitas vezes. Por favor, tente novamente em alguns segundos."
+        description:
+          "Você tentou fazer login muitas vezes. Por favor, tente novamente em alguns segundos.",
       })
       return
     }
@@ -88,7 +89,8 @@ export default function Login() {
       errorLogger.logRateLimit("/auth/google", rateLimitCooldown)
       sileo.error({
         title: `Aguarde ${rateLimitCooldown}s`,
-        description: "Você tentou fazer login muitas vezes. Por favor, tente novamente em alguns segundos."
+        description:
+          "Você tentou fazer login muitas vezes. Por favor, tente novamente em alguns segundos.",
       })
       return
     }
@@ -212,7 +214,11 @@ export default function Login() {
               disabled={loading || rateLimitCooldown > 0}
             >
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {loading ? "Entrando..." : rateLimitCooldown > 0 ? `Tente em ${rateLimitCooldown}s` : "Entrar"}
+              {loading
+                ? "Entrando..."
+                : rateLimitCooldown > 0
+                  ? `Tente em ${rateLimitCooldown}s`
+                  : "Entrar"}
             </Button>
 
             {/* Divider */}
@@ -240,7 +246,10 @@ export default function Login() {
         {/* Footer */}
         <p className="mt-7 text-center text-base text-foregroundDark">
           Ainda não tem uma conta?{" "}
-          <Link to="/signup" className="font-semibold text-link underline underline-offset-2 hover:text-primary">
+          <Link
+            to="/signup"
+            className="font-semibold text-link underline underline-offset-2 hover:text-primary"
+          >
             Criar conta
           </Link>
         </p>

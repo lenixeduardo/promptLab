@@ -12,7 +12,13 @@ import {
   saveAchievementsToDb,
   syncLocalAchievementsToSupabase,
 } from "@/lib/achievements-db"
-import { loadStreak, saveStreak, insertNotification, getAchievementDefinitions, type DbAchievementDefinition } from "@/lib/db"
+import {
+  loadStreak,
+  saveStreak,
+  insertNotification,
+  getAchievementDefinitions,
+  type DbAchievementDefinition,
+} from "@/lib/db"
 import { useAuthContext } from "@/contexts/AuthContext"
 import { AchievementsContext } from "./achievementsContextDef"
 
@@ -31,9 +37,13 @@ export function AchievementsProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<AchievementsData>(loadAchievements)
   const [definitions, setDefinitions] = useState<Achievement[]>(ACHIEVEMENTS)
   const dataRef = useRef(data)
-  useEffect(() => { dataRef.current = data }, [data])
+  useEffect(() => {
+    dataRef.current = data
+  }, [data])
   const userIdRef = useRef(userId)
-  useEffect(() => { userIdRef.current = userId }, [userId])
+  useEffect(() => {
+    userIdRef.current = userId
+  }, [userId])
 
   // ── Load from DB on mount / on user change ──────────────────────────────
   const loadedUserIdRef = useRef<string | null>(null)
@@ -68,20 +78,24 @@ export function AchievementsProvider({ children }: { children: ReactNode }) {
       setInitialLoading(false)
     })()
 
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [userId])
 
   // ── Fetch achievement definitions from DB ────────────────────────────────
   useEffect(() => {
     getAchievementDefinitions().then(({ data }) => {
       if (data && data.length > 0) {
-        setDefinitions(data.map(d => ({
-          id: d.ach_id,
-          title: d.title,
-          description: d.description,
-          icon: d.icon,
-          category: d.category as Achievement["category"],
-        })))
+        setDefinitions(
+          data.map((d) => ({
+            id: d.ach_id,
+            title: d.title,
+            description: d.description,
+            icon: d.icon,
+            category: d.category as Achievement["category"],
+          }))
+        )
       }
     })
   }, [])
@@ -105,37 +119,42 @@ export function AchievementsProvider({ children }: { children: ReactNode }) {
 
   // ── Methods ──────────────────────────────────────────────────────────────
 
-  const checkLessonComplete = useCallback(
-    (wasPerfect: boolean): Achievement[] => {
-      const prev = dataRef.current
-      const { newUnlocks, data: next } = checkAchievements(prev, {
-        totalLessonsCompleted: prev.totalLessonsCompleted + 1,
-        perfectCount: prev.perfectCount + (wasPerfect ? 1 : 0),
-      })
-      if (newUnlocks.length > 0) {
-        setData(next)
-        const uid = userIdRef.current
-        if (uid) {
-          newUnlocks.forEach((achievement) => {
-            insertNotification(uid, {
-              type: "achievement",
-              title: `Conquista desbloqueada! 🏆`,
-              description: `Você conquistou "${achievement.title}": ${achievement.description}`,
-            }).catch(() => {/* silent — non-critical */})
+  const checkLessonComplete = useCallback((wasPerfect: boolean): Achievement[] => {
+    const prev = dataRef.current
+    const { newUnlocks, data: next } = checkAchievements(prev, {
+      totalLessonsCompleted: prev.totalLessonsCompleted + 1,
+      perfectCount: prev.perfectCount + (wasPerfect ? 1 : 0),
+    })
+    if (newUnlocks.length > 0) {
+      setData(next)
+      const uid = userIdRef.current
+      if (uid) {
+        newUnlocks.forEach((achievement) => {
+          insertNotification(uid, {
+            type: "achievement",
+            title: `Conquista desbloqueada! 🏆`,
+            description: `Você conquistou "${achievement.title}": ${achievement.description}`,
+          }).catch(() => {
+            /* silent — non-critical */
           })
-        }
+        })
       }
-      return newUnlocks
-    },
-    [],
-  )
+    }
+    return newUnlocks
+  }, [])
 
   const checkDailyVisit = useCallback(
-    async (userId?: string, favoritesCount?: number): Promise<{ newUnlocks: Achievement[]; daysAbsent: number | null }> => {
+    async (
+      userId?: string,
+      favoritesCount?: number
+    ): Promise<{ newUnlocks: Achievement[]; daysAbsent: number | null }> => {
       const existing = dataRef.current
 
       // Calculate new streak locally first (optimistic)
-      const { newLastVisit, newConsecutive } = updateStreak(existing.lastVisitDate, existing.consecutiveDays)
+      const { newLastVisit, newConsecutive } = updateStreak(
+        existing.lastVisitDate,
+        existing.consecutiveDays
+      )
 
       let finalConsecutive = newConsecutive
       let finalLongest = Math.max(existing.longestStreak, newConsecutive)
@@ -163,7 +182,9 @@ export function AchievementsProvider({ children }: { children: ReactNode }) {
           currentStreak: finalConsecutive,
           longestStreak: finalLongest,
           lastVisitDate: newLastVisit,
-        }).catch(() => {/* silent — localStorage is the fallback */})
+        }).catch(() => {
+          /* silent — localStorage is the fallback */
+        })
       }
 
       // Days the user was away before this visit — used to greet returning users.
@@ -181,42 +202,40 @@ export function AchievementsProvider({ children }: { children: ReactNode }) {
         favoritesCount,
       })
 
-      if (newLastVisit !== existing.lastVisitDate || newUnlocks.length > 0 || finalConsecutive !== existing.consecutiveDays) {
+      if (
+        newLastVisit !== existing.lastVisitDate ||
+        newUnlocks.length > 0 ||
+        finalConsecutive !== existing.consecutiveDays
+      ) {
         setData({ ...next, longestStreak: finalLongest })
       }
 
       return { newUnlocks, daysAbsent }
     },
-    [],
+    []
   )
 
-  const visitCategory = useCallback(
-    (categoryId: string) => {
-      const existing = dataRef.current
-      if (existing.visitedCategories.includes(categoryId)) return
+  const visitCategory = useCallback((categoryId: string) => {
+    const existing = dataRef.current
+    if (existing.visitedCategories.includes(categoryId)) return
 
-      const { newUnlocks, data: next } = checkAchievements(existing, {
-        visitedCategories: [...existing.visitedCategories, categoryId],
-      })
-      if (newUnlocks.length > 0) {
-        setData(next)
-      } else {
-        setData({ ...existing, visitedCategories: [...existing.visitedCategories, categoryId] })
-      }
-    },
-    [],
-  )
+    const { newUnlocks, data: next } = checkAchievements(existing, {
+      visitedCategories: [...existing.visitedCategories, categoryId],
+    })
+    if (newUnlocks.length > 0) {
+      setData(next)
+    } else {
+      setData({ ...existing, visitedCategories: [...existing.visitedCategories, categoryId] })
+    }
+  }, [])
 
-  const checkFavorites = useCallback(
-    (count: number): Achievement[] => {
-      const { newUnlocks, data: next } = checkAchievements(dataRef.current, { favoritesCount: count })
-      if (newUnlocks.length > 0) {
-        setData(next)
-      }
-      return newUnlocks
-    },
-    [],
-  )
+  const checkFavorites = useCallback((count: number): Achievement[] => {
+    const { newUnlocks, data: next } = checkAchievements(dataRef.current, { favoritesCount: count })
+    if (newUnlocks.length > 0) {
+      setData(next)
+    }
+    return newUnlocks
+  }, [])
 
   const getAchievement = useCallback((id: string) => {
     return ACHIEVEMENTS.find((a) => a.id === id)

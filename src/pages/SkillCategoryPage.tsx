@@ -1,10 +1,25 @@
 import { useMemo, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import {
-  ChevronLeft, ChevronRight, Star,
-  Lightbulb, BookOpen, Zap, Eye, Brain, ListChecks,
-  User, Workflow, RefreshCw, PenLine, Target, TrendingUp,
-  MessageSquare, BarChart3, Database, LineChart,
+  ChevronLeft,
+  ChevronRight,
+  Star,
+  Lightbulb,
+  BookOpen,
+  Zap,
+  Eye,
+  Brain,
+  ListChecks,
+  User,
+  Workflow,
+  RefreshCw,
+  PenLine,
+  Target,
+  TrendingUp,
+  MessageSquare,
+  BarChart3,
+  Database,
+  LineChart,
   type LucideIcon,
 } from "lucide-react"
 import { TRAIL_CATEGORY_SKILLS, type SkillDifficulty } from "@/data/trailCategorySkillsData"
@@ -28,9 +43,23 @@ const LEVEL_BADGE: Record<number, { bg: string; text: string }> = {
 }
 
 const ICON_MAP: Record<string, LucideIcon> = {
-  Lightbulb, BookOpen, Zap, Eye, Brain, Star, ListChecks,
-  User, Workflow, RefreshCw, PenLine, Target, TrendingUp,
-  MessageSquare, BarChart3, Database, LineChart,
+  Lightbulb,
+  BookOpen,
+  Zap,
+  Eye,
+  Brain,
+  Star,
+  ListChecks,
+  User,
+  Workflow,
+  RefreshCw,
+  PenLine,
+  Target,
+  TrendingUp,
+  MessageSquare,
+  BarChart3,
+  Database,
+  LineChart,
 }
 
 export default function SkillCategoryPage() {
@@ -50,10 +79,7 @@ export default function SkillCategoryPage() {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-white text-foregroundMuted">
         <p className="text-base font-semibold">Categoria não encontrada</p>
-        <button
-          onClick={() => navigate(-1)}
-          className="text-sm font-semibold text-primary-dark"
-        >
+        <button onClick={() => navigate(-1)} className="text-sm font-semibold text-primary-dark">
           Voltar
         </button>
       </div>
@@ -77,7 +103,9 @@ export default function SkillCategoryPage() {
             </button>
             <div>
               <h1 className="text-lg font-extrabold text-foregroundDark">{catData.label}</h1>
-              <p className="text-xs text-foregroundMuted">{catData.skills.length} skills disponíveis</p>
+              <p className="text-xs text-foregroundMuted">
+                {catData.skills.length} skills disponíveis
+              </p>
             </div>
           </div>
 
@@ -138,7 +166,9 @@ export default function SkillCategoryPage() {
                   </div>
 
                   <div className="flex shrink-0 flex-col items-end gap-1.5">
-                    <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-semibold ${badge.bg} ${badge.text}`}>
+                    <span
+                      className={`rounded-full px-2.5 py-0.5 text-[10px] font-semibold ${badge.bg} ${badge.text}`}
+                    >
                       Nível {skill.level}
                     </span>
                     <span className="flex items-center gap-0.5 text-[10px] font-semibold text-amber-600">

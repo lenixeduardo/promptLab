@@ -1,35 +1,35 @@
-import { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { useEffect, useState } from "react"
+import { X } from "lucide-react"
 
 interface StreakCelebrationProps {
-  active: boolean;
-  streak: number;
-  onClose: () => void;
+  active: boolean
+  streak: number
+  onClose: () => void
 }
 
 export function StreakCelebration({ active, streak, onClose }: StreakCelebrationProps) {
-  const [show, setShow] = useState(false);
-  const [videoEnded, setVideoEnded] = useState(false);
+  const [show, setShow] = useState(false)
+  const [videoEnded, setVideoEnded] = useState(false)
 
   useEffect(() => {
     if (active) {
-      setShow(true);
-      setVideoEnded(false);
+      setShow(true)
+      setVideoEnded(false)
     }
-  }, [active]);
+  }, [active])
 
   useEffect(() => {
-    if (!videoEnded) return;
-    const t = setTimeout(close, 1400);
-    return () => clearTimeout(t);
+    if (!videoEnded) return
+    const t = setTimeout(close, 1400)
+    return () => clearTimeout(t)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoEnded]);
+  }, [videoEnded])
 
-  if (!active && !show) return null;
+  if (!active && !show) return null
 
   function close() {
-    setShow(false);
-    onClose();
+    setShow(false)
+    onClose()
   }
 
   return (
@@ -60,10 +60,12 @@ export function StreakCelebration({ active, streak, onClose }: StreakCelebration
             videoEnded ? "opacity-100" : "opacity-0"
           }`}
         >
-          <p className="text-xs font-extrabold uppercase tracking-wider text-brand-orange">Streak em chamas!</p>
+          <p className="text-xs font-extrabold uppercase tracking-wider text-brand-orange">
+            Streak em chamas!
+          </p>
           <p className="text-4xl font-extrabold text-white">{streak} dias</p>
         </div>
       </div>
     </div>
-  );
+  )
 }

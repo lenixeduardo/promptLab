@@ -6,7 +6,20 @@ export interface PromptCard {
   title: string
   difficulty: "Iniciante" | "Intermediario" | "Avancado"
   color: "green" | "yellow" | "red"
-  category: "Criatividade" | "Marketing" | "Programacao" | "Educacao" | "Produtividade" | "Gestao de Produto" | "Comunicacao" | "Analise" | "Automacao" | "Negocios" | "Design" | "Suporte" | "RH"
+  category:
+    | "Criatividade"
+    | "Marketing"
+    | "Programacao"
+    | "Educacao"
+    | "Produtividade"
+    | "Gestao de Produto"
+    | "Comunicacao"
+    | "Analise"
+    | "Automacao"
+    | "Negocios"
+    | "Design"
+    | "Suporte"
+    | "RH"
   promptText: string
   description: string
   exampleInput?: string
@@ -19,7 +32,8 @@ export const PROMPTS: PromptCard[] = [
     difficulty: "Avancado",
     color: "red",
     category: "Criatividade",
-    description: "Template de roteiro para vídeos curtos (Reels/TikTok/Shorts) com gancho inicial, corpo e CTA final.",
+    description:
+      "Template de roteiro para vídeos curtos (Reels/TikTok/Shorts) com gancho inicial, corpo e CTA final.",
     promptText: `# Instrução
 Você é um roteirista de conteúdo curto para redes sociais. Crie um roteiro estruturado para vídeo de até 60 segundos.
 
@@ -32,14 +46,16 @@ Você é um roteirista de conteúdo curto para redes sociais. Crie um roteiro es
 - Linguagem coloquial e direta.
 - Sugira locução + indicação visual (texto na tela / B-roll).`,
     exampleInput: "Tema: Dica rapidíssima de marcação de água na edição de vídeos para iniciantes.",
-    exampleOutput: "✅ Dica de ouro em 3 passos: \n1...[texto na tela: Resize antes de exportar]\n2...[exemplo visual]\n3...[CTA: Salva o tutorial para não esquecer!]"
+    exampleOutput:
+      "✅ Dica de ouro em 3 passos: \n1...[texto na tela: Resize antes de exportar]\n2...[exemplo visual]\n3...[CTA: Salva o tutorial para não esquecer!]",
   },
   {
     title: "Email Cold Outreach Que Funciona",
     difficulty: "Iniciante",
     color: "green",
     category: "Marketing",
-    description: "Modelo curto de e-mail de prospecção fria com abertura específica, proposta de valor e single CTA.",
+    description:
+      "Modelo curto de e-mail de prospecção fria com abertura específica, proposta de valor e single CTA.",
     promptText: `# Instrução
 Escreva um e-mail de prospecção fria curto e persuasivo.
 
@@ -49,15 +65,18 @@ Escreva um e-mail de prospecção fria curto e persuasivo.
 - Sem "Espero que esta mensagem o encontre bem".
 - Abertura com dado específico da empresa/pessoa.
 - Apenas 1 pedido claro.`,
-    exampleInput: "Público: Diretor de operações de uma rede de cafeterias. Oferta: App de gestão de fila e mesas.",
-    exampleOutput: "Assunto: Filas mais curtas na [nome da cafeteria]\n\nOlá, [Nome], vi que a [Cafeteria] abriu um novo ponto no centro ontem..."
+    exampleInput:
+      "Público: Diretor de operações de uma rede de cafeterias. Oferta: App de gestão de fila e mesas.",
+    exampleOutput:
+      "Assunto: Filas mais curtas na [nome da cafeteria]\n\nOlá, [Nome], vi que a [Cafeteria] abriu um novo ponto no centro ontem...",
   },
   {
     title: "Copywriting Para Anuncios Performaticos",
     difficulty: "Intermediario",
     color: "yellow",
     category: "Marketing",
-    description: "Geração de variações de anúncios com frameworks de copy (AIDA / PAS) focados em conversão.",
+    description:
+      "Geração de variações de anúncios com frameworks de copy (AIDA / PAS) focados em conversão.",
     promptText: `# Instrução
 Escreva 3 variações de anúncios de alta conversão para a plataforma informada.
 
@@ -69,8 +88,10 @@ Escreva 3 variações de anúncios de alta conversão para a plataforma informad
 # Critérios
 - Linguagem adaptada ao público.
 - Palavras de poder e específicas, sem jargões vazios.`,
-    exampleInput: "Produto: Assinatura de pão artesanal saudável (sem glúten, fermentação natural). Canal: Meta Ads.",
-    exampleOutput: "### Opção 1 PAS\n**Título:** Fome de verdade, sem culpa.\n**Texto:** Pão de fermentação natural sem glúten que deixa a massa macia..."
+    exampleInput:
+      "Produto: Assinatura de pão artesanal saudável (sem glúten, fermentação natural). Canal: Meta Ads.",
+    exampleOutput:
+      "### Opção 1 PAS\n**Título:** Fome de verdade, sem culpa.\n**Texto:** Pão de fermentação natural sem glúten que deixa a massa macia...",
   },
   {
     title: "Viral Social Hooks",
@@ -90,14 +111,16 @@ Crie 8 opções de hook (primeira linha) para redes sociais, divididas por tom e
 - Cada hook deve ter no máximo 18 palavras.
 - Inclua observação rápida de quando usar (ex: LinkedIn profissional).`,
     exampleInput: "Tema: Por que migração de software não é só código, e sim gestão de risco.",
-    exampleOutput: "1. Educativo: “Migrar sistemas não é refatorar — é transferir risco sem parar a empresa.” (LinkedIn)"
+    exampleOutput:
+      "1. Educativo: “Migrar sistemas não é refatorar — é transferir risco sem parar a empresa.” (LinkedIn)",
   },
   {
     title: "Plano Semanal Otimizado",
     difficulty: "Intermediario",
     color: "yellow",
     category: "Produtividade",
-    description: "Monta rotina semanal com blocos de foco profundo, reuniões objetivas e descanso intencional.",
+    description:
+      "Monta rotina semanal com blocos de foco profundo, reuniões objetivas e descanso intencional.",
     promptText: `# Instrução
 Crie um plano semanal de trabalho realista para o perfil informado.
 
@@ -105,8 +128,10 @@ Crie um plano semanal de trabalho realista para o perfil informado.
 - **Segunda a Sexta:** blocos de Deep Work (2h-4h), reuniões curtas, tarefas operacionais e check-in diário.
 - **Sexta à tarde:** bloco de fechamento e planejamento da próxima semana.
 - **Dica:** sugerir batch de tarefas similares para reduzir trocas de contexto.`,
-    exampleInput: "Perfil: Desenvolvedor full-stack júnior que também faz suporte e reuniões diárias com equipe.",
-    exampleOutput: "# Plano Semanal: Full-Stack Júnior\n## Deep Work (Manhãs)\n- Seg/Ter/Qui: 09:00–12:00 — feature X..."
+    exampleInput:
+      "Perfil: Desenvolvedor full-stack júnior que também faz suporte e reuniões diárias com equipe.",
+    exampleOutput:
+      "# Plano Semanal: Full-Stack Júnior\n## Deep Work (Manhãs)\n- Seg/Ter/Qui: 09:00–12:00 — feature X...",
   },
   {
     title: "Facilitador de Reuniao Diaria",
@@ -125,15 +150,18 @@ Crie um roteiro de daily sync de 15 minutos.
 # Regras
 - Sem discussões longas: issues complexas viram follow-up.
 - Tom colaborativo, sem culpa.`,
-    exampleInput: "Time: 2 devs, 1 QA, 1 UX, 1 PM. Objetivo: desbloquear a homologação do checkout.",
-    exampleOutput: "# Daily Sync - Checkout\n**Tempo:** 15 min\n**Regra:** bloqueios viram follow-up; não abrimos discussões longas..."
+    exampleInput:
+      "Time: 2 devs, 1 QA, 1 UX, 1 PM. Objetivo: desbloquear a homologação do checkout.",
+    exampleOutput:
+      "# Daily Sync - Checkout\n**Tempo:** 15 min\n**Regra:** bloqueios viram follow-up; não abrimos discussões longas...",
   },
   {
     title: "Apresentacao Executiva Estruturada",
     difficulty: "Intermediario",
     color: "yellow",
     category: "Comunicacao",
-    description: "Cria roteiro de apresentação executiva com enredo, slides sugeridos e perguntas de engajamento.",
+    description:
+      "Cria roteiro de apresentação executiva com enredo, slides sugeridos e perguntas de engajamento.",
     promptText: `# Instrução
 Monte um roteiro de apresentação executiva curta (10-12 slides) para stakeholders.
 
@@ -147,15 +175,18 @@ Monte um roteiro de apresentação executiva curta (10-12 slides) para stakehold
 # Regras
 - Cada slide com 1 mensagem principal.
 - Antecipo objeções e responda com dados.`,
-    exampleInput: "Contexto: Time de produto pediu orçamento de experimento para reduzir no-show em telemedicina.",
-    exampleOutput: "# Apresentação: No-Show Reduction\n**Slide 1:** Hoje perdemos ~18% das consultas..."
+    exampleInput:
+      "Contexto: Time de produto pediu orçamento de experimento para reduzir no-show em telemedicina.",
+    exampleOutput:
+      "# Apresentação: No-Show Reduction\n**Slide 1:** Hoje perdemos ~18% das consultas...",
   },
   {
     title: "Analise Exploratoria de Dados Guiada",
     difficulty: "Avancado",
     color: "red",
     category: "Analise",
-    description: "Plano de análise para explorar um conjunto de dados com perguntas, hipóteses e checagens.",
+    description:
+      "Plano de análise para explorar um conjunto de dados com perguntas, hipóteses e checagens.",
     promptText: `# Instrução
 Escreva um plano de análise exploratória de dados para o cenário fornecido.
 
@@ -165,8 +196,10 @@ Escreva um plano de análise exploratória de dados para o cenário fornecido.
 - Checks de qualidade (valores faltantes, outliers, janela temporal).
 - 3 hipóteses validadas por gráfico.
 - Próximos passos para modelagem ou decisão.`,
-    exampleInput: "Dataset: Vendas de e-commerce com colunas data, canal, ticket, cidade, categoria, status_entrega.",
-    exampleOutput: "# EDA: Vendas E-commerce\n- **Pergunta 1:** Qual canal entrega maior ticket médio e menor tempo de entrega?"
+    exampleInput:
+      "Dataset: Vendas de e-commerce com colunas data, canal, ticket, cidade, categoria, status_entrega.",
+    exampleOutput:
+      "# EDA: Vendas E-commerce\n- **Pergunta 1:** Qual canal entrega maior ticket médio e menor tempo de entrega?",
   },
   {
     title: "Dashboard Executivo em Texto",
@@ -182,15 +215,18 @@ Transforme o conjunto de métricas em um painel textual executivo.
 - **Métricas:** Tabela com nome, valor atual, comparação semana/mês e sinal ↗ ↘ →.
 - **Alertas:** Apenas métricas fora do normal.
 - **Ações:** Ações sugeridas com responsável sugerido.`,
-    exampleInput: "Métricas: DAU 12.400 (-4%), receita R$ 284k (+2%), churn 1.9% (target <1.5%), NPS 42 (-3).",
-    exampleOutput: "# Dashboard - Performance\n## Visão Geral\nSemana de pressão em crescimento líquido..."
+    exampleInput:
+      "Métricas: DAU 12.400 (-4%), receita R$ 284k (+2%), churn 1.9% (target <1.5%), NPS 42 (-3).",
+    exampleOutput:
+      "# Dashboard - Performance\n## Visão Geral\nSemana de pressão em crescimento líquido...",
   },
   {
     title: "Gerador de Copy Para Carrossel",
     difficulty: "Iniciante",
     color: "green",
     category: "Marketing",
-    description: "Cria texto para carrosséis educativos com título, tópicos escaneáveis e CTA final.",
+    description:
+      "Cria texto para carrosséis educativos com título, tópicos escaneáveis e CTA final.",
     promptText: `# Instrução
 Crie o texto de um carrossel para Instagram/LinkedIn com base no tema.
 
@@ -204,14 +240,16 @@ Crie o texto de um carrossel para Instagram/LinkedIn com base no tema.
 - Frases curtas e escaneáveis.
 - Palavras de engajamento explícito (“salva”, “compartilha”).`,
     exampleInput: "Tema: 6 hábitos rápidos para dormir melhor sem mudar rotina.",
-    exampleOutput: "# Carrossel: Sono Melhor\n**Slide 1:** 6 hábitos rápidos para dormir mais e rápido (sem mudar sua rotina)..."
+    exampleOutput:
+      "# Carrossel: Sono Melhor\n**Slide 1:** 6 hábitos rápidos para dormir mais e rápido (sem mudar sua rotina)...",
   },
   {
     title: "Planejador de Conteudo Mensal",
     difficulty: "Intermediario",
     color: "yellow",
     category: "Produtividade",
-    description: "Gera calendário de conteúdo de 2 a 4 semanas com temas, formatos, canais e objetivos.",
+    description:
+      "Gera calendário de conteúdo de 2 a 4 semanas com temas, formatos, canais e objetivos.",
     promptText: `# Instrução
 Crie um calendário de conteúdo para o período informado.
 
@@ -222,8 +260,10 @@ Crie um calendário de conteúdo para o período informado.
 - Misture conteúdo educativo, entretenimento e venda.
 - Inclua datas oportunistas se relevantes.
 - Não repita a ordem de tópicos iguais em dias seguidos.`,
-    exampleInput: "Nicho: Produtividade para estudantes. Duração: 2 semanas. Canais: TikTok e Instagram.",
-    exampleOutput: "| Data | Tema | Canal | Formato | Gancho | Objetivo |\n|---|---|---|---|---|---|"
+    exampleInput:
+      "Nicho: Produtividade para estudantes. Duração: 2 semanas. Canais: TikTok e Instagram.",
+    exampleOutput:
+      "| Data | Tema | Canal | Formato | Gancho | Objetivo |\n|---|---|---|---|---|---|",
   },
   {
     title: "Facilitador de Retrospectiva Estruturada",
@@ -244,15 +284,18 @@ Escreva um roteiro de retrospectiva de sprint ou projeto com duração de 45 min
 # Objetivo
 - Manter tom de melhoria contínua, sem blame.
 - Gerar saídas acionáveis.`,
-    exampleInput: "Contexto: Sprint com atraso na API, desempenho ruim nos testes E2E, mas boa colaboração front/back.",
-    exampleOutput: "# Retrospectiva - Sprint 12\n**Duração:** 45 min\n**1. Abertura:** acordar que o foco é processo, não culpa individual..."
+    exampleInput:
+      "Contexto: Sprint com atraso na API, desempenho ruim nos testes E2E, mas boa colaboração front/back.",
+    exampleOutput:
+      "# Retrospectiva - Sprint 12\n**Duração:** 45 min\n**1. Abertura:** acordar que o foco é processo, não culpa individual...",
   },
   {
     title: "Framework de Avaliacao de Saida de IA",
     difficulty: "Intermediario",
     color: "yellow",
     category: "Gestao de Produto",
-    description: "Checklist para auditar respostas de IA quanto a veracidade, tom, conformidade e utilidade.",
+    description:
+      "Checklist para auditar respostas de IA quanto a veracidade, tom, conformidade e utilidade.",
     promptText: `# Instrução
 Crie um checklist de avaliação de saídas de IA para o caso de uso informado.
 
@@ -265,14 +308,16 @@ Crie um checklist de avaliação de saídas de IA para o caso de uso informado.
 
 # Entregue como matriz de avaliação e exemplos de rerank de prompts.`,
     exampleInput: "Caso: Assistente jurídico que resume contratos e sugere cláusulas de risco.",
-    exampleOutput: "# Avaliação de Saída - Assistente Jurídico\n## Critérios\n| Critério | Peso | Nota 1 | Nota 2 |"
+    exampleOutput:
+      "# Avaliação de Saída - Assistente Jurídico\n## Critérios\n| Critério | Peso | Nota 1 | Nota 2 |",
   },
   {
     title: "Planejador de Lançamento de Produto Digital",
     difficulty: "Avancado",
     color: "red",
     category: "Gestao de Produto",
-    description: "Plano de lançamento faseado com público-alvo, canais, mensagens e métricas de sucesso.",
+    description:
+      "Plano de lançamento faseado com público-alvo, canais, mensagens e métricas de sucesso.",
     promptText: `# Instrução
 Desenvolva uma estratégia de lançamento de produto faseada.
 
@@ -290,7 +335,7 @@ Desenvolva uma estratégia de lançamento de produto faseada.
 - Timeline semanal
 - Plano de comunicação por stakeholder`,
     exampleInput: "Produto: Assinatura de pão artesanal saudável com entrega em 24h.",
-    exampleOutput: "# Estratégia GTM - Pão Artesanal Saudável\n## Pré-lançamento (Semana 1-2)\n..."
+    exampleOutput: "# Estratégia GTM - Pão Artesanal Saudável\n## Pré-lançamento (Semana 1-2)\n...",
   },
   {
     title: "Playbook de Automacao de Processos",
@@ -311,15 +356,18 @@ Crie um playbook de automação para o processo informado.
 # Regras
 - Priorize simplicidade operacional.
 - Inclua 3 pontos de falha prováveis e mitigação.`,
-    exampleInput: "Processo: Quando chega um novo lead no site, enriquecer dados, atribuir score, enviar sequência de e-mails e notificar o responsável.",
-    exampleOutput: "# Playbook: Autoqualificação de Leads\n## Mapa atual\n1. Lead entra no formulário..."
+    exampleInput:
+      "Processo: Quando chega um novo lead no site, enriquecer dados, atribuir score, enviar sequência de e-mails e notificar o responsável.",
+    exampleOutput:
+      "# Playbook: Autoqualificação de Leads\n## Mapa atual\n1. Lead entra no formulário...",
   },
   {
     title: "Gerador de Receitas com IA",
     difficulty: "Intermediario",
     color: "yellow",
     category: "Criatividade",
-    description: "Gera receitas personalizadas a partir dos ingredientes disponíveis, restrições e preferências.",
+    description:
+      "Gera receitas personalizadas a partir dos ingredientes disponíveis, restrições e preferências.",
     promptText: `# Instrução
 Crie uma receita criativa, prática e saborosa a partir dos ingredientes e restrições informados.
 
@@ -329,8 +377,9 @@ Crie uma receita criativa, prática e saborosa a partir dos ingredientes e restr
 - Modo de preparo passo a passo.
 - Sugestão de harmonização.
 - Dica de variação para reaproveitamento.`,
-    exampleInput: "Ingredientes disponíveis: frango desfiado, creme de leite, batata, milho, cebola, queijo mussarela. Restrição: sem pimenta e sem glúten.",
-    exampleOutput: "**Nome:** Escondidinho cremoso de frango com milho\n**Ingredientes:** ..."
+    exampleInput:
+      "Ingredientes disponíveis: frango desfiado, creme de leite, batata, milho, cebola, queijo mussarela. Restrição: sem pimenta e sem glúten.",
+    exampleOutput: "**Nome:** Escondidinho cremoso de frango com milho\n**Ingredientes:** ...",
   },
   {
     title: "Copy de WhatsApp e Mensagens Curtas",
@@ -352,7 +401,8 @@ Escreva a sequência de mensagens curtas de WhatsApp para o cenário informado.
 - Emojis moderados.
 - Texto no formato mobile-friendly.`,
     exampleInput: "Contexto: Agendamento de aula experimental em academia de dança.",
-    exampleOutput: "**Mensagem 1:** Olá, [Nome]! Sua aula experimental de dança está confirmada para amanhã às 18h..."
+    exampleOutput:
+      "**Mensagem 1:** Olá, [Nome]! Sua aula experimental de dança está confirmada para amanhã às 18h...",
   },
   // ── Negocios fallback ────────────────────────────────────────────────────
   {
@@ -360,7 +410,8 @@ Escreva a sequência de mensagens curtas de WhatsApp para o cenário informado.
     difficulty: "Iniciante",
     color: "green",
     category: "Negocios",
-    description: "Canvas de plano de negócios de uma página com problema, solução, mercado e modelo de receita.",
+    description:
+      "Canvas de plano de negócios de uma página com problema, solução, mercado e modelo de receita.",
     promptText: `# Instrução
 Crie um plano de negócios de uma página (Lean Canvas) para a ideia descrita.
 
@@ -372,15 +423,17 @@ Crie um plano de negócios de uma página (Lean Canvas) para a ideia descrita.
 5. Canais de distribuição.
 6. Modelo de receita e estrutura de custos.
 7. Métricas-chave (3 KPIs).`,
-    exampleInput: "Ideia: App de aluguel de trajes sociais por assinatura para jovens profissionais.",
-    exampleOutput: "# Lean Canvas: AlugaFormal\n**Problema:** 1. Comprar terno é caro..."
+    exampleInput:
+      "Ideia: App de aluguel de trajes sociais por assinatura para jovens profissionais.",
+    exampleOutput: "# Lean Canvas: AlugaFormal\n**Problema:** 1. Comprar terno é caro...",
   },
   {
     title: "Estrategia de Precificacao",
     difficulty: "Intermediario",
     color: "yellow",
     category: "Negocios",
-    description: "Comparação de estratégias de precificação e recomendação baseada no produto e mercado.",
+    description:
+      "Comparação de estratégias de precificação e recomendação baseada no produto e mercado.",
     promptText: `# Instrução
 Analise o produto/serviço e recomende a melhor estratégia de precificação.
 
@@ -394,8 +447,10 @@ Analise o produto/serviço e recomende a melhor estratégia de precificação.
 - Tabela comparativa das 3 estratégias.
 - Recomendação justificada.
 - Faixa de preço sugerida.`,
-    exampleInput: "Produto: Curso online de Excel avançado, 8h de conteúdo, com suporte via WhatsApp.",
-    exampleOutput: "# Estratégia de Precificação: Curso Excel\n| Estratégia | Preço sugerido | Prós | Contras |"
+    exampleInput:
+      "Produto: Curso online de Excel avançado, 8h de conteúdo, com suporte via WhatsApp.",
+    exampleOutput:
+      "# Estratégia de Precificação: Curso Excel\n| Estratégia | Preço sugerido | Prós | Contras |",
   },
   // ── Design fallback ──────────────────────────────────────────────────────
   {
@@ -403,7 +458,8 @@ Analise o produto/serviço e recomende a melhor estratégia de precificação.
     difficulty: "Iniciante",
     color: "green",
     category: "Design",
-    description: "Documento de briefing para projetos de design com objetivos, público, referências e restrições.",
+    description:
+      "Documento de briefing para projetos de design com objetivos, público, referências e restrições.",
     promptText: `# Instrução
 Crie um briefing de design visual completo para o projeto descrito.
 
@@ -414,15 +470,18 @@ Crie um briefing de design visual completo para o projeto descrito.
 - Referências visuais (descreva estilos ou cite exemplos).
 - Restrições (cores da marca, tipografia existente, formatos).
 - Entregáveis esperados e prazo.`,
-    exampleInput: "Projeto: Redesign da embalagem de uma linha de chás orgânicos para público feminino 30-45 anos.",
-    exampleOutput: "# Briefing: Redesign Linha de Chás Orgânicos\n**Objetivo:** Elevar percepção de premium..."
+    exampleInput:
+      "Projeto: Redesign da embalagem de uma linha de chás orgânicos para público feminino 30-45 anos.",
+    exampleOutput:
+      "# Briefing: Redesign Linha de Chás Orgânicos\n**Objetivo:** Elevar percepção de premium...",
   },
   {
     title: "Sistema de Design Minimo",
     difficulty: "Intermediario",
     color: "yellow",
     category: "Design",
-    description: "Especificação de tokens de design (cores, tipografia, espaçamento) para consistência visual.",
+    description:
+      "Especificação de tokens de design (cores, tipografia, espaçamento) para consistência visual.",
     promptText: `# Instrução
 Defina os tokens de um sistema de design mínimo para a marca descrita.
 
@@ -433,8 +492,9 @@ Defina os tokens de um sistema de design mínimo para a marca descrita.
 - Bordas e raios: padrão de border-radius.
 - Sombras: 3 níveis (baixo, médio, alto).
 - Componentes base: botão, input, card, badge.`,
-    exampleInput: "Marca: Fintech de crédito para autônomos. Valores: confiança, simplicidade, modernidade.",
-    exampleOutput: "# Design System: FinCredit\n**Primária:** #1A56DB (azul profundo)..."
+    exampleInput:
+      "Marca: Fintech de crédito para autônomos. Valores: confiança, simplicidade, modernidade.",
+    exampleOutput: "# Design System: FinCredit\n**Primária:** #1A56DB (azul profundo)...",
   },
   // ── Suporte fallback ─────────────────────────────────────────────────────
   {
@@ -442,7 +502,8 @@ Defina os tokens de um sistema de design mínimo para a marca descrita.
     difficulty: "Iniciante",
     color: "green",
     category: "Suporte",
-    description: "Modelo de resposta empática e resolutiva para reclamações de clientes insatisfeitos.",
+    description:
+      "Modelo de resposta empática e resolutiva para reclamações de clientes insatisfeitos.",
     promptText: `# Instrução
 Escreva uma resposta profissional e empática para a reclamação do cliente.
 
@@ -456,7 +517,7 @@ Escreva uma resposta profissional e empática para a reclamação do cliente.
 
 # Tom: humano, direto, nunca robótico.`,
     exampleInput: "Reclamação: Produto chegou amassado e o suporte demorou 5 dias para responder.",
-    exampleOutput: "Olá, [Nome], fico genuinamente chateado com o que aconteceu..."
+    exampleOutput: "Olá, [Nome], fico genuinamente chateado com o que aconteceu...",
   },
   {
     title: "Script de FAQ Inteligente",
@@ -475,7 +536,8 @@ Crie um FAQ inteligente para o produto/serviço descrito.
 
 # Gere pelo menos 8 perguntas cobrindo: conta, pagamento, produto, cancelamento, bug.`,
     exampleInput: "Produto: Plataforma SaaS de gestão de projetos para equipes remotas.",
-    exampleOutput: "**1. Como faço para adicionar um membro à minha equipe?**\nAcesse Configurações → Membros → Convidar..."
+    exampleOutput:
+      "**1. Como faço para adicionar um membro à minha equipe?**\nAcesse Configurações → Membros → Convidar...",
   },
   // ── RH fallback ──────────────────────────────────────────────────────────
   {
@@ -498,7 +560,8 @@ Escreva uma descrição de vaga profissional e atrativa para a posição descrit
 
 # Linguagem inclusiva: evite termos que excluam gênero ou idade.`,
     exampleInput: "Cargo: Desenvolvedor(a) Front-end Pleno. Stack: React, TypeScript. Remoto, PJ.",
-    exampleOutput: "# Vaga: Desenvolvedor(a) Front-end Pleno\n**Sobre nós:** Somos uma fintech que simplifica..."
+    exampleOutput:
+      "# Vaga: Desenvolvedor(a) Front-end Pleno\n**Sobre nós:** Somos uma fintech que simplifica...",
   },
   {
     title: "Roteiro de Entrevista Estruturada",
@@ -516,7 +579,9 @@ Crie um roteiro de entrevista estruturada para a vaga descrita.
 - Perguntas situacionais (2-3): "o que você faria se...".
 - Espaço para perguntas do candidato (5 min).
 - Rubrica de avaliação: critérios e pontuação 1-5 por competência.`,
-    exampleInput: "Vaga: Gerente de Produto. Competências: visão de produto, comunicação, priorização.",
-    exampleOutput: "# Roteiro de Entrevista: Gerente de Produto\n**Abertura:** \"Obrigado por estar aqui, [Nome]...\""
+    exampleInput:
+      "Vaga: Gerente de Produto. Competências: visão de produto, comunicação, priorização.",
+    exampleOutput:
+      '# Roteiro de Entrevista: Gerente de Produto\n**Abertura:** "Obrigado por estar aqui, [Nome]..."',
   },
-];
+]

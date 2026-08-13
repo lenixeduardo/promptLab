@@ -4,9 +4,9 @@ import {
   Settings as SettingsIcon,
   Hand,
   Smartphone,
-} from "lucide-react";
+} from "lucide-react"
 import { AppBottomNav } from "@/components/AppBottomNav"
-import { AppPageHeader } from "@/components/AppPageHeader";
+import { AppPageHeader } from "@/components/AppPageHeader"
 
 const BACK_TAP_STEPS = [
   {
@@ -25,7 +25,7 @@ const BACK_TAP_STEPS = [
     icon: <Hand className="h-5 w-5 text-emerald" strokeWidth={2.5} />,
     text: "Back Tap → Toque Duplo → seu atalho",
   },
-];
+]
 
 export default function BackTapConfigPage() {
   return (
@@ -81,5 +81,5 @@ export default function BackTapConfigPage() {
 
       <AppBottomNav />
     </div>
-  );
+  )
 }

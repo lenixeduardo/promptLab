@@ -13,9 +13,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 const IS_PREVIEW = import.meta.env.VITE_PREVIEW_MODE === "true"
 
 const PREVIEW_USER = {
-  id: "preview-user", aud: "authenticated", role: "authenticated",
-  email: "preview@promptlabz.com", created_at: "", updated_at: "",
-  app_metadata: {}, user_metadata: { name: "Aluno Preview" },
+  id: "preview-user",
+  aud: "authenticated",
+  role: "authenticated",
+  email: "preview@promptlabz.com",
+  created_at: "",
+  updated_at: "",
+  app_metadata: {},
+  user_metadata: { name: "Aluno Preview" },
 } as User
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -30,13 +35,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // session on the first call, so no separate getSession() is needed.
     // This avoids a race condition where getSession() and the listener
     // could resolve in different orders and briefly show a wrong auth state.
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user ?? null)
-        setError(null)
-        setLoading(false)
-      }
-    )
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null)
+      setError(null)
+      setLoading(false)
+    })
 
     return () => subscription?.unsubscribe()
   }, [])
@@ -50,11 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [user, loading, error]
   )
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 // Hook lives beside provider to keep auth API centralized.

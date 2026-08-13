@@ -10,17 +10,14 @@ import {
   Copy,
   Check,
   Info,
-} from "lucide-react";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { toast } from "sonner";
+} from "lucide-react"
+import { useState } from "react"
+import { useParams } from "react-router-dom"
+import { toast } from "sonner"
 import { AppBottomNav } from "@/components/AppBottomNav"
-import { AppPageHeader } from "@/components/AppPageHeader";
-import verifyShield from "@/assets/verify-shield.png";
-import {
-  createCertificatePdfBlob,
-  downloadCertificatePdf,
-} from "@/lib/certificatePdf";
+import { AppPageHeader } from "@/components/AppPageHeader"
+import verifyShield from "@/assets/verify-shield.png"
+import { createCertificatePdfBlob, downloadCertificatePdf } from "@/lib/certificatePdf"
 
 function lookupCertificate(id: string) {
   return {
@@ -30,14 +27,14 @@ function lookupCertificate(id: string) {
     issuedAt: "08 de maio de 2025",
     hours: "10 horas",
     issuer: "PromptLabz",
-  };
+  }
 }
 
 export default function VerifyPage() {
-  const { id = "" } = useParams<{ id: string }>();
-  const cert = lookupCertificate(id);
-  const [copied, setCopied] = useState(false);
-  const [busy, setBusy] = useState<"dl" | "sh" | null>(null);
+  const { id = "" } = useParams<{ id: string }>()
+  const cert = lookupCertificate(id)
+  const [copied, setCopied] = useState(false)
+  const [busy, setBusy] = useState<"dl" | "sh" | null>(null)
 
   function buildData() {
     return {
@@ -46,75 +43,75 @@ export default function VerifyPage() {
       issuedAt: cert.issuedAt,
       hours: cert.hours,
       id: cert.id,
-    };
+    }
   }
 
   async function copyCode() {
     try {
-      await navigator.clipboard.writeText(cert.id);
-      setCopied(true);
-      toast.success("Código copiado");
-      setTimeout(() => setCopied(false), 1800);
+      await navigator.clipboard.writeText(cert.id)
+      setCopied(true)
+      toast.success("Código copiado")
+      setTimeout(() => setCopied(false), 1800)
     } catch {
-      toast.error("Não foi possível copiar");
+      toast.error("Não foi possível copiar")
     }
   }
 
   async function handleDownload() {
-    if (busy) return;
-    setBusy("dl");
-    const tid = toast.loading("Gerando seu certificado…");
+    if (busy) return
+    setBusy("dl")
+    const tid = toast.loading("Gerando seu certificado…")
     try {
-      const { filename } = await downloadCertificatePdf(buildData());
-      toast.success(`Baixado: ${filename}`, { id: tid });
+      const { filename } = await downloadCertificatePdf(buildData())
+      toast.success(`Baixado: ${filename}`, { id: tid })
     } catch (err) {
-      console.error(err);
-      toast.error("Não foi possível gerar o PDF.", { id: tid });
+      console.error(err)
+      toast.error("Não foi possível gerar o PDF.", { id: tid })
     } finally {
-      setBusy(null);
+      setBusy(null)
     }
   }
 
   async function handleShare() {
-    if (busy) return;
-    setBusy("sh");
-    const tid = toast.loading("Preparando certificado…");
+    if (busy) return
+    setBusy("sh")
+    const tid = toast.loading("Preparando certificado…")
     try {
-      const data = buildData();
-      const blob = await createCertificatePdfBlob(data);
-      const filename = `certificado-${data.id}.pdf`;
-      const file = new File([blob], filename, { type: "application/pdf" });
+      const data = buildData()
+      const blob = await createCertificatePdfBlob(data)
+      const filename = `certificado-${data.id}.pdf`
+      const file = new File([blob], filename, { type: "application/pdf" })
       const navAny = navigator as Navigator & {
-        canShare?: (d: { files?: File[] }) => boolean;
-        share?: (d: { title?: string; text?: string; files?: File[] }) => Promise<void>;
-      };
+        canShare?: (d: { files?: File[] }) => boolean
+        share?: (d: { title?: string; text?: string; files?: File[] }) => Promise<void>
+      }
       if (navAny.share && navAny.canShare?.({ files: [file] })) {
         await navAny.share({
           title: `Certificado — ${cert.course}`,
           text: `Certificado autêntico do PromptLabz`,
           files: [file],
-        });
-        toast.success("Pronto para compartilhar!", { id: tid });
+        })
+        toast.success("Pronto para compartilhar!", { id: tid })
       } else {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-        toast.success("Compartilhamento indisponível — PDF baixado.", { id: tid });
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = filename
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        URL.revokeObjectURL(url)
+        toast.success("Compartilhamento indisponível — PDF baixado.", { id: tid })
       }
     } catch (err) {
       if ((err as Error)?.name !== "AbortError") {
-        console.error(err);
-        toast.error("Não foi possível compartilhar.", { id: tid });
+        console.error(err)
+        toast.error("Não foi possível compartilhar.", { id: tid })
       } else {
-        toast.dismiss(tid);
+        toast.dismiss(tid)
       }
     } finally {
-      setBusy(null);
+      setBusy(null)
     }
   }
 
@@ -144,9 +141,7 @@ export default function VerifyPage() {
           <div className="mt-5 border-t border-emerald/15 pt-4">
             <div className="mx-auto flex w-fit items-center gap-2 rounded-full bg-surface-success px-4 py-2">
               <ShieldCheck className="h-4 w-4 text-emerald" />
-              <span className="text-sm font-bold text-emerald">
-                Autenticidade confirmada
-              </span>
+              <span className="text-sm font-bold text-emerald">Autenticidade confirmada</span>
             </div>
           </div>
         </section>
@@ -193,11 +188,7 @@ export default function VerifyPage() {
                 </button>
               }
             />
-            <InfoRow
-              icon={<User className="h-4 w-4" />}
-              label="Emitido por"
-              value={cert.issuer}
-            />
+            <InfoRow icon={<User className="h-4 w-4" />} label="Emitido por" value={cert.issuer} />
           </dl>
         </section>
 
@@ -243,7 +234,7 @@ export default function VerifyPage() {
 
       <AppBottomNav />
     </div>
-  );
+  )
 }
 
 function InfoRow({
@@ -251,9 +242,9 @@ function InfoRow({
   label,
   value,
 }: {
-  icon: React.ReactNode;
-  label: string;
-  value: React.ReactNode;
+  icon: React.ReactNode
+  label: string
+  value: React.ReactNode
 }) {
   return (
     <div className="flex items-start justify-between gap-3">
@@ -265,5 +256,5 @@ function InfoRow({
         {value}
       </div>
     </div>
-  );
+  )
 }

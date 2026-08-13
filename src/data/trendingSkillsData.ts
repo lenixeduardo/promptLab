@@ -26,7 +26,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   // ── Desenvolvimento ────────────────────────────────────────────────────
   {
     name: "Test-Driven Development (TDD)",
-    description: "Implementa o ciclo red-green-refactor para desenvolvimento orientado a testes. Escreva o teste primeiro, depois o código mínimo para passar, e refatore com segurança.",
+    description:
+      "Implementa o ciclo red-green-refactor para desenvolvimento orientado a testes. Escreva o teste primeiro, depois o código mínimo para passar, e refatore com segurança.",
     category: "Desenvolvimento",
     author: "mattpocock",
     installs: "145K",
@@ -36,7 +37,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Diagnose (Debugging)",
-    description: "Loop disciplinado de diagnóstico: reproduzir → minimizar → hipotetizar → instrumentar → corrigir → testar regressão. Caça a bugs sistemática.",
+    description:
+      "Loop disciplinado de diagnóstico: reproduzir → minimizar → hipotetizar → instrumentar → corrigir → testar regressão. Caça a bugs sistemática.",
     category: "Desenvolvimento",
     author: "mattpocock",
     installs: "132K",
@@ -46,7 +48,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Improve Codebase Architecture",
-    description: "Identifica oportunidades de refatoração guiadas pela linguagem de domínio e padrões de projeto. Remove acoplamento e melhora coesão.",
+    description:
+      "Identifica oportunidades de refatoração guiadas pela linguagem de domínio e padrões de projeto. Remove acoplamento e melhora coesão.",
     category: "Desenvolvimento",
     author: "mattpocock",
     installs: "98K",
@@ -56,7 +59,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Vercel React Best Practices",
-    description: "Padrões e boas práticas para React no ecossistema Vercel: Server Components, Data Fetching, Streaming, Edge Runtime, Core Web Vitals.",
+    description:
+      "Padrões e boas práticas para React no ecossistema Vercel: Server Components, Data Fetching, Streaming, Edge Runtime, Core Web Vitals.",
     category: "Desenvolvimento",
     author: "vercel-labs",
     installs: "312K",
@@ -66,7 +70,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Next.js Best Practices",
-    description: "Boas práticas para Next.js App Router, caching, Server Components, metadados, middleware e otimização de imagens.",
+    description:
+      "Boas práticas para Next.js App Router, caching, Server Components, metadados, middleware e otimização de imagens.",
     category: "Desenvolvimento",
     author: "vercel-labs",
     installs: "298K",
@@ -76,7 +81,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Supabase + PostgreSQL Best Practices",
-    description: "Design de esquemas, Row-Level Security, real-time subscriptions, Edge Functions e estratégias de migração para Supabase.",
+    description:
+      "Design de esquemas, Row-Level Security, real-time subscriptions, Edge Functions e estratégias de migração para Supabase.",
     category: "Desenvolvimento",
     author: "supabase",
     installs: "187K",
@@ -86,7 +92,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Web App Testing",
-    description: "Testes com Vitest, React Testing Library e Playwright. Cobertura de testes unitários, de componente e E2E com acessibilidade.",
+    description:
+      "Testes com Vitest, React Testing Library e Playwright. Cobertura de testes unitários, de componente e E2E com acessibilidade.",
     category: "Desenvolvimento",
     author: "anthropics",
     installs: "156K",
@@ -96,7 +103,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Skill Creator",
-    description: "Cria novas skills para agentes de IA com estrutura padronizada, frontmatter validação e diretrizes de publicação.",
+    description:
+      "Cria novas skills para agentes de IA com estrutura padronizada, frontmatter validação e diretrizes de publicação.",
     category: "Desenvolvimento",
     author: "anthropics",
     installs: "89K",
@@ -108,7 +116,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   // ── Design & UI ────────────────────────────────────────────────────────
   {
     name: "High-End Visual Design",
-    description: "Define fontes, espaçamentos, sombras e animações exatas que fazem um site parecer caro e premium. Bloqueia padrões genéricos de IA.",
+    description:
+      "Define fontes, espaçamentos, sombras e animações exatas que fazem um site parecer caro e premium. Bloqueia padrões genéricos de IA.",
     category: "Design & UI",
     author: "leonxlnx",
     installs: "234K",
@@ -118,7 +127,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Design Taste — Frontend",
-    description: "Skill anti-slop para landing pages, portfólios e redesigns. Interfaces que não parecem template. Audit-first, strict pre-flight check.",
+    description:
+      "Skill anti-slop para landing pages, portfólios e redesigns. Interfaces que não parecem template. Audit-first, strict pre-flight check.",
     category: "Design & UI",
     author: "leonxlnx",
     installs: "198K",
@@ -128,7 +138,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Image to Code",
-    description: "Gera imagens de design seção por seção, analisa composição e implementa o site correspondente com alta fidelidade visual.",
+    description:
+      "Gera imagens de design seção por seção, analisa composição e implementa o site correspondente com alta fidelidade visual.",
     category: "Design & UI",
     author: "leonxlnx",
     installs: "167K",
@@ -138,7 +149,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Brand Kit",
-    description: "Criação de brand-guidelines boards, sistemas de logo, identity decks e apresentações visuais para marcas premium.",
+    description:
+      "Criação de brand-guidelines boards, sistemas de logo, identity decks e apresentações visuais para marcas premium.",
     category: "Design & UI",
     author: "leonxlnx",
     installs: "145K",
@@ -148,7 +160,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Frontend Design",
-    description: "Diretrizes de design e implementação para aplicações web modernas: componentes, responsividade, acessibilidade e sistemas de design.",
+    description:
+      "Diretrizes de design e implementação para aplicações web modernas: componentes, responsividade, acessibilidade e sistemas de design.",
     category: "Design & UI",
     author: "anthropics",
     installs: "178K",
@@ -158,7 +171,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Industrial Brutalist UI",
-    description: "Interfaces mecânicas cruas que fundem tipografia suíça com estética de terminal militar. Ideal para dashboards e sites editoriais.",
+    description:
+      "Interfaces mecânicas cruas que fundem tipografia suíça com estética de terminal militar. Ideal para dashboards e sites editoriais.",
     category: "Design & UI",
     author: "leonxlnx",
     installs: "88K",
@@ -170,7 +184,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   // ── IA & Media ─────────────────────────────────────────────────────────
   {
     name: "AI Image Generation",
-    description: "Geração de imagens de alta qualidade com modelos de difusão: Flux, DALL-E 3, Stable Diffusion. Controle de estilo, composição e variações.",
+    description:
+      "Geração de imagens de alta qualidade com modelos de difusão: Flux, DALL-E 3, Stable Diffusion. Controle de estilo, composição e variações.",
     category: "IA & Media",
     author: "agentspace-so",
     installs: "456K",
@@ -180,7 +195,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "AI Video Generation",
-    description: "Geração e edição de vídeos com IA: texto-para-vídeo com Kling 3.0, edição, inpaint, extensão de clipes e lip-sync.",
+    description:
+      "Geração e edição de vídeos com IA: texto-para-vídeo com Kling 3.0, edição, inpaint, extensão de clipes e lip-sync.",
     category: "IA & Media",
     author: "agentspace-so",
     installs: "312K",
@@ -190,7 +206,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "AI Music Generation",
-    description: "Criação musical com IA via ElevenLabs: composição por texto, controle de estilo e gênero, produção de música royalty-free.",
+    description:
+      "Criação musical com IA via ElevenLabs: composição por texto, controle de estilo e gênero, produção de música royalty-free.",
     category: "IA & Media",
     author: "agentspace-so",
     installs: "234K",
@@ -200,7 +217,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Image Editing",
-    description: "Edição avançada de imagens com IA: inpainting, outpainting, relighting, ControlNet pose, remoção de fundo e transformação.",
+    description:
+      "Edição avançada de imagens com IA: inpainting, outpainting, relighting, ControlNet pose, remoção de fundo e transformação.",
     category: "IA & Media",
     author: "agentspace-so",
     installs: "198K",
@@ -210,7 +228,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "AI Avatar Video",
-    description: "Criação de vídeos com avatar de IA: geração realista a partir de fotos, text-to-speech natural, lip-sync e suporte multilíngue.",
+    description:
+      "Criação de vídeos com avatar de IA: geração realista a partir de fotos, text-to-speech natural, lip-sync e suporte multilíngue.",
     category: "IA & Media",
     author: "agentspace-so",
     installs: "167K",
@@ -222,7 +241,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   // ── Cloud & Infra ──────────────────────────────────────────────────────
   {
     name: "Azure Kubernetes (AKS)",
-    description: "Gerenciamento completo do Azure Kubernetes Service: provisionamento, node pools, estratégias de deploy, monitoring e RBAC.",
+    description:
+      "Gerenciamento completo do Azure Kubernetes Service: provisionamento, node pools, estratégias de deploy, monitoring e RBAC.",
     category: "Cloud & Infra",
     author: "microsoft",
     installs: "278K",
@@ -232,7 +252,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Azure Security",
-    description: "Boas práticas de segurança no Azure: Entra ID, RBAC, Key Vault, Defender for Cloud, network security groups e compliance.",
+    description:
+      "Boas práticas de segurança no Azure: Entra ID, RBAC, Key Vault, Defender for Cloud, network security groups e compliance.",
     category: "Cloud & Infra",
     author: "microsoft",
     installs: "245K",
@@ -242,7 +263,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Azure Cost Optimisation",
-    description: "Análise de custos, budgeting, reserved instances, rightsizing e otimização de gastos em nuvem Azure.",
+    description:
+      "Análise de custos, budgeting, reserved instances, rightsizing e otimização de gastos em nuvem Azure.",
     category: "Cloud & Infra",
     author: "microsoft",
     installs: "212K",
@@ -252,7 +274,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Azure Cloud Migration",
-    description: "Estratégias de migração on-premises para Azure: assessment, planejamento (rehost/refactor/rebuild), Azure Migrate e cutover.",
+    description:
+      "Estratégias de migração on-premises para Azure: assessment, planejamento (rehost/refactor/rebuild), Azure Migrate e cutover.",
     category: "Cloud & Infra",
     author: "microsoft",
     installs: "189K",
@@ -262,7 +285,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "OpenClaw — Secure Linux Cloud",
-    description: "Servidor Linux hardening: firewall, SSH key-only, fail2ban, monitoring com Prometheus, backups automatizados e auditoria de segurança.",
+    description:
+      "Servidor Linux hardening: firewall, SSH key-only, fail2ban, monitoring com Prometheus, backups automatizados e auditoria de segurança.",
     category: "Cloud & Infra",
     author: "microsoft",
     installs: "98K",
@@ -274,7 +298,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   // ── Marketing ──────────────────────────────────────────────────────────
   {
     name: "Copywriting",
-    description: "Redação profissional de marketing: landing pages, e-mails, anúncios, sales pages. Adaptação de tom de voz e variações para A/B test.",
+    description:
+      "Redação profissional de marketing: landing pages, e-mails, anúncios, sales pages. Adaptação de tom de voz e variações para A/B test.",
     category: "Marketing",
     author: "coreyhaines31",
     installs: "198K",
@@ -284,7 +309,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "SEO Audit",
-    description: "Auditoria completa de SEO: technical SEO, on-page, off-page, content gaps, structured data e recomendações acionáveis priorizadas.",
+    description:
+      "Auditoria completa de SEO: technical SEO, on-page, off-page, content gaps, structured data e recomendações acionáveis priorizadas.",
     category: "Marketing",
     author: "coreyhaines31",
     installs: "176K",
@@ -294,7 +320,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Programmatic SEO",
-    description: "Criação de páginas SEO em escala usando templates, feeds de dados e automação. URL structure, canonical tags e conteúdo unique.",
+    description:
+      "Criação de páginas SEO em escala usando templates, feeds de dados e automação. URL structure, canonical tags e conteúdo unique.",
     category: "Marketing",
     author: "coreyhaines31",
     installs: "156K",
@@ -304,7 +331,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Marketing Psychology",
-    description: "Aplicação de behavioral science e vieses cognitivos no marketing: prova social, escassez, ancoragem, framing e princípios de persuasão.",
+    description:
+      "Aplicação de behavioral science e vieses cognitivos no marketing: prova social, escassez, ancoragem, framing e princípios de persuasão.",
     category: "Marketing",
     author: "coreyhaines31",
     installs: "145K",
@@ -314,7 +342,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Conversion Rate Optimisation (CRO)",
-    description: "Otimização de taxas de conversão: análise de funil, A/B testing, layout de landing pages, formulários e UX data-driven.",
+    description:
+      "Otimização de taxas de conversão: análise de funil, A/B testing, layout de landing pages, formulários e UX data-driven.",
     category: "Marketing",
     author: "coreyhaines31",
     installs: "134K",
@@ -324,7 +353,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "AI SEO",
-    description: "Otimização de conteúdo para mecanismos de busca com IA: AI Overviews, LLM citations, structured data para consumo por IA, entity SEO.",
+    description:
+      "Otimização de conteúdo para mecanismos de busca com IA: AI Overviews, LLM citations, structured data para consumo por IA, entity SEO.",
     category: "Marketing",
     author: "coreyhaines31",
     installs: "112K",
@@ -334,7 +364,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Product Marketing",
-    description: "Estratégia de product marketing: posicionamento, mensagem, launch plan, sales enablement, persona e estratégias PLG.",
+    description:
+      "Estratégia de product marketing: posicionamento, mensagem, launch plan, sales enablement, persona e estratégias PLG.",
     category: "Marketing",
     author: "coreyhaines31",
     installs: "98K",
@@ -346,7 +377,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   // ── Produtividade ──────────────────────────────────────────────────────
   {
     name: "Brainstorming",
-    description: "Sessões estruturadas de brainstorming: pensamento divergente para geração de ideias, convergente para seleção, matriz de prioridade.",
+    description:
+      "Sessões estruturadas de brainstorming: pensamento divergente para geração de ideias, convergente para seleção, matriz de prioridade.",
     category: "Produtividade",
     author: "obra",
     installs: "234K",
@@ -356,7 +388,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Writing Plans",
-    description: "Criação de planos de execução estruturados a partir de objetivos: breakdown em passos acionáveis, dependências, milestones e riscos.",
+    description:
+      "Criação de planos de execução estruturados a partir de objetivos: breakdown em passos acionáveis, dependências, milestones e riscos.",
     category: "Produtividade",
     author: "obra",
     installs: "212K",
@@ -366,7 +399,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Executing Plans",
-    description: "Execução de planos passo a passo com verification gates, progress tracking, handling de blockers e status reporting.",
+    description:
+      "Execução de planos passo a passo com verification gates, progress tracking, handling de blockers e status reporting.",
     category: "Produtividade",
     author: "obra",
     installs: "189K",
@@ -376,7 +410,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Remembering Conversations",
-    description: "Memória episódica para agentes de IA: armazenamento de contexto, decisões e progresso entre sessões com recall inteligente.",
+    description:
+      "Memória episódica para agentes de IA: armazenamento de contexto, decisões e progresso entre sessões com recall inteligente.",
     category: "Produtividade",
     author: "obra",
     installs: "167K",
@@ -386,7 +421,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Teach",
-    description: "Ensino multi-sessão: avalia o nível do usuário, cria trilha de aprendizado, trackeia progresso e adapta o ritmo com repetição espaçada.",
+    description:
+      "Ensino multi-sessão: avalia o nível do usuário, cria trilha de aprendizado, trackeia progresso e adapta o ritmo com repetição espaçada.",
     category: "Produtividade",
     author: "mattpocock",
     installs: "123K",
@@ -396,7 +432,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Lark Doc",
-    description: "Gestão de documentos no Lark/Feishu: criação, edição, colaboração, templates, import/export Markdown/Word/PDF e automação.",
+    description:
+      "Gestão de documentos no Lark/Feishu: criação, edição, colaboração, templates, import/export Markdown/Word/PDF e automação.",
     category: "Produtividade",
     author: "larksuite",
     installs: "198K",
@@ -406,7 +443,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Lark OKR",
-    description: "Gestão de OKRs no Lark/Feishu: criação de objetivos, tracking de key results, check-ins semanais, alinhamento cross-team.",
+    description:
+      "Gestão de OKRs no Lark/Feishu: criação de objetivos, tracking de key results, check-ins semanais, alinhamento cross-team.",
     category: "Produtividade",
     author: "larksuite",
     installs: "156K",
@@ -418,7 +456,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   // ── Agentes & Workflows ────────────────────────────────────────────────
   {
     name: "Dispatching Parallel Agents",
-    description: "Orquestração de múltiplos agentes de IA em paralelo: divisão de trabalho, dispatch com instruções claras, merge de resultados e retry.",
+    description:
+      "Orquestração de múltiplos agentes de IA em paralelo: divisão de trabalho, dispatch com instruções claras, merge de resultados e retry.",
     category: "Agentes & Workflows",
     author: "obra",
     installs: "256K",
@@ -428,7 +467,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Subagent-Driven Development",
-    description: "Divide tarefas de desenvolvimento entre subagentes especializados: arquitetura, implementação, revisão, testes e documentação.",
+    description:
+      "Divide tarefas de desenvolvimento entre subagentes especializados: arquitetura, implementação, revisão, testes e documentação.",
     category: "Agentes & Workflows",
     author: "obra",
     installs: "198K",
@@ -438,7 +478,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Verification Before Completion",
-    description: "Gates de qualidade antes de marcar tarefa como completa: checklist de requisitos, execução de testes, revisão de edge cases.",
+    description:
+      "Gates de qualidade antes de marcar tarefa como completa: checklist de requisitos, execução de testes, revisão de edge cases.",
     category: "Agentes & Workflows",
     author: "obra",
     installs: "178K",
@@ -448,7 +489,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "MCP Builder",
-    description: "Construção de servidores MCP (Model Context Protocol): definição de tools, schemas, recursos, autenticação, deploy e integração.",
+    description:
+      "Construção de servidores MCP (Model Context Protocol): definição de tools, schemas, recursos, autenticação, deploy e integração.",
     category: "Agentes & Workflows",
     author: "anthropics",
     installs: "156K",
@@ -458,7 +500,8 @@ export const TRENDING_SKILLS: TrendingSkill[] = [
   },
   {
     name: "Browsing",
-    description: "Automação de navegação web para agentes de IA: interação com páginas, preenchimento de formulários, extração de dados e screenshots.",
+    description:
+      "Automação de navegação web para agentes de IA: interação com páginas, preenchimento de formulários, extração de dados e screenshots.",
     category: "Agentes & Workflows",
     author: "obra",
     installs: "145K",

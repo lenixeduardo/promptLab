@@ -1,48 +1,48 @@
-import { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
-import { Bell, Award, MessageCircle, Settings } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { useAuth } from "@/hooks/useAuth";
-import { getNotifications, markNotificationsRead, type DbNotification } from "@/lib/db";
+import { useState, useEffect, useCallback } from "react"
+import { Link } from "react-router-dom"
+import { Bell, Award, MessageCircle, Settings } from "lucide-react"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
+import { useAuth } from "@/hooks/useAuth"
+import { getNotifications, markNotificationsRead, type DbNotification } from "@/lib/db"
 
 const TYPE_CONFIG = {
   achievement: { icon: Award, iconBg: "bg-emerald-100", iconColor: "text-emerald-700" },
   mention: { icon: MessageCircle, iconBg: "bg-violet-100", iconColor: "text-violet-600" },
   system: { icon: Settings, iconBg: "bg-blue-100", iconColor: "text-blue-600" },
   reminder: { icon: Bell, iconBg: "bg-amber-100", iconColor: "text-amber-500" },
-} as const;
+} as const
 
 function formatTime(isoDate: string): string {
-  const diffMs = Date.now() - new Date(isoDate).getTime();
-  const minutes = Math.floor(diffMs / 60000);
-  const hours = Math.floor(diffMs / 3600000);
-  const days = Math.floor(diffMs / 86400000);
-  if (minutes < 1) return "agora";
-  if (minutes < 60) return `${minutes}min`;
-  if (hours < 24) return `${hours}h`;
-  return `${days}d`;
+  const diffMs = Date.now() - new Date(isoDate).getTime()
+  const minutes = Math.floor(diffMs / 60000)
+  const hours = Math.floor(diffMs / 3600000)
+  const days = Math.floor(diffMs / 86400000)
+  if (minutes < 1) return "agora"
+  if (minutes < 60) return `${minutes}min`
+  if (hours < 24) return `${hours}h`
+  return `${days}d`
 }
 
 export function NotificationsBell() {
-  const { user } = useAuth();
-  const [items, setItems] = useState<DbNotification[]>([]);
+  const { user } = useAuth()
+  const [items, setItems] = useState<DbNotification[]>([])
 
-  const unreadCount = items.filter((i) => i.read_at === null).length;
+  const unreadCount = items.filter((i) => i.read_at === null).length
 
   useEffect(() => {
-    if (!user?.id) return;
+    if (!user?.id) return
     getNotifications(user.id, 5).then(({ data }) => {
-      if (data) setItems(data);
-    });
-  }, [user?.id]);
+      if (data) setItems(data)
+    })
+  }, [user?.id])
 
   const handleMarkAllRead = useCallback(() => {
-    if (!user?.id || unreadCount === 0) return;
+    if (!user?.id || unreadCount === 0) return
     markNotificationsRead(user.id).then(() => {
-      setItems((prev) => prev.map((i) => ({ ...i, read_at: new Date().toISOString() })));
-    });
-  }, [user?.id, unreadCount]);
+      setItems((prev) => prev.map((i) => ({ ...i, read_at: new Date().toISOString() })))
+    })
+  }, [user?.id, unreadCount])
 
   return (
     <Popover>
@@ -73,7 +73,12 @@ export function NotificationsBell() {
       >
         <div className="flex items-center justify-between px-4 pt-4 pb-2" id="notifications-header">
           <h3 className="text-base font-extrabold text-primary-dark">
-            Notificações {unreadCount > 0 && <span aria-live="polite">({unreadCount} não lida{unreadCount !== 1 ? "s" : ""})</span>}
+            Notificações{" "}
+            {unreadCount > 0 && (
+              <span aria-live="polite">
+                ({unreadCount} não lida{unreadCount !== 1 ? "s" : ""})
+              </span>
+            )}
           </h3>
           <button
             onClick={handleMarkAllRead}
@@ -94,30 +99,41 @@ export function NotificationsBell() {
           ) : (
             <div className="flex flex-col gap-2 py-1">
               {items.map((n) => {
-                const config = TYPE_CONFIG[n.type] ?? TYPE_CONFIG.system;
-                const Icon = config.icon;
-                const unread = n.read_at === null;
+                const config = TYPE_CONFIG[n.type] ?? TYPE_CONFIG.system
+                const Icon = config.icon
+                const unread = n.read_at === null
                 return (
                   <div
                     key={n.id}
                     className={cn(
                       "flex items-start gap-3 rounded-xl p-2.5 transition-colors",
-                      unread ? "bg-surface-soft/60" : "bg-card",
+                      unread ? "bg-surface-soft/60" : "bg-card"
                     )}
                   >
-                    <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", config.iconBg)}>
+                    <div
+                      className={cn(
+                        "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
+                        config.iconBg
+                      )}
+                    >
                       <Icon className={cn("h-5 w-5", config.iconColor)} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-foreground-dark leading-tight">{n.title}</p>
-                      <p className="mt-0.5 text-xs text-foreground-tertiary leading-snug">{n.description}</p>
+                      <p className="text-sm font-bold text-foreground-dark leading-tight">
+                        {n.title}
+                      </p>
+                      <p className="mt-0.5 text-xs text-foreground-tertiary leading-snug">
+                        {n.description}
+                      </p>
                     </div>
                     <div className="flex flex-col items-end gap-1 pt-0.5">
-                      <span className="text-[10px] text-foreground-placeholder">{formatTime(n.created_at)}</span>
+                      <span className="text-[10px] text-foreground-placeholder">
+                        {formatTime(n.created_at)}
+                      </span>
                       {unread && <span className="h-2 w-2 rounded-full bg-emerald" />}
                     </div>
                   </div>
-                );
+                )
               })}
             </div>
           )}
@@ -132,5 +148,5 @@ export function NotificationsBell() {
         </Link>
       </PopoverContent>
     </Popover>
-  );
+  )
 }

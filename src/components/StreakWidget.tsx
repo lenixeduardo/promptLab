@@ -7,7 +7,12 @@ interface StreakWidgetProps {
   streakBroken?: boolean
 }
 
-export function StreakWidget({ streak, longestStreak, loading = false, streakBroken = false }: StreakWidgetProps) {
+export function StreakWidget({
+  streak,
+  longestStreak,
+  loading = false,
+  streakBroken = false,
+}: StreakWidgetProps) {
   if (loading) {
     return (
       <div className="rounded-2xl border-2 border-stroke-light bg-surface-soft px-4 py-3 animate-pulse">
@@ -24,7 +29,9 @@ export function StreakWidget({ streak, longestStreak, loading = false, streakBro
         <div>
           <p className="text-sm font-bold text-orange-800">Streak zerado — recomeça hoje!</p>
           {longestStreak > 0 && (
-            <p className="text-xs text-[#A0714A]">Seu recorde foi de {longestStreak} {longestStreak === 1 ? "dia" : "dias"}</p>
+            <p className="text-xs text-[#A0714A]">
+              Seu recorde foi de {longestStreak} {longestStreak === 1 ? "dia" : "dias"}
+            </p>
           )}
         </div>
       </div>

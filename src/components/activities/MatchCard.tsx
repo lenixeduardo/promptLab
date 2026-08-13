@@ -15,7 +15,7 @@ export function MatchCard({ activity, answered, onAnswer }: Props) {
     [...activity.pairs]
       .map((p) => ({ ...p, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
-      .map((p) => p.definition),
+      .map((p) => p.definition)
   )
   const [selectedWord, setSelectedWord] = useState<string | null>(null)
   const [connections, setConnections] = useState<Record<string, string>>({}) // word → definition
@@ -77,11 +77,17 @@ export function MatchCard({ activity, answered, onAnswer }: Props) {
               onClick={() => handleWordClick(pair.word)}
               className={cn(
                 "rounded-xl border-2 px-3 py-2.5 text-left text-sm font-semibold transition-all",
-                !answered && selectedWord === pair.word && "border-emerald bg-emerald/10 ring-2 ring-emerald/30",
-                !answered && selectedWord !== pair.word && "border-stroke-light bg-card hover:border-emerald",
+                !answered &&
+                  selectedWord === pair.word &&
+                  "border-emerald bg-emerald/10 ring-2 ring-emerald/30",
+                !answered &&
+                  selectedWord !== pair.word &&
+                  "border-stroke-light bg-card hover:border-emerald",
                 answered && isCorrect(pair.word) && "border-emerald bg-emerald/15",
-                answered && isWrong(pair.word) && "border-red-400 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300",
-                answered && !connections[pair.word] && "border-stroke-light bg-card opacity-50",
+                answered &&
+                  isWrong(pair.word) &&
+                  "border-red-400 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300",
+                answered && !connections[pair.word] && "border-stroke-light bg-card opacity-50"
               )}
             >
               <div className="flex items-center gap-2">
@@ -115,12 +121,18 @@ export function MatchCard({ activity, answered, onAnswer }: Props) {
                 onClick={() => handleDefClick(def)}
                 className={cn(
                   "rounded-xl border-2 px-3 py-2.5 text-left text-xs leading-relaxed transition-all",
-                  !answered && selectedWord && !isConnected && "border-emerald/50 bg-emerald/5 cursor-pointer",
+                  !answered &&
+                    selectedWord &&
+                    !isConnected &&
+                    "border-emerald/50 bg-emerald/5 cursor-pointer",
                   !answered && !selectedWord && "border-stroke-light bg-card",
                   !answered && isConnected && "border-forest bg-forest/10",
                   answered && isDefCorrect && "border-emerald bg-emerald/15",
-                  answered && isConnected && !isDefCorrect && "border-red-400 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300",
-                  answered && !isConnected && "border-stroke-light bg-card opacity-50",
+                  answered &&
+                    isConnected &&
+                    !isDefCorrect &&
+                    "border-red-400 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300",
+                  answered && !isConnected && "border-stroke-light bg-card opacity-50"
                 )}
               >
                 <div className="flex items-center gap-2">

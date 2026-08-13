@@ -19,13 +19,8 @@ function QRCodePlaceholder() {
     const row = Math.floor(i / 7)
     const col = i % 7
     // Corner blocks
-    const isCorner =
-      (row < 2 && col < 2) ||
-      (row < 2 && col > 4) ||
-      (row > 4 && col < 2)
-    const isBorder =
-      (row === 0 || row === 6) ||
-      (col === 0 || col === 6)
+    const isCorner = (row < 2 && col < 2) || (row < 2 && col > 4) || (row > 4 && col < 2)
+    const isBorder = row === 0 || row === 6 || col === 0 || col === 6
     const isData = !isCorner && !isBorder && Math.random() > 0.5
     return isCorner || isBorder || isData
   })
@@ -94,7 +89,9 @@ export default function Certificate() {
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-dark">
                 <span className="text-xs font-extrabold text-white">PL</span>
               </div>
-              <span className="text-sm font-extrabold tracking-tight text-primary-dark">PromptLab</span>
+              <span className="text-sm font-extrabold tracking-tight text-primary-dark">
+                PromptLab
+              </span>
             </div>
 
             {/* Title */}
@@ -114,7 +111,9 @@ export default function Certificate() {
             <p className="text-xs font-semibold uppercase tracking-widest text-neutral">Para</p>
             <p className="mt-0.5 text-2xl font-extrabold text-primary-dark">{displayName}</p>
 
-            <p className="mt-3 text-center text-sm font-semibold text-foregroundDark">{courseName}</p>
+            <p className="mt-3 text-center text-sm font-semibold text-foregroundDark">
+              {courseName}
+            </p>
 
             {/* Meta info */}
             <div className="mt-4 flex w-full flex-col gap-1.5 rounded-xl bg-surface-soft px-4 py-3">

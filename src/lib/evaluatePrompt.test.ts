@@ -123,7 +123,8 @@ describe("evaluatePromptWithAI — cota excedida (429)", () => {
       error: {
         message: "Edge Function returned a non-2xx status code",
         context: buildContext(429, {
-          error: "Limite diário de avaliações com IA atingido. Assine o Premium para análises ilimitadas.",
+          error:
+            "Limite diário de avaliações com IA atingido. Assine o Premium para análises ilimitadas.",
           quotaExceeded: true,
         }),
       },

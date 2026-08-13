@@ -46,7 +46,10 @@ function renderPremium(initialRoute = "/premium") {
 beforeEach(() => {
   vi.clearAllMocks()
   mockGetSession.mockResolvedValue({ data: { session: null } })
-  mockInvoke.mockResolvedValue({ data: { url: "https://checkout.stripe.com/session" }, error: null })
+  mockInvoke.mockResolvedValue({
+    data: { url: "https://checkout.stripe.com/session" },
+    error: null,
+  })
 })
 
 describe("Premium — renderização", () => {
@@ -57,9 +60,7 @@ describe("Premium — renderização", () => {
 
   it("exibe o texto descritivo", () => {
     renderPremium()
-    expect(
-      screen.getByText(/Acesse recursos exclusivos/i)
-    ).toBeInTheDocument()
+    expect(screen.getByText(/Acesse recursos exclusivos/i)).toBeInTheDocument()
   })
 
   it("exibe o toggle de cobrança com Anual e Mensal", () => {
@@ -200,9 +201,7 @@ describe("Premium — checkout", () => {
     await userEvent.click(screen.getByText("Quero ser Premium"))
 
     await waitFor(() => {
-      expect(mockSileoError).toHaveBeenCalledWith(
-        expect.objectContaining({ title: "Erro" })
-      )
+      expect(mockSileoError).toHaveBeenCalledWith(expect.objectContaining({ title: "Erro" }))
     })
   })
 })

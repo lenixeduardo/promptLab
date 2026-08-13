@@ -22,9 +22,7 @@ export function EssayCard({ activity, answered, onAnswer }: EssayCardProps) {
         placeholder={activity.placeholder ?? "Escreva sua resposta aqui..."}
         className={cn(
           "w-full resize-none rounded-2xl border-2 bg-card px-4 py-3 text-sm text-foreground-dark transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400",
-          answered
-            ? "border-stroke-muted opacity-70"
-            : "border-stroke-light hover:border-amber-300",
+          answered ? "border-stroke-muted opacity-70" : "border-stroke-light hover:border-amber-300"
         )}
       />
 
@@ -36,7 +34,7 @@ export function EssayCard({ activity, answered, onAnswer }: EssayCardProps) {
             "w-full rounded-2xl py-3 text-sm font-extrabold uppercase tracking-wide transition-colors",
             text.trim().length >= 5
               ? "bg-amber-500 text-white hover:bg-amber-600"
-              : "cursor-not-allowed bg-stroke-light text-neutral",
+              : "cursor-not-allowed bg-stroke-light text-neutral"
           )}
         >
           Verificar resposta
@@ -51,9 +49,7 @@ export function EssayCard({ activity, answered, onAnswer }: EssayCardProps) {
               Gabarito de referência
             </p>
           </div>
-          <p className="text-sm leading-relaxed text-foreground-dark">
-            {activity.referenceAnswer}
-          </p>
+          <p className="text-sm leading-relaxed text-foreground-dark">{activity.referenceAnswer}</p>
           <p className="mt-3 text-[11px] text-foreground-tertiary">
             Compare com a sua resposta. O importante é ter refletido sobre o tema!
           </p>

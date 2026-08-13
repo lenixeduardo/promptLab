@@ -31,16 +31,16 @@ export interface EvaluatePromptError {
 }
 
 export type EvaluatePromptResult =
-  | { ok: true; data: PromptEvaluation }
-  | { ok: false; error: EvaluatePromptError }
+  { ok: true; data: PromptEvaluation } | { ok: false; error: EvaluatePromptError }
 
-const GENERIC_ERROR_MESSAGE = "Não foi possível concluir a análise com IA. Tente novamente mais tarde."
+const GENERIC_ERROR_MESSAGE =
+  "Não foi possível concluir a análise com IA. Tente novamente mais tarde."
 
 // ── Public API ────────────────────────────────────────────────────────────
 
 export async function evaluatePromptWithAI(
   prompt: string,
-  mode?: string,
+  mode?: string
 ): Promise<EvaluatePromptResult> {
   try {
     const { data, error } = await supabase.functions.invoke("evaluate-prompt", {

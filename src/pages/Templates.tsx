@@ -1,18 +1,39 @@
 import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import {
-  ChevronLeft, ChevronRight, Search, SlidersHorizontal, X,
-  Bookmark, Users, Lock,
-  Globe, BarChart3, ClipboardList, Calendar, Briefcase,
-  Settings, Lightbulb, TrendingUp, Zap,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  SlidersHorizontal,
+  X,
+  Bookmark,
+  Users,
+  Lock,
+  Globe,
+  BarChart3,
+  ClipboardList,
+  Calendar,
+  Briefcase,
+  Settings,
+  Lightbulb,
+  TrendingUp,
+  Zap,
   type LucideIcon,
 } from "lucide-react"
 import { TEMPLATES, TEMPLATE_CATEGORIES, type Template } from "@/data/templatesData"
 import { AppBottomNav } from "@/components/AppBottomNav"
 
 const ICON_MAP: Record<string, LucideIcon> = {
-  Globe, BarChart3, ClipboardList, Calendar, Briefcase,
-  Settings, Lightbulb, TrendingUp, Zap, Users,
+  Globe,
+  BarChart3,
+  ClipboardList,
+  Calendar,
+  Briefcase,
+  Settings,
+  Lightbulb,
+  TrendingUp,
+  Zap,
+  Users,
 }
 
 function formatCount(n: number): string {
@@ -49,13 +70,7 @@ function MiniPreview({ color }: { color: string }) {
   )
 }
 
-function FeaturedCard({
-  template,
-  onClick,
-}: {
-  template: Template
-  onClick: () => void
-}) {
+function FeaturedCard({ template, onClick }: { template: Template; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
@@ -85,13 +100,7 @@ function FeaturedCard({
   )
 }
 
-function PopularCard({
-  template,
-  onClick,
-}: {
-  template: Template
-  onClick: () => void
-}) {
+function PopularCard({ template, onClick }: { template: Template; onClick: () => void }) {
   const Icon = ICON_MAP[template.icon] ?? Lightbulb
 
   return (
@@ -104,8 +113,12 @@ function PopularCard({
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-bold leading-snug text-[#1F2A24] dark:text-foregroundDark">{template.name}</p>
-        <p className="mt-0.5 line-clamp-1 text-xs text-[#4A5E52] dark:text-foregroundMuted">{template.description}</p>
+        <p className="text-sm font-bold leading-snug text-[#1F2A24] dark:text-foregroundDark">
+          {template.name}
+        </p>
+        <p className="mt-0.5 line-clamp-1 text-xs text-[#4A5E52] dark:text-foregroundMuted">
+          {template.description}
+        </p>
       </div>
 
       <div className="flex shrink-0 flex-col items-end gap-1">
@@ -145,9 +158,7 @@ export default function Templates() {
     return TEMPLATES.filter((t) => {
       const matchCat = activeCategory === "todos" || t.category === activeCategory
       const matchSearch =
-        !q ||
-        t.name.toLowerCase().includes(q) ||
-        t.description.toLowerCase().includes(q)
+        !q || t.name.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
       return matchCat && matchSearch
     })
   }, [activeCategory, search])
@@ -155,7 +166,7 @@ export default function Templates() {
   const featured = useMemo(() => filtered.filter((t) => t.featured), [filtered])
   const popular = useMemo(
     () => [...filtered].sort((a, b) => b.usageCount - a.usageCount),
-    [filtered],
+    [filtered]
   )
 
   const isSearching = search.trim().length > 0
@@ -174,8 +185,12 @@ export default function Templates() {
               <ChevronLeft className="h-5 w-5" />
             </button>
             <div>
-              <h1 className="text-xl font-extrabold text-[#1F2A24] dark:text-foregroundDark">Templates</h1>
-              <p className="text-xs text-[#4A5E52] dark:text-foregroundMuted">Explore e use templates prontos e otimizados.</p>
+              <h1 className="text-xl font-extrabold text-[#1F2A24] dark:text-foregroundDark">
+                Templates
+              </h1>
+              <p className="text-xs text-[#4A5E52] dark:text-foregroundMuted">
+                Explore e use templates prontos e otimizados.
+              </p>
             </div>
           </div>
           <img
@@ -236,8 +251,12 @@ export default function Templates() {
         {featured.length > 0 && !isSearching && (
           <div>
             <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-base font-bold text-[#1F2A24] dark:text-foregroundDark">Destaques</h2>
-              <button className="text-xs font-semibold text-[#2B5D3A] dark:text-emerald">Ver todos</button>
+              <h2 className="text-base font-bold text-[#1F2A24] dark:text-foregroundDark">
+                Destaques
+              </h2>
+              <button className="text-xs font-semibold text-[#2B5D3A] dark:text-emerald">
+                Ver todos
+              </button>
             </div>
             <div className="no-scrollbar flex gap-3 overflow-x-auto pb-1">
               {featured.map((t) => (
@@ -259,7 +278,9 @@ export default function Templates() {
                 {isSearching ? "Resultados" : "Mais usados"}
               </h2>
               {!isSearching && (
-                <button className="text-xs font-semibold text-[#2B5D3A] dark:text-emerald">Ver todos</button>
+                <button className="text-xs font-semibold text-[#2B5D3A] dark:text-emerald">
+                  Ver todos
+                </button>
               )}
             </div>
             <div className="flex flex-col gap-3">

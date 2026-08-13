@@ -12,20 +12,41 @@ import { getNewsArticles, type DbNewsArticle } from "@/lib/db"
 import { cn } from "@/lib/utils"
 
 const CATEGORIES: Array<"Todos" | NewsCategory> = [
-  "Todos", "OpenAI", "Anthropic", "Google", "ChatGPT", "Meta", "Microsoft", "General",
+  "Todos",
+  "OpenAI",
+  "Anthropic",
+  "Google",
+  "ChatGPT",
+  "Meta",
+  "Microsoft",
+  "General",
 ]
 
 const CATEGORY_STYLES: Record<NewsCategory, string> = {
-  OpenAI:    "bg-blue-50 text-blue-700 border border-blue-200",
+  OpenAI: "bg-blue-50 text-blue-700 border border-blue-200",
   Anthropic: "bg-purple-50 text-purple-700 border border-purple-200",
-  Google:    "bg-amber-50 text-amber-700 border border-amber-200",
-  ChatGPT:   "bg-teal-50 text-teal-700 border border-teal-200",
-  Meta:      "bg-indigo-50 text-indigo-700 border border-indigo-200",
+  Google: "bg-amber-50 text-amber-700 border border-amber-200",
+  ChatGPT: "bg-teal-50 text-teal-700 border border-teal-200",
+  Meta: "bg-indigo-50 text-indigo-700 border border-indigo-200",
   Microsoft: "bg-sky-50 text-sky-700 border border-sky-200",
-  General:   "bg-gray-50 text-gray-600 border border-gray-200",
+  General: "bg-gray-50 text-gray-600 border border-gray-200",
 }
 
-const PT_MONTHS = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"]
+const PT_MONTHS = [
+  "Jan",
+  "Fev",
+  "Mar",
+  "Abr",
+  "Mai",
+  "Jun",
+  "Jul",
+  "Ago",
+  "Set",
+  "Out",
+  "Nov",
+  "Dez",
+]
+const PAGE_SIZE = 30
 
 function formatDate(iso: string): string {
   const d = new Date(iso)
@@ -77,7 +98,7 @@ function NewsCard({
         <span
           className={cn(
             "absolute left-3 top-3 rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide backdrop-blur-sm",
-            CATEGORY_STYLES[article.category],
+            CATEGORY_STYLES[article.category]
           )}
         >
           {article.category}
@@ -95,9 +116,7 @@ function NewsCard({
         <div className="mt-1 flex items-center justify-between">
           <span className="text-[10px] text-foregroundPlaceholder">{article.date}</span>
           {article.sourceUrl && (
-            <span className="text-[10px] font-medium text-emerald-600">
-              Ler artigo →
-            </span>
+            <span className="text-[10px] font-medium text-emerald-600">Ler artigo →</span>
           )}
         </div>
       </div>
@@ -122,12 +141,20 @@ export default function News() {
   const [activeCategory, setActiveCategory] = useState<"Todos" | NewsCategory>("Todos")
   const [articles, setArticles] = useState<NewsArticle[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null)
+  // Only true when the list came from Supabase — the static NEWS_ARTICLES
+  // fallback isn't paginated server-side, so "load more" doesn't apply to it.
+  const [isRemoteData, setIsRemoteData] = useState(false)
+  const [hasMore, setHasMore] = useState(false)
 
   useEffect(() => {
-    getNewsArticles()
+    getNewsArticles(PAGE_SIZE, 0)
       .then(({ data }) => {
-        setArticles(data && data.length > 0 ? data.map(mapDbArticle) : NEWS_ARTICLES)
+        const remote = !!data && data.length > 0
+        setIsRemoteData(remote)
+        setArticles(remote ? data!.map(mapDbArticle) : NEWS_ARTICLES)
+        setHasMore(remote && data!.length === PAGE_SIZE)
       })
       .catch(() => {
         setArticles(NEWS_ARTICLES)
@@ -137,10 +164,19 @@ export default function News() {
       })
   }, [])
 
+  const handleLoadMore = () => {
+    if (loadingMore) return
+    setLoadingMore(true)
+    getNewsArticles(PAGE_SIZE, articles.length)
+      .then(({ data }) => {
+        setArticles((prev) => [...prev, ...(data ? data.map(mapDbArticle) : [])])
+        setHasMore((data?.length ?? 0) === PAGE_SIZE)
+      })
+      .finally(() => setLoadingMore(false))
+  }
+
   const filtered =
-    activeCategory === "Todos"
-      ? articles
-      : articles.filter((a) => a.category === activeCategory)
+    activeCategory === "Todos" ? articles : articles.filter((a) => a.category === activeCategory)
 
   return (
     <div className="flex min-h-screen flex-col bg-white pb-24 lg:pb-8">
@@ -163,7 +199,7 @@ export default function News() {
                 "shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors",
                 activeCategory === cat
                   ? "border-primary-dark bg-primary-dark text-white"
-                  : "border-stroke-light bg-white text-primary-dark hover:border-emerald",
+                  : "border-stroke-light bg-white text-primary-dark hover:border-emerald"
               )}
             >
               {cat}
@@ -174,22 +210,37 @@ export default function News() {
 
       {/* Articles grid */}
       <div className="flex-1 px-4 lg:px-8 py-4 lg:max-w-5xl lg:mx-auto lg:w-full">
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-        {loading ? (
-          <>
-            {[...Array(4)].map((_, i) => <NewsCardSkeleton key={i} />)}
-          </>
-        ) : filtered.length === 0 ? (
-          <div className="flex flex-1 flex-col items-center justify-center gap-2 py-16 text-center">
-            <MailOpen className="h-10 w-10 text-foreground-muted" strokeWidth={1.5} />
-            <p className="text-sm font-medium text-foregroundTertiary">Nenhuma notícia nessa categoria.</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+          {loading ? (
+            <>
+              {[...Array(4)].map((_, i) => (
+                <NewsCardSkeleton key={i} />
+              ))}
+            </>
+          ) : filtered.length === 0 ? (
+            <div className="flex flex-1 flex-col items-center justify-center gap-2 py-16 text-center">
+              <MailOpen className="h-10 w-10 text-foreground-muted" strokeWidth={1.5} />
+              <p className="text-sm font-medium text-foregroundTertiary">
+                Nenhuma notícia nessa categoria.
+              </p>
+            </div>
+          ) : (
+            filtered.map((article) => (
+              <NewsCard key={article.id} article={article} onOpen={setSelectedArticle} />
+            ))
+          )}
+        </div>
+        {isRemoteData && hasMore && activeCategory === "Todos" && !loading && (
+          <div className="mt-4 flex justify-center">
+            <button
+              onClick={handleLoadMore}
+              disabled={loadingMore}
+              className="rounded-full border border-stroke-light px-5 py-2 text-sm font-semibold text-primary-dark transition-colors hover:bg-surface-soft disabled:opacity-50"
+            >
+              {loadingMore ? "Carregando..." : "Carregar mais notícias"}
+            </button>
           </div>
-        ) : (
-          filtered.map((article) => (
-            <NewsCard key={article.id} article={article} onOpen={setSelectedArticle} />
-          ))
         )}
-      </div>
       </div>
 
       <Dialog.Root
@@ -203,11 +254,7 @@ export default function News() {
           {selectedArticle && (
             <Dialog.Content className="fixed inset-x-4 top-1/2 z-50 mx-auto max-h-[85vh] max-w-md -translate-y-1/2 overflow-y-auto rounded-2xl border border-stroke-muted bg-white p-5 shadow-xl focus:outline-none">
               <div className="relative -mx-5 -mt-5 mb-5 h-48 overflow-hidden rounded-t-2xl bg-pageBgLight">
-                <img
-                  src={selectedArticle.imageUrl}
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
+                <img src={selectedArticle.imageUrl} alt="" className="h-full w-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 <Dialog.Close
                   aria-label="Fechar noticia"
@@ -218,7 +265,7 @@ export default function News() {
                 <span
                   className={cn(
                     "absolute bottom-3 left-4 rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide",
-                    CATEGORY_STYLES[selectedArticle.category],
+                    CATEGORY_STYLES[selectedArticle.category]
                   )}
                 >
                   {selectedArticle.category}

@@ -30,7 +30,7 @@ test.describe("Accessibility - Forms & Labels", () => {
     await expect(form).toHaveAttribute("aria-label", /cadastro|signup/i)
 
     // Check inputs have labels
-    const inputs = page.locator('input[aria-label]')
+    const inputs = page.locator("input[aria-label]")
     const count = await inputs.count()
     expect(count).toBeGreaterThan(0)
 
@@ -123,7 +123,9 @@ test.describe("Accessibility - Notifications", () => {
   test("Notification bell has aria-label with unread count", async ({ page }) => {
     await page.goto("/home")
 
-    const bellButton = page.locator('button[aria-label*="notificações"], button[aria-label*="notifications"]')
+    const bellButton = page.locator(
+      'button[aria-label*="notificações"], button[aria-label*="notifications"]'
+    )
     if (await bellButton.isVisible()) {
       const ariaLabel = await bellButton.getAttribute("aria-label")
       expect(ariaLabel).toBeTruthy()
@@ -300,7 +302,7 @@ test.describe("Accessibility - Dynamic Content", () => {
 
     // Look for aria-busy or aria-live regions
     const busyElements = page.locator('[aria-busy="true"]')
-    const liveRegions = page.locator('[aria-live]')
+    const liveRegions = page.locator("[aria-live]")
 
     // May or may not exist depending on page state
     expect(true).toBeTruthy()
@@ -309,7 +311,7 @@ test.describe("Accessibility - Dynamic Content", () => {
   test("Form validation messages are linked to inputs", async ({ page }) => {
     await page.goto("/signup")
 
-    const inputs = page.locator('input[aria-describedby]')
+    const inputs = page.locator("input[aria-describedby]")
     const count = await inputs.count()
 
     for (let i = 0; i < count; i++) {

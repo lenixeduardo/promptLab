@@ -58,10 +58,9 @@ describe("useTrendingSkills", () => {
   it("updates when category changes", async () => {
     mockGetTrendingSkills.mockResolvedValue({ data: [], error: null })
 
-    const { result, rerender } = renderHook(
-      ({ category }) => useTrendingSkills(category),
-      { initialProps: { category: undefined } }
-    )
+    const { result, rerender } = renderHook(({ category }) => useTrendingSkills(category), {
+      initialProps: { category: undefined },
+    })
 
     await waitFor(() => expect(result.current.loading).toBe(false))
 

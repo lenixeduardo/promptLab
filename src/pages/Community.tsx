@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
-import { Users, Clock } from "lucide-react";
-import { AppBottomNav } from "@/components/AppBottomNav";
-import { AppPageHeader } from "@/components/AppPageHeader";
+import { Link } from "react-router-dom"
+import { Users, Clock } from "lucide-react"
+import { AppBottomNav } from "@/components/AppBottomNav"
+import { AppPageHeader } from "@/components/AppPageHeader"
 
 export default function CommunityPage() {
   return (
@@ -15,7 +15,8 @@ export default function CommunityPage() {
         <div className="space-y-2">
           <h2 className="text-2xl font-extrabold text-primary-dark">Em breve</h2>
           <p className="text-sm text-foreground-tertiary max-w-xs">
-            O feed da comunidade está a caminho! Você poderá compartilhar prompts, participar de desafios e aprender com outros usuários.
+            O feed da comunidade está a caminho! Você poderá compartilhar prompts, participar de
+            desafios e aprender com outros usuários.
           </p>
         </div>
         <div className="flex items-center gap-2 rounded-full bg-emerald/10 px-4 py-2 text-sm font-semibold text-emerald">
@@ -32,5 +33,5 @@ export default function CommunityPage() {
 
       <AppBottomNav />
     </div>
-  );
+  )
 }

@@ -5,11 +5,11 @@ import { cn } from "@/lib/utils"
 export type NavTab = "home" | "trilha" | "lab" | "ranking" | "perfil"
 
 const NAV_ITEMS = [
-  { key: "home" as const,    label: "Início",      icon: Icons.Home,         path: "/home" },
-  { key: "trilha" as const,  label: "Trilha",      icon: Icons.Scissors,     path: "/learn" },
-  { key: "lab" as const,     label: "Laboratório", icon: Icons.FlaskConical, path: "/lab" },
-  { key: "ranking" as const, label: "Ranking",     icon: Icons.Trophy,       path: "/ranking" },
-  { key: "perfil" as const,  label: "Perfil",      icon: Icons.UserCircle,   path: "/profile" },
+  { key: "home" as const, label: "Início", icon: Icons.Home, path: "/home" },
+  { key: "trilha" as const, label: "Trilha", icon: Icons.Scissors, path: "/learn" },
+  { key: "lab" as const, label: "Laboratório", icon: Icons.FlaskConical, path: "/lab" },
+  { key: "ranking" as const, label: "Ranking", icon: Icons.Trophy, path: "/ranking" },
+  { key: "perfil" as const, label: "Perfil", icon: Icons.UserCircle, path: "/profile" },
 ]
 
 export function BottomNav({ active }: { active: NavTab }) {
@@ -31,7 +31,9 @@ export function BottomNav({ active }: { active: NavTab }) {
             aria-current={resolvedActive === key ? "page" : undefined}
           >
             <Icon className="h-6 w-6" strokeWidth={resolvedActive === key ? 2.5 : 1.8} />
-            <span className={cn("text-[10px]", resolvedActive === key ? "font-bold" : "font-medium")}>
+            <span
+              className={cn("text-[10px]", resolvedActive === key ? "font-bold" : "font-medium")}
+            >
               {label}
             </span>
           </Link>

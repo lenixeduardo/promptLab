@@ -1,16 +1,38 @@
 import { memo, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import {
-  ArrowRight, Briefcase, Lightbulb, Megaphone, Code2, Apple,
-  ClipboardList, BarChart3, MessageSquare, Settings, Palette,
-  Headphones, Users, FlaskConical, type LucideIcon,
+  ArrowRight,
+  Briefcase,
+  Lightbulb,
+  Megaphone,
+  Code2,
+  Apple,
+  ClipboardList,
+  BarChart3,
+  MessageSquare,
+  Settings,
+  Palette,
+  Headphones,
+  Users,
+  FlaskConical,
+  type LucideIcon,
 } from "lucide-react"
 import { useLabCategories } from "@/hooks/useLabCategories"
 import type { LabCategory } from "@/data/labCategoriesData"
 
 const ICON_MAP: Record<string, LucideIcon> = {
-  Lightbulb, Megaphone, Code2, Apple, ClipboardList, BarChart3,
-  MessageSquare, Settings, Briefcase, Palette, Headphones, Users,
+  Lightbulb,
+  Megaphone,
+  Code2,
+  Apple,
+  ClipboardList,
+  BarChart3,
+  MessageSquare,
+  Settings,
+  Briefcase,
+  Palette,
+  Headphones,
+  Users,
 }
 
 const CategoryCard = memo(function CategoryCard({ cat }: { cat: LabCategory }) {
@@ -57,10 +79,7 @@ export default function PromptsSection() {
       {/* Em destaque — Prompt of the Day */}
       <div className="mb-2 flex items-center justify-between">
         <h3 className="text-sm font-bold text-foregroundDark">Em destaque</h3>
-        <button
-          onClick={handleViewAll}
-          className="text-xs font-semibold text-primary-dark"
-        >
+        <button onClick={handleViewAll} className="text-xs font-semibold text-primary-dark">
           Ver todos &gt;
         </button>
       </div>

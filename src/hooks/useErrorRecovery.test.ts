@@ -72,7 +72,9 @@ describe("useErrorRecovery — executeRecovery", () => {
     const action = vi.fn().mockResolvedValue(undefined)
 
     act(() => {
-      result.current.addError("Falha de rede", "NETWORK_ERROR", [{ label: "Tentar novamente", action }])
+      result.current.addError("Falha de rede", "NETWORK_ERROR", [
+        { label: "Tentar novamente", action },
+      ])
     })
 
     await act(async () => {
@@ -88,7 +90,9 @@ describe("useErrorRecovery — executeRecovery", () => {
     const action = vi.fn().mockRejectedValue(new Error("ainda offline"))
 
     act(() => {
-      result.current.addError("Falha de rede", "NETWORK_ERROR", [{ label: "Tentar novamente", action }])
+      result.current.addError("Falha de rede", "NETWORK_ERROR", [
+        { label: "Tentar novamente", action },
+      ])
     })
 
     await act(async () => {

@@ -22,11 +22,7 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-white px-6 text-center">
-          <img
-            src="/assets/mascot-login-new.png"
-            alt="Erro"
-            className="h-32 w-auto opacity-80"
-          />
+          <img src="/assets/mascot-login-new.png" alt="Erro" className="h-32 w-auto opacity-80" />
           <h1 className="text-2xl font-extrabold text-primary-dark">Algo deu errado</h1>
           <p className="max-w-sm text-sm text-foregroundSecondary">{this.state.message}</p>
           <button

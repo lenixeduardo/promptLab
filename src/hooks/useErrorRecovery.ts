@@ -60,34 +60,37 @@ export function useErrorRecovery() {
     setErrors((prev) => prev.filter((e) => e.timestamp !== timestamp))
   }, [])
 
-  const executeRecovery = useCallback(async (errorIndex: number, actionIndex: number) => {
-    setErrors((prev) => {
-      const updated = [...prev]
-      if (updated[errorIndex] && updated[errorIndex].recoveryActions[actionIndex]) {
-        updated[errorIndex].isRetrying = true
-      }
-      return updated
-    })
-
-    try {
-      const error = errors[errorIndex]
-      if (error && error.recoveryActions[actionIndex]) {
-        await error.recoveryActions[actionIndex].action()
-        removeError(error.timestamp)
-      }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Recovery action failed"
-      addError(message, "RECOVERY_FAILED")
-    } finally {
+  const executeRecovery = useCallback(
+    async (errorIndex: number, actionIndex: number) => {
       setErrors((prev) => {
         const updated = [...prev]
-        if (updated[errorIndex]) {
-          updated[errorIndex].isRetrying = false
+        if (updated[errorIndex] && updated[errorIndex].recoveryActions[actionIndex]) {
+          updated[errorIndex].isRetrying = true
         }
         return updated
       })
-    }
-  }, [errors, addError, removeError])
+
+      try {
+        const error = errors[errorIndex]
+        if (error && error.recoveryActions[actionIndex]) {
+          await error.recoveryActions[actionIndex].action()
+          removeError(error.timestamp)
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Recovery action failed"
+        addError(message, "RECOVERY_FAILED")
+      } finally {
+        setErrors((prev) => {
+          const updated = [...prev]
+          if (updated[errorIndex]) {
+            updated[errorIndex].isRetrying = false
+          }
+          return updated
+        })
+      }
+    },
+    [errors, addError, removeError]
+  )
 
   const clearErrors = useCallback(() => {
     setErrors([])

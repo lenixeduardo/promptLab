@@ -6,36 +6,36 @@
    (evita fallback para a fonte serif padrão do navegador quando a rede
    externa está bloqueada, ex: ambientes de preview sandboxed). */
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/poppins-400.woff2') format('woff2');
+  font-family: "Poppins";
+  src: url("/fonts/poppins/poppins-400.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/poppins-500.woff2') format('woff2');
+  font-family: "Poppins";
+  src: url("/fonts/poppins/poppins-500.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/poppins-600.woff2') format('woff2');
+  font-family: "Poppins";
+  src: url("/fonts/poppins/poppins-600.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/poppins-700.woff2') format('woff2');
+  font-family: "Poppins";
+  src: url("/fonts/poppins/poppins-700.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/poppins-800.woff2') format('woff2');
+  font-family: "Poppins";
+  src: url("/fonts/poppins/poppins-800.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -43,15 +43,15 @@
 
 /* duolingo-sans — apelido para Poppins (carregada via Google Fonts no index.html) */
 @font-face {
-  font-family: 'duolingo-sans';
-  src: local('Poppins'), local('Poppins-Regular');
+  font-family: "duolingo-sans";
+  src: local("Poppins"), local("Poppins-Regular");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'duolingo-sans';
-  src: local('Poppins Italic'), local('Poppins-Italic');
+  font-family: "duolingo-sans";
+  src: local("Poppins Italic"), local("Poppins-Italic");
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;
@@ -92,52 +92,52 @@
     --radius: 1rem;
 
     /* Custom palette (light mode) */
-    --page-bg: #F8FAF9;
-    --page-bg-light: #EEF3F0;
-    --emerald: #22C55E;
-    --emerald-dark: #16A34A;
-    --forest: #15803D;
-    --mint: #4ADE80;
-    --foreground-dark: #0A1F12;
-    --foreground-muted: #5E7A6B;
-    --foreground-secondary: #3A5A4B;
-    --foreground-tertiary: #7A8F82;
-    --foreground-placeholder: #A0B5AA;
-    --stroke-light: #DDE6E2;
-    --stroke-muted: #E5EBE8;
-    --surface-soft: #F2F6F4;
-    --surface-success: #E6F7ED;
-    --gradient-mid: #F0F5F2;
-    --gradient-end: #E8F0EC;
-    --link: #15803D;
-    --luxury: #FBBF24;
-    --luxury-foreground: #0A1F12;
-    --neutral: #8A9A8F;
-    --primary: #22C55E;
-    --primary-light: #4ADE80;
-    --primary-dark: #0A1F12;
-    --secondary: #3B82F6;
-    --accent: #F5A623;
-    --muted-default: #EDF2EF;
+    --page-bg: #f8faf9;
+    --page-bg-light: #eef3f0;
+    --emerald: #22c55e;
+    --emerald-dark: #16a34a;
+    --forest: #15803d;
+    --mint: #4ade80;
+    --foreground-dark: #0a1f12;
+    --foreground-muted: #5e7a6b;
+    --foreground-secondary: #3a5a4b;
+    --foreground-tertiary: #7a8f82;
+    --foreground-placeholder: #a0b5aa;
+    --stroke-light: #dde6e2;
+    --stroke-muted: #e5ebe8;
+    --surface-soft: #f2f6f4;
+    --surface-success: #e6f7ed;
+    --gradient-mid: #f0f5f2;
+    --gradient-end: #e8f0ec;
+    --link: #15803d;
+    --luxury: #fbbf24;
+    --luxury-foreground: #0a1f12;
+    --neutral: #8a9a8f;
+    --primary: #22c55e;
+    --primary-light: #4ade80;
+    --primary-dark: #0a1f12;
+    --secondary: #3b82f6;
+    --accent: #f5a623;
+    --muted-default: #edf2ef;
     /* Semantic design tokens (light mode) */
-    --bg-primary: #F8FAF9;
-    --bg-secondary: #FFFFFF;
-    --bg-card-dark: #EEF3F0;
-    --text-primary: #0A1F12;
-    --text-secondary: #3A5A4B;
-    --text-muted: #A0B5AA;
-    --primary-green: #22C55E;
-    --brand-purple: #9333EA;
-    --brand-blue: #2563EB;
-    --brand-gold: #FBBF24;
-    --brand-orange: #F97316;
-    --status-premium: #E6F7ED;
-    --tag-bg-advanced: #E6F7ED;
-    --tag-text-advanced: #16A34A;
-    --tag-bg-intermediate: #F3E8FF;
-    --tag-text-intermediate: #7E22CE;
-    --tag-bg-basic: #FEF9C3;
-    --tag-text-basic: #92400E;
+    --bg-primary: #f8faf9;
+    --bg-secondary: #ffffff;
+    --bg-card-dark: #eef3f0;
+    --text-primary: #0a1f12;
+    --text-secondary: #3a5a4b;
+    --text-muted: #a0b5aa;
+    --primary-green: #22c55e;
+    --brand-purple: #9333ea;
+    --brand-blue: #2563eb;
+    --brand-gold: #fbbf24;
+    --brand-orange: #f97316;
+    --status-premium: #e6f7ed;
+    --tag-bg-advanced: #e6f7ed;
+    --tag-text-advanced: #16a34a;
+    --tag-bg-intermediate: #f3e8ff;
+    --tag-text-intermediate: #7e22ce;
+    --tag-bg-basic: #fef9c3;
+    --tag-text-basic: #92400e;
 
     /* ── Duolingo design tokens (light) ── */
     --duo-brand-green: #58cc02;
@@ -186,33 +186,33 @@
     --ring: 142 71% 45%;
 
     /* Custom palette (dark mode) */
-    --page-bg: #05080A;
-    --page-bg-light: #0B110F;
-    --emerald: #22C55E;
-    --emerald-dark: #16A34A;
-    --forest: #15803D;
-    --mint: #4ADE80;
-    --foreground-dark: #F5F7F6;
-    --foreground-muted: #8FA89A;
-    --foreground-secondary: #C2D1C8;
-    --foreground-tertiary: #8B9C92;
-    --foreground-placeholder: #5E6F66;
-    --stroke-light: #1F2D27;
-    --stroke-muted: #17231E;
-    --surface-soft: #10201A;
-    --surface-success: #052E16;
-    --gradient-mid: #0E1A14;
-    --gradient-end: #0B110F;
-    --link: #22C55E;
-    --luxury: #FBBF24;
-    --luxury-foreground: #0A1F12;
-    --neutral: #8A9A8F;
-    --primary: #22C55E;
-    --primary-light: #86EFAC;
-    --primary-dark: #F5F7F6;
-    --secondary: #3B82F6;
-    --accent: #F5A623;
-    --muted-default: #14201B;
+    --page-bg: #05080a;
+    --page-bg-light: #0b110f;
+    --emerald: #22c55e;
+    --emerald-dark: #16a34a;
+    --forest: #15803d;
+    --mint: #4ade80;
+    --foreground-dark: #f5f7f6;
+    --foreground-muted: #8fa89a;
+    --foreground-secondary: #c2d1c8;
+    --foreground-tertiary: #8b9c92;
+    --foreground-placeholder: #5e6f66;
+    --stroke-light: #1f2d27;
+    --stroke-muted: #17231e;
+    --surface-soft: #10201a;
+    --surface-success: #052e16;
+    --gradient-mid: #0e1a14;
+    --gradient-end: #0b110f;
+    --link: #22c55e;
+    --luxury: #fbbf24;
+    --luxury-foreground: #0a1f12;
+    --neutral: #8a9a8f;
+    --primary: #22c55e;
+    --primary-light: #86efac;
+    --primary-dark: #f5f7f6;
+    --secondary: #3b82f6;
+    --accent: #f5a623;
+    --muted-default: #14201b;
     /* ── Duolingo design tokens (dark) ── */
     --duo-muted-text: #c2c2c2;
     --duo-primary-text: #f0f0f0;
@@ -222,24 +222,24 @@
     --duo-input-bg: #1c1c1c;
     --duo-social-btn-bg: #2a2a2a;
     /* Semantic design tokens */
-    --bg-primary: #05080A;
-    --bg-secondary: #0E1513;
-    --bg-card-dark: #14201B;
-    --text-primary: #F5F7F6;
-    --text-secondary: #C2D1C8;
-    --text-muted: #5E6F66;
-    --primary-green: #22C55E;
-    --brand-purple: #9333EA;
-    --brand-blue: #3B82F6;
-    --brand-gold: #FBBF24;
-    --brand-orange: #F97316;
-    --status-premium: #052E16;
-    --tag-bg-advanced: #052E16;
-    --tag-text-advanced: #22C55E;
-    --tag-bg-intermediate: #2E1065;
-    --tag-text-intermediate: #A855F7;
-    --tag-bg-basic: #1C1917;
-    --tag-text-basic: #FBBF24;
+    --bg-primary: #05080a;
+    --bg-secondary: #0e1513;
+    --bg-card-dark: #14201b;
+    --text-primary: #f5f7f6;
+    --text-secondary: #c2d1c8;
+    --text-muted: #5e6f66;
+    --primary-green: #22c55e;
+    --brand-purple: #9333ea;
+    --brand-blue: #3b82f6;
+    --brand-gold: #fbbf24;
+    --brand-orange: #f97316;
+    --status-premium: #052e16;
+    --tag-bg-advanced: #052e16;
+    --tag-text-advanced: #22c55e;
+    --tag-bg-intermediate: #2e1065;
+    --tag-text-intermediate: #a855f7;
+    --tag-bg-basic: #1c1917;
+    --tag-text-basic: #fbbf24;
   }
 }
 
@@ -249,16 +249,26 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
-    font-family: 'Poppins', 'duolingo-sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    font-family:
+      "Poppins",
+      "duolingo-sans",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Helvetica Neue",
+      Arial,
+      sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1,
+      "calt" 1;
     text-rendering: optimizeLegibility;
   }
 
   /* Tipografia Duolingo — todas as headings usam duolingo-sans bold */
   h1 {
-    font-family: 'duolingo-sans', 'Poppins', sans-serif;
+    font-family: "duolingo-sans", "Poppins", sans-serif;
     font-size: 32px;
     font-weight: 700;
     line-height: 1.2;
@@ -270,7 +280,7 @@
     }
   }
   h2 {
-    font-family: 'duolingo-sans', 'Poppins', sans-serif;
+    font-family: "duolingo-sans", "Poppins", sans-serif;
     font-size: 19px;
     font-weight: 700;
     line-height: 26.6px;
@@ -282,8 +292,11 @@
       line-height: 30px;
     }
   }
-  h3, h4, h5, h6 {
-    font-family: 'duolingo-sans', 'Poppins', sans-serif;
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "duolingo-sans", "Poppins", sans-serif;
     font-weight: 700;
   }
 
@@ -294,13 +307,19 @@
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   }
   .dark .shadow-md {
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.3),
+      0 2px 4px -2px rgb(0 0 0 / 0.2);
   }
   .dark .shadow-lg {
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.3),
+      0 4px 6px -4px rgb(0 0 0 / 0.2);
   }
   .dark .shadow-xl {
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.2);
+    box-shadow:
+      0 20px 25px -5px rgb(0 0 0 / 0.3),
+      0 8px 10px -6px rgb(0 0 0 / 0.2);
   }
   .dark .shadow-\[0_-4px_20px_rgba\(0\2c 0\2c 0\2c 0\.06\)\] {
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
@@ -356,7 +375,7 @@
 /* ── Duolingo typography utilities ── */
 @layer utilities {
   .duo-hero {
-    font-family: 'duolingo-sans', 'Poppins', sans-serif;
+    font-family: "duolingo-sans", "Poppins", sans-serif;
     font-size: 32px;
     font-weight: 700;
     line-height: 1.2;
@@ -367,7 +386,7 @@
     }
   }
   .duo-subheading {
-    font-family: 'duolingo-sans', 'Poppins', sans-serif;
+    font-family: "duolingo-sans", "Poppins", sans-serif;
     font-size: 19px;
     font-weight: 700;
     line-height: 26.6px;
@@ -379,26 +398,26 @@
     }
   }
   .duo-body {
-    font-family: 'duolingo-sans', 'Poppins', sans-serif;
+    font-family: "duolingo-sans", "Poppins", sans-serif;
     font-size: 17px;
     font-weight: 500;
     line-height: 20px;
   }
   .duo-btn-label {
-    font-family: 'duolingo-sans', 'Poppins', sans-serif;
+    font-family: "duolingo-sans", "Poppins", sans-serif;
     font-size: 15px;
     font-weight: 700;
     line-height: 20px;
     letter-spacing: 0.8px;
   }
   .duo-small-label {
-    font-family: 'duolingo-sans', 'Poppins', sans-serif;
+    font-family: "duolingo-sans", "Poppins", sans-serif;
     font-size: 13px;
     font-weight: 700;
     line-height: 16px;
   }
   .duo-nav-link {
-    font-family: 'duolingo-sans', 'Poppins', sans-serif;
+    font-family: "duolingo-sans", "Poppins", sans-serif;
     font-size: 17px;
     font-weight: 500;
     line-height: 24px;
@@ -429,12 +448,20 @@
 }
 /* â”€â”€ Page transition: growing circle reveal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @keyframes circleGrow {
-  0%   { clip-path: circle(0% at 50% 60%); }
-  100% { clip-path: circle(150% at 50% 60%); }
+  0% {
+    clip-path: circle(0% at 50% 60%);
+  }
+  100% {
+    clip-path: circle(150% at 50% 60%);
+  }
 }
 @keyframes circleShrink {
-  0%   { clip-path: circle(150% at 50% 60%); }
-  100% { clip-path: circle(0% at 50% 60%); }
+  0% {
+    clip-path: circle(150% at 50% 60%);
+  }
+  100% {
+    clip-path: circle(0% at 50% 60%);
+  }
 }
 
 @layer utilities {
@@ -447,9 +474,17 @@
 }
 
 @keyframes confettiFall {
-  0%   { transform: translateY(-10px) rotate(var(--r, 20deg)); opacity: 1; }
-  80%  { opacity: 0.8; }
-  100% { transform: translateY(100vh) rotate(calc(var(--r, 20deg) + 360deg)); opacity: 0; }
+  0% {
+    transform: translateY(-10px) rotate(var(--r, 20deg));
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(100vh) rotate(calc(var(--r, 20deg) + 360deg));
+    opacity: 0;
+  }
 }
 
 @keyframes sparkle-twinkle {
@@ -494,18 +529,34 @@
 }
 
 @keyframes progress-stripes {
-  from { background-position: 0 0; }
-  to   { background-position: 1rem 0; }
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 1rem 0;
+  }
 }
 
 @keyframes dot-pulse {
-  0%, 80%, 100% { opacity: 0.35; transform: scale(0.8); }
-  40%           { opacity: 1;    transform: scale(1.15); }
+  0%,
+  80%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0);    }
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 @layer utilities {
@@ -555,4 +606,3 @@
     transform: none;
   }
 }
-
