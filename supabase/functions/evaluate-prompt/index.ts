@@ -189,7 +189,7 @@ Deno.serve(async (req) => {
       strengths: parsed.strengths,
       improvements: parsed.improvements,
       enhancedPrompt: parsed.enhancedPrompt,
-      quota: { used: currentCount + 1, limit: dailyLimit },
+      quota: { used: newCount ?? dailyLimit, limit: dailyLimit },
     })
   } catch (err) {
     console.error("evaluate-prompt error:", err)
