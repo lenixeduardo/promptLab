@@ -22,8 +22,6 @@ const MOCK_ENTRIES: LeaderboardEntry[] = [
   { id: "mock-8", full_name: "Rafael Sousa", avatar_url: "cat-blue", xp: 1450 },
 ]
 
-type Period = "semana" | "mes" | "geral"
-
 interface RankedUser extends LeaderboardEntry {
   position: number
   isCurrentUser: boolean
@@ -249,12 +247,6 @@ export default function Ranking() {
     ? getLevelProgress(currentUser.xp)
     : { currentXP: 0, targetXP: 100 }
   const progressPct = currentUser ? Math.min(100, Math.round((progressXP / targetXP) * 100)) : 0
-
-  const PERIOD_LABELS: Record<Period, string> = {
-    semana: "Semana",
-    mes: "Mês",
-    geral: "Geral",
-  }
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-white">

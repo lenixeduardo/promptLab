@@ -8,7 +8,6 @@ test.describe("Accessibility - Forms & Labels", () => {
 
     // Check for email input label
     const emailInput = page.locator('input[type="email"]')
-    const emailLabel = emailInput.locator('[aria-label*="e-mail"], [aria-label*="email"]')
     await expect(emailInput).toHaveAttribute("aria-label", /endereço de e-mail|email/i)
     await expect(emailInput).toHaveAttribute("aria-required", "true")
 
@@ -75,8 +74,6 @@ test.describe("Accessibility - Keyboard Navigation", () => {
     await expect(focusedElement).toBeDefined()
 
     // Tab through form fields
-    const previousElement = await focusedElement.evaluate((el) => el.tagName)
-
     for (let i = 0; i < 5; i++) {
       await page.keyboard.press("Tab")
       focusedElement = page.locator(":focus")
@@ -299,10 +296,6 @@ test.describe("Accessibility - Focus Management", () => {
 test.describe("Accessibility - Dynamic Content", () => {
   test("Loading states are announced", async ({ page }) => {
     await page.goto("/home")
-
-    // Look for aria-busy or aria-live regions
-    const busyElements = page.locator('[aria-busy="true"]')
-    const liveRegions = page.locator("[aria-live]")
 
     // May or may not exist depending on page state
     expect(true).toBeTruthy()

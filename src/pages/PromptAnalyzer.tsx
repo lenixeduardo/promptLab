@@ -344,13 +344,6 @@ export default function PromptAnalyzerPage() {
     }
   }
 
-  const overallColor =
-    (result?.overallScore ?? 0) >= 7
-      ? "text-emerald border-emerald"
-      : (result?.overallScore ?? 0) >= 4
-        ? "text-amber-500 border-amber-400"
-        : "text-red-500 border-red-400"
-
   return (
     <div className="flex min-h-screen flex-col bg-white pb-28 lg:pb-8">
       {/* ── Header ── */}

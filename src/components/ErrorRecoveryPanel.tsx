@@ -1,4 +1,4 @@
-import { X, AlertCircle, Wifi, WifiOff, RotateCw, Clock } from "lucide-react"
+import { X, AlertCircle, WifiOff, RotateCw, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -42,7 +42,6 @@ export function ErrorRecoveryPanel({
       )}
 
       {errors.map((error, index) => {
-        const isNetworkError = error.code === "NETWORK_ERROR"
         const isAuthError = error.code === "AUTH_ERROR"
         const bgColor = isAuthError ? "bg-red-50 border-red-200" : "bg-orange-50 border-orange-200"
         const iconColor = isAuthError ? "text-red-600" : "text-orange-600"

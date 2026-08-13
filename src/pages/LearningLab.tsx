@@ -1,4 +1,4 @@
-import { Link, useSearchParams, useNavigate } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import {
   Check,
   Lock,
@@ -134,7 +134,6 @@ function useTrackCompletion() {
 
 export default function LearningLabPage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const navigate = useNavigate()
   const track = (searchParams.get("track") as TrackId) || "a1"
   const completions = useTrackCompletion()
   const { lives, canPlay, msUntilNextLife } = useLives()

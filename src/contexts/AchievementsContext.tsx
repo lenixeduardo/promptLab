@@ -12,13 +12,7 @@ import {
   saveAchievementsToDb,
   syncLocalAchievementsToSupabase,
 } from "@/lib/achievements-db"
-import {
-  loadStreak,
-  saveStreak,
-  insertNotification,
-  getAchievementDefinitions,
-  type DbAchievementDefinition,
-} from "@/lib/db"
+import { loadStreak, saveStreak, insertNotification, getAchievementDefinitions } from "@/lib/db"
 import { useAuthContext } from "@/contexts/AuthContext"
 import { AchievementsContext } from "./achievementsContextDef"
 

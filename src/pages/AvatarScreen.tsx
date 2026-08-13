@@ -1,12 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { ChevronLeft, Gem, Crown, Lock } from "lucide-react"
-import {
-  useAvatar,
-  AVATAR_OPTIONS,
-  type AvatarOption,
-  type AvatarTier,
-} from "@/components/AvatarProvider"
+import { useAvatar, type AvatarOption, type AvatarTier } from "@/components/AvatarProvider"
 import { AppBottomNav } from "@/components/AppBottomNav"
 import { cn } from "@/lib/utils"
 import { sileo } from "sileo"

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { Link } from "react-router-dom"
-import { Settings, ChevronRight, Zap, BookOpen, Edit2, Heart, Crown, Flame } from "lucide-react"
+import { Settings, Zap, BookOpen, Edit2, Heart, Crown, Flame } from "lucide-react"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { AppBottomNav } from "@/components/AppBottomNav"
 import { useAuth } from "@/hooks/useAuth"

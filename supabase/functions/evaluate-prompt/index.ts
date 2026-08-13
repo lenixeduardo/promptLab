@@ -10,6 +10,8 @@ const ANTHROPIC_MODEL = "claude-sonnet-5"
 
 const MAX_PROMPT_LENGTH = 5000
 const FREE_DAILY_LIMIT = 5
+// Kept for the open-beta revert noted below, not used directly yet.
+void FREE_DAILY_LIMIT
 // Premium users are not truly "unlimited" — this is a guard rail against abuse.
 const PREMIUM_DAILY_LIMIT = 200
 

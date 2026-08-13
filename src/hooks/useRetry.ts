@@ -29,12 +29,10 @@ export function useRetry(options: RetryOptions = {}) {
         await fn()
         setRetryCount(0)
         setIsRetrying(false)
-      } catch (error) {
+      } catch {
+        // Caller decides whether to retry again via canRetry/retryCount
         setRetryCount(nextAttempt)
         setIsRetrying(false)
-        if (nextAttempt < maxAttempts) {
-          // Will retry next time retry is called
-        }
       }
     },
     [retryCount, maxAttempts, delayMs, backoffMultiplier]

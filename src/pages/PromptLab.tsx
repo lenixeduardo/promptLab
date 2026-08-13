@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import {
   ArrowLeft,
-  Send,
   Sparkles,
   RotateCcw,
   Star,
@@ -165,7 +164,7 @@ export default function PromptLabPage() {
   const [evaluating, setEvaluating] = useState(false)
   const [result, setResult] = useState<EvalResult | null>(null)
   const [showCelebration, setShowCelebration] = useState(false)
-  const [mascotSpeaking, setMascotSpeaking] = useState(false)
+  const [, setMascotSpeaking] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {

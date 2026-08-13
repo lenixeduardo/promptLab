@@ -29,7 +29,6 @@ export function OrderCard({ activity, answered, onAnswer }: Props) {
 
     // Se o left já tem conexão, remove
     if (newConn[selectedLeft]) {
-      const oldRight = newConn[selectedLeft]
       delete newConn[selectedLeft]
       // Se o right clicado já estava conectado a outro left, remove também
       const otherLeft = Object.entries(newConn).find(([, r]) => r === id)?.[0]

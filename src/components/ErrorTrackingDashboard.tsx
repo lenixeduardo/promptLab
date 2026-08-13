@@ -1,4 +1,4 @@
-import { BarChart3, AlertTriangle, CheckCircle2, Clock, Zap } from "lucide-react"
+import { BarChart3, AlertTriangle, CheckCircle2, Clock } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 

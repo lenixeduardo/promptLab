@@ -143,8 +143,8 @@ export default function PromptCategoryPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
 
-  const { categories, loading: labLoading, error: catError } = useLabCategories()
-  const { prompts, loading: promptsLoading, error: promptsError } = usePrompts(categoryId)
+  const { categories, error: catError } = useLabCategories()
+  const { prompts, error: promptsError } = usePrompts(categoryId)
 
   useEffect(() => {
     if (catError) {

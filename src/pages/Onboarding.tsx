@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { Sparkles, Target, Trophy, ArrowRight, Check } from "lucide-react"
 
 export const ONBOARDED_KEY = "promptlabz:onboarded"
