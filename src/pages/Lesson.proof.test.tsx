@@ -55,6 +55,7 @@ vi.mock("@/lib/userScope", () => ({
 
 vi.mock("@/lib/db", () => ({
   uploadLessonProof: vi.fn(),
+  recordLessonCompletion: vi.fn().mockResolvedValue({ data: null, error: null }),
 }))
 
 vi.mock("sileo", () => ({

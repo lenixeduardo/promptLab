@@ -44,9 +44,9 @@ import { sileo } from "sileo"
 
 type Status = "completed" | "current" | "locked"
 
-type Module = { title: string; icon: typeof BookOpen; xp: number }
+export type LabModule = { title: string; icon: typeof BookOpen; xp: number }
 
-const TRACKS: { id: TrackId; label: string; subtitle: string; modules: Module[] }[] = [
+export const TRACKS: { id: TrackId; label: string; subtitle: string; modules: LabModule[] }[] = [
   {
     id: "a1",
     label: "Trilha A1",

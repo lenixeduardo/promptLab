@@ -9,6 +9,8 @@ import {
   getLeaderboard,
   getNewsArticles,
   getNotifications,
+  getLessonCompletions,
+  recordLessonCompletion,
   updateUserXP,
   updateUserGems,
   saveModuleProgress,
@@ -350,6 +352,42 @@ describe("getNotifications", () => {
     await getNotifications("user-1", 50, 100)
 
     expect(q.range).toHaveBeenCalledWith(100, 149)
+  })
+})
+
+describe("getLessonCompletions", () => {
+  it("usa .range(offset, offset+limit-1) para paginar o histórico de lições", async () => {
+    const q = buildQuery({ range: vi.fn().mockResolvedValue({ data: [], error: null }) })
+
+    await getLessonCompletions("user-1", 20, 40)
+
+    expect(q.range).toHaveBeenCalledWith(40, 59)
+    expect(mockFrom).toHaveBeenCalledWith("lesson_completions")
+  })
+})
+
+describe("recordLessonCompletion", () => {
+  it("faz upsert ignorando duplicatas (retentativa segura)", async () => {
+    const q = buildQuery({ upsert: vi.fn().mockResolvedValue({ data: null, error: null }) })
+
+    const result = await recordLessonCompletion("user-1", "a1", 3)
+
+    expect(mockFrom).toHaveBeenCalledWith("lesson_completions")
+    expect(q.upsert).toHaveBeenCalledWith(
+      { user_id: "user-1", track: "a1", module_index: 3 },
+      { onConflict: "user_id,track,module_index", ignoreDuplicates: true }
+    )
+    expect(result.error).toBeNull()
+  })
+
+  it("retorna erro quando a gravação falha", async () => {
+    buildQuery({
+      upsert: vi.fn().mockResolvedValue({ data: null, error: { message: "Insert failed" } }),
+    })
+
+    const result = await recordLessonCompletion("user-1", "a1", 3)
+
+    expect(result.error).toBe("Insert failed")
   })
 })
 

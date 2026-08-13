@@ -55,6 +55,7 @@ const Favorites = lazy(() => import("@/pages/Favorites"))
 const Notifications = lazy(() => import("@/pages/Notifications"))
 const Premium = lazy(() => import("@/pages/Premium"))
 const Achievements = lazy(() => import("@/pages/Achievements"))
+const LessonHistory = lazy(() => import("@/pages/LessonHistory"))
 const Prompts = lazy(() => import("@/pages/Prompts"))
 const PromptChallenge = lazy(() => import("@/pages/PromptChallenge"))
 const Subscription = lazy(() => import("@/pages/Subscription"))
@@ -351,6 +352,16 @@ export default function App() {
                           <PrivateRoute>
                             <AppLayout>
                               <Achievements />
+                            </AppLayout>
+                          </PrivateRoute>
+                        }
+                      />
+                      <Route
+                        path="/lesson-history"
+                        element={
+                          <PrivateRoute>
+                            <AppLayout>
+                              <LessonHistory />
                             </AppLayout>
                           </PrivateRoute>
                         }

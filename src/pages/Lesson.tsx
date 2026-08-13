@@ -12,7 +12,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react"
 import { sileo } from "sileo"
 import { advanceModule, type TrackId } from "@/lib/moduleProgress"
-import { uploadLessonProof } from "@/lib/db"
+import { uploadLessonProof, recordLessonCompletion } from "@/lib/db"
 import {
   getActivities,
   getProofTask,
@@ -242,6 +242,11 @@ export default function LessonPage() {
     rewardGrantedRef.current = true
     advanceModule(TRACK_TOTALS[track], track)
     completeMission("lesson")
+    if (user?.id) {
+      recordLessonCompletion(user.id, track, module).catch(() => {
+        /* silent — best-effort, does not block the completion flow */
+      })
+    }
     // Save XP and gems earned in this lesson
     let leveledUp: { newLevel: number; prevLevel: number } | null = null
     if (user?.id) {
