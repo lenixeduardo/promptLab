@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/hooks/useAuth"
+import { useAvatar } from "@/components/AvatarProvider"
 import { loadInventory } from "@/lib/inventory"
 import { getLocalXP } from "@/lib/xp"
 import { POWER_UPS } from "@/data/powerUpsData"
 import { AVATARS, getAvatarById } from "@/data/avatarsData"
-import { getUserProfile, fetchInventoryFromServer } from "@/lib/db"
+import { fetchInventoryFromServer } from "@/lib/db"
 import * as Icons from "@/lib/icons"
 import { cn } from "@/lib/utils"
+import { sileo } from "sileo"
 
 export default function Inventory() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { equippedId, setEquipped } = useAvatar()
   const [xp, setXp] = useState(0)
   const [powerUps, setPowerUps] = useState<Record<string, number>>({})
   const [ownedAvatarIds, setOwnedAvatarIds] = useState<string[]>(["cat-green"])
-  const [activeAvatarId, setActiveAvatarId] = useState<string>("cat-green")
 
   useEffect(() => {
     if (!user?.id) return
@@ -23,14 +25,6 @@ export default function Inventory() {
     setPowerUps(inv.powerUps)
     setOwnedAvatarIds(inv.ownedAvatarIds)
     setXp(getLocalXP(user.id))
-
-    getUserProfile(user.id)
-      .then(({ data: profile }) => {
-        if (profile?.avatar_url) setActiveAvatarId(profile.avatar_url)
-      })
-      .catch((err) => {
-        console.error("Falha ao carregar perfil do usuário:", err)
-      })
 
     // Hidrata com o servidor (útil ao logar em um dispositivo novo), mesclando
     // com o que já está em localStorage.
@@ -45,6 +39,12 @@ export default function Inventory() {
         console.error("Falha ao sincronizar inventário do servidor:", err)
       })
   }, [user?.id])
+
+  function handleEquip(avatarId: string) {
+    if (avatarId === equippedId) return
+    setEquipped(avatarId)
+    sileo.success({ title: "Avatar equipado!" })
+  }
 
   const ownedAvatars = ownedAvatarIds
     .map((id) => getAvatarById(id))
@@ -125,13 +125,14 @@ export default function Inventory() {
           ) : (
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
               {ownedAvatars.map((avatar) => (
-                <div
+                <button
                   key={avatar.id}
+                  onClick={() => handleEquip(avatar.id)}
                   className={cn(
-                    "flex shrink-0 flex-col items-center gap-1.5 rounded-2xl border-2 p-2",
-                    activeAvatarId === avatar.id
+                    "flex shrink-0 flex-col items-center gap-1.5 rounded-2xl border-2 p-2 transition-all active:scale-95",
+                    equippedId === avatar.id
                       ? "border-primary-dark bg-pageBgLight"
-                      : "border-stroke-muted bg-white"
+                      : "border-stroke-muted bg-white hover:border-stroke-light"
                   )}
                 >
                   <div className="h-16 w-16 overflow-hidden rounded-xl">
@@ -144,12 +145,12 @@ export default function Inventory() {
                   <p className="w-16 text-center text-[10px] font-semibold leading-tight text-primary-dark">
                     {avatar.name}
                   </p>
-                  {activeAvatarId === avatar.id && (
+                  {equippedId === avatar.id && (
                     <span className="rounded-full bg-primary-dark px-2 py-0.5 text-[9px] font-bold text-white">
                       Ativo
                     </span>
                   )}
-                </div>
+                </button>
               ))}
             </div>
           )}

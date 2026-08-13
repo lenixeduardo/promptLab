@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/hooks/useAuth"
+import { useAvatar } from "@/components/AvatarProvider"
 import { loadInventory, addPowerUp, addAvatar } from "@/lib/inventory"
 import { getLocalGems, saveLocalGems } from "@/lib/xp"
-import {
-  updateUserAvatar,
-  updateUserGems,
-  syncInventoryToServer,
-  fetchInventoryFromServer,
-} from "@/lib/db"
+import { updateUserGems, syncInventoryToServer, fetchInventoryFromServer } from "@/lib/db"
 import { AVATARS } from "@/data/avatarsData"
 import { POWER_UPS } from "@/data/powerUpsData"
 import { GEM_PACKAGES } from "@/data/storeItemsData"
@@ -20,6 +16,7 @@ import { sileo } from "sileo"
 export default function Store() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { setEquipped } = useAvatar()
   const [gems, setGems] = useState(0)
   const [ownedAvatarIds, setOwnedAvatarIds] = useState<string[]>(["cat-green"])
   const [purchasingId, setPurchasingId] = useState<string | null>(null)
@@ -62,7 +59,9 @@ export default function Store() {
     try {
       const inv = addAvatar(user.id, avatarId)
       setOwnedAvatarIds([...inv.ownedAvatarIds])
-      await updateUserAvatar(user.id, avatarId)
+      // Also persists to Supabase (updateUserAvatar) and updates the shared
+      // AvatarProvider state, so Home/Profile reflect it immediately.
+      setEquipped(avatarId)
       await updateUserGems(user.id, newGems)
       await syncInventoryToServer(user.id, inv)
       sileo.success({ title: "Avatar desbloqueado! 🎉" })
