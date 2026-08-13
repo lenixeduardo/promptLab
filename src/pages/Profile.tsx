@@ -157,12 +157,14 @@ export default function Profile() {
 
           {/* Stats row */}
           <div className="flex gap-2">
-            <StatCard
-              value={data.totalLessonsCompleted}
-              label="Lições"
-              icon={BookOpen}
-              iconClass="text-emerald"
-            />
+            <Link to="/lesson-history" className="flex flex-1" aria-label="Ver histórico de lições">
+              <StatCard
+                value={data.totalLessonsCompleted}
+                label="Lições"
+                icon={BookOpen}
+                iconClass="text-emerald"
+              />
+            </Link>
             <StatCard
               value={data.consecutiveDays}
               label="Sequência"

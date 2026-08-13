@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { MemoryRouter, Routes, Route } from "react-router-dom"
 import Lesson from "./Lesson"
-import { uploadLessonProof } from "@/lib/db"
+import { recordLessonCompletion } from "@/lib/db"
 import { sileo } from "sileo"
 
 vi.mock("@/hooks/useAuth", () => ({
@@ -11,6 +11,7 @@ vi.mock("@/hooks/useAuth", () => ({
 
 vi.mock("@/lib/db", () => ({
   uploadLessonProof: vi.fn().mockResolvedValue({ data: "user-1/a1-0.png", error: null }),
+  recordLessonCompletion: vi.fn().mockResolvedValue({ data: null, error: null }),
 }))
 
 vi.mock("sileo", () => ({
@@ -218,6 +219,7 @@ describe("Lesson — fluxo de aprendizado", () => {
     })
     expect(screen.getByText(/Você acertou\s*3\s*de\s*3\s*atividades/i)).toBeInTheDocument()
     expect(screen.getByRole("link", { name: /Próxima aula/i })).toBeInTheDocument()
+    expect(recordLessonCompletion).toHaveBeenCalledWith("user-1", "a1", 0)
   })
 
   it("errando todas as questões: mostra 0/3 e NÃO libera 'Próxima aula'", async () => {
@@ -245,6 +247,7 @@ describe("Lesson — fluxo de aprendizado", () => {
     expect(screen.getByText(/Você acertou\s*0\s*de\s*3\s*atividades/i)).toBeInTheDocument()
     expect(screen.queryByRole("link", { name: /Próxima aula/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("link", { name: /Fazer prova final/i })).not.toBeInTheDocument()
+    expect(recordLessonCompletion).not.toHaveBeenCalled()
   })
 
   it("ao navegar para a próxima aula (mesma rota, só troca a query), o progresso não vaza da aula anterior", async () => {

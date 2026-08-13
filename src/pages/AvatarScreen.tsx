@@ -1,47 +1,59 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { ChevronLeft, Gem, Crown, Lock } from "lucide-react"
-import { useAvatar, type AvatarOption, type AvatarTier } from "@/components/AvatarProvider"
+import { ChevronLeft, Gem, Lock } from "lucide-react"
+import { useAvatar } from "@/components/AvatarProvider"
+import { useAuth } from "@/hooks/useAuth"
+import { loadInventory } from "@/lib/inventory"
+import { getLocalGems } from "@/lib/xp"
 import { AppBottomNav } from "@/components/AppBottomNav"
 import { cn } from "@/lib/utils"
 import { sileo } from "sileo"
-import { tryCompleteSpecialQuest } from "@/lib/missions"
+import type { Avatar } from "@/data/avatarsData"
 
-type FilterValue = "Todos" | AvatarTier
+type FilterValue = "Todos" | Avatar["rarity"]
 
 const FILTER_TABS: { label: string; value: FilterValue }[] = [
   { label: "Todos", value: "Todos" },
-  { label: "Grátis", value: "Grátis" },
-  { label: "Raro", value: "Raro" },
-  { label: "Épico", value: "Épico" },
-  { label: "Lendário", value: "Lendário" },
+  { label: "Comum", value: "common" },
+  { label: "Raro", value: "rare" },
+  { label: "Épico", value: "epic" },
+  { label: "Lendário", value: "legendary" },
 ]
 
-const TIER_BADGE: Record<AvatarTier, { label: string; className: string }> = {
-  Grátis: { label: "GRÁTIS", className: "bg-gray-800 text-white" },
-  Raro: { label: "RARO", className: "bg-amber-500 text-white" },
-  Épico: { label: "ÉPICO", className: "bg-purple-600 text-white" },
-  Lendário: { label: "LENDÁRIO", className: "bg-yellow-500 text-white" },
+const RARITY_BADGE: Record<Avatar["rarity"], { label: string; className: string }> = {
+  common: { label: "COMUM", className: "bg-gray-800 text-white" },
+  rare: { label: "RARO", className: "bg-amber-500 text-white" },
+  epic: { label: "ÉPICO", className: "bg-purple-600 text-white" },
+  legendary: { label: "LENDÁRIO", className: "bg-yellow-500 text-white" },
 }
 
 export default function AvatarScreen() {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const { equippedId, equipped, setEquipped, options } = useAvatar()
   const [filter, setFilter] = useState<FilterValue>("Todos")
-  const [userBalance] = useState(142)
+  const [ownedIds, setOwnedIds] = useState<string[]>(["cat-green"])
+  const [gems, setGems] = useState(0)
 
-  const filtered = filter === "Todos" ? options : options.filter((a) => a.tier === filter)
+  useEffect(() => {
+    if (!user?.id) return
+    setOwnedIds(loadInventory(user.id).ownedAvatarIds)
+    setGems(getLocalGems(user.id))
+  }, [user?.id])
 
-  const handleSelect = (avatar: AvatarOption) => {
-    if (!avatar.owned && avatar.cost > userBalance) {
-      sileo.error({
-        title: "Diamantes insuficientes",
-        description: `Você precisa de ${avatar.cost - userBalance} diamantes a mais.`,
+  const filtered = filter === "Todos" ? options : options.filter((a) => a.rarity === filter)
+
+  const handleSelect = (avatar: Avatar) => {
+    const owned = ownedIds.includes(avatar.id)
+    if (!owned) {
+      sileo.info({
+        title: "Você ainda não tem esse avatar",
+        description: "Desbloqueie na loja com gemas.",
       })
+      navigate("/store")
       return
     }
     setEquipped(avatar.id)
-    tryCompleteSpecialQuest("buy-avatar")
     sileo.success({
       title: "Avatar equipado!",
       description: `Você agora está usando ${avatar.name}`,
@@ -56,17 +68,18 @@ export default function AvatarScreen() {
           <button
             onClick={() => navigate(-1)}
             className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-soft text-foregroundSecondary"
+            aria-label="Voltar"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-1.5 rounded-full bg-surface-soft px-3 py-1.5">
             <Gem className="h-4 w-4 fill-sky-400 text-sky-400" />
-            <span className="text-sm font-bold text-foregroundDark">{userBalance}</span>
+            <span className="text-sm font-bold text-foregroundDark">{gems}</span>
           </div>
         </div>
-        <h1 className="text-2xl font-extrabold text-foregroundDark">Loja de Avatares</h1>
+        <h1 className="text-2xl font-extrabold text-foregroundDark">Meus Avatares</h1>
         <p className="mb-5 mt-0.5 text-sm text-foregroundSecondary">
-          Desbloqueie seu visual lendário
+          Toque para equipar um avatar que você já desbloqueou
         </p>
       </div>
 
@@ -78,20 +91,21 @@ export default function AvatarScreen() {
           </div>
           <div className="text-center">
             <h2 className="text-xl font-extrabold text-white">{equipped.name}</h2>
-            <p className="text-sm text-white/80">{equipped.desc}</p>
-          </div>
-          <div className="flex items-center gap-1.5 rounded-full bg-amber-400 px-4 py-1.5">
-            <Crown className="h-3.5 w-3.5 text-white" />
-            <span className="text-xs font-bold text-white">{equipped.tier}</span>
           </div>
         </div>
       </div>
 
       {/* Filter tabs */}
-      <div className="mb-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">
+      <div
+        className="mb-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]"
+        role="tablist"
+        aria-label="Filtrar avatares por raridade"
+      >
         {FILTER_TABS.map(({ label, value }) => (
           <button
             key={value}
+            role="tab"
+            aria-selected={filter === value}
             onClick={() => setFilter(value)}
             className={cn(
               "shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold transition-colors",
@@ -109,8 +123,9 @@ export default function AvatarScreen() {
       <div className="grid grid-cols-2 gap-3 px-4">
         {filtered.map((avatar) => {
           const isEquipped = equippedId === avatar.id
-          const badge = TIER_BADGE[avatar.tier]
-          const locked = !avatar.owned
+          const owned = ownedIds.includes(avatar.id)
+          const badge = RARITY_BADGE[avatar.rarity]
+          const locked = !owned
 
           return (
             <button
@@ -138,6 +153,12 @@ export default function AvatarScreen() {
                 </div>
               )}
 
+              {isEquipped && (
+                <span className="absolute right-2.5 top-2.5 rounded-full bg-primary-dark px-2 py-0.5 text-[9px] font-bold text-white">
+                  Ativo
+                </span>
+              )}
+
               {/* Avatar image */}
               <div className="mt-7 flex justify-center">
                 <img
@@ -150,12 +171,11 @@ export default function AvatarScreen() {
               {/* Info */}
               <div className="mt-2 space-y-0.5">
                 <p className="text-sm font-bold leading-tight text-foregroundDark">{avatar.name}</p>
-                <p className="text-[11px] leading-tight text-foregroundSecondary">{avatar.desc}</p>
-                {locked && avatar.cost > 0 && (
+                {locked && avatar.price > 0 && (
                   <div className="mt-1 flex items-center gap-1">
                     <Gem className="h-3 w-3 fill-sky-400 text-sky-400" />
                     <span className="text-xs font-bold text-foregroundDark">
-                      {avatar.cost.toLocaleString("pt-BR")}
+                      {avatar.price.toLocaleString("pt-BR")}
                     </span>
                   </div>
                 )}

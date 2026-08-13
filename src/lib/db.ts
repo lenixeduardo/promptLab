@@ -7,6 +7,13 @@ export interface CategoryProgress {
   completedLessonIds: string[]
 }
 
+export interface DbLessonCompletion {
+  id: string
+  track: string
+  module_index: number
+  completed_at: string
+}
+
 export interface Profile {
   id: string
   email: string | null
@@ -507,6 +514,51 @@ export async function fetchModuleProgress(
     return { data: result, error: null }
   } catch (err) {
     return { data: null, error: getErrorMessage(err, "Erro ao carregar progresso da trilha") }
+  }
+}
+
+// ── Lesson History ─────────────────────────────────────────────────────────
+
+// Best-effort: fire-and-forget from Lesson.tsx when a lesson completes. The
+// UNIQUE(user_id, track, module_index) constraint makes this safely retryable
+// — a duplicate call for the same lesson is silently ignored, not an error.
+export async function recordLessonCompletion(
+  userId: string,
+  track: string,
+  moduleIndex: number
+): Promise<DbResult<void>> {
+  if (!isSupabaseConfigured()) return { data: null, error: "Supabase não configurado" }
+  try {
+    const { error } = await supabase
+      .from("lesson_completions")
+      .upsert(
+        { user_id: userId, track, module_index: moduleIndex },
+        { onConflict: "user_id,track,module_index", ignoreDuplicates: true }
+      )
+    if (error) throw error
+    return { data: null, error: null }
+  } catch (err) {
+    return { data: null, error: getErrorMessage(err, "Erro ao registrar lição concluída") }
+  }
+}
+
+export async function getLessonCompletions(
+  userId: string,
+  limit = 20,
+  offset = 0
+): Promise<DbResult<DbLessonCompletion[]>> {
+  if (!isSupabaseConfigured()) return { data: null, error: "Supabase não configurado" }
+  try {
+    const { data, error } = await supabase
+      .from("lesson_completions")
+      .select("id,track,module_index,completed_at")
+      .eq("user_id", userId)
+      .order("completed_at", { ascending: false })
+      .range(offset, offset + limit - 1)
+    if (error) throw error
+    return { data: data as DbLessonCompletion[], error: null }
+  } catch (err) {
+    return { data: null, error: getErrorMessage(err, "Erro ao carregar histórico de lições") }
   }
 }
 
