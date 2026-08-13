@@ -48,6 +48,14 @@ O cooldown de 3s em `Login.tsx` é feedback de UX, não proteção real contra b
 
 `PRODUCT.md` e `README.md` descreviam só o estado atual do produto (v0.3, 11+ funcionalidades) sem nunca isolar o que era, de fato, o MVP que validou a hipótese central. Isso foi corrigido: `PRODUCT.md` agora tem uma seção "MVP (v0.1) — Escopo Real" com as 5 funcionalidades centrais (auth, trilhas, vidas, skills, perfil/progresso), e o restante é explicitamente rotulado como construído depois, incrementalmente, sobre esse core validado.
 
+### Avatar: dois catálogos paralelos e desincronizados (achado, não corrigido)
+
+Existem hoje **dois sistemas de avatar independentes**: `AvatarScreen.tsx`/`AvatarProvider.tsx` (11 opções em `AVATAR_OPTIONS`, seleção salva só em `localStorage`, nunca chama `updateUserAvatar`) e `Store.tsx`/`Inventory.tsx` (17 opções em `AVATARS`, compra via `addAvatar`, persiste em `users.avatar_url` via `updateUserAvatar`). Os catálogos usam IDs e imagens diferentes e não convergem — dependendo de qual fluxo o usuário usa, o avatar escolhido pode não ser o mesmo em telas diferentes, e a persistência no servidor é inconsistente (um caminho salva, o outro não). **Decisão consciente de não corrigir agora**: unificar os dois sistemas é um refactor real (decidir qual catálogo é a fonte da verdade, migrar usuários com avatar já selecionado no fluxo que não persiste, tocar RLS/schema se necessário) — risco desproporcional para consertar numa sessão de auditoria, dado que "avatar" não é um fluxo crítico (auth, pagamento, progresso). Rastreado como parte da issue [#151](https://github.com/lenixeduardo/promptLabz/issues/151).
+
+### Histórico de lições: não existe como dado, não é uma correção pontual
+
+A issue [#150](https://github.com/lenixeduardo/promptLabz/issues/150) menciona "paginação no histórico de lições" — investigando o código, **não existe hoje nenhuma lista de lições individuais concluídas** para paginar. O que existe são só contadores agregados (`totalLessonsCompleted` em `Achievements.tsx`/`Profile.tsx`, um inteiro por trilha em `moduleProgress.ts`). Construir isso do zero exigiria um novo modelo de dado (tabela ou array por lição com data de conclusão) e uma tela nova — feature genuína, não um ajuste de paginação em uma lista que já existe. Documentando para não ser confundido com um "quick win" nas próximas rodadas de auditoria.
+
 ## Próximos Passos (priorizados)
 
 **Curto prazo (v0.3, em andamento)**
@@ -63,7 +71,8 @@ O cooldown de 3s em `Login.tsx` é feedback de UX, não proteção real contra b
 **Médio prazo (v0.4)**
 
 - Migrar conteúdo de `src/data` para tabelas do Supabase com seeds
-- Ligar `addError()` do `useErrorRecovery` a erros reais de rede/API (hoje o hook está montado globalmente e a faixa "sem internet" funciona de verdade, mas os cards de erro com ação de retry não são acionados por nenhum call site ainda)
+- Unificar os dois catálogos de avatar (ver achado acima)
+- Construir histórico de lições (dado + tela) do zero (ver achado acima)
 - TypeScript strict mode
 - Cache via Service Worker (PWA) para skills e trilhas
 

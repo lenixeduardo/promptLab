@@ -40,11 +40,17 @@ Para o detalhamento completo por item e estimativas de esforço, veja [ROADMAP.m
 - Upload real de comprovação de lição (`Lesson.tsx`) para o bucket privado `lesson-proofs` no Supabase Storage, com RLS por `auth.uid()` (migration `20260813_021_lesson_proofs_storage.sql`); `localStorage` continua como cache local imediato (offline-first)
 - Testes cobrindo os fluxos de paginação novos (`db.test.ts`, `News.test.tsx`, `Notifications.test.tsx`, `Community.test.tsx`) e o upload real de comprovação (`Lesson.proof.test.tsx`)
 - Removida `getLessonProofUrl()` (helper de storage sem nenhum consumidor — mesmo padrão de "função sem uso real" já corrigido em `getReviews`)
+- `useErrorRecovery` promovido a Context (`ErrorRecoveryProvider`), compartilhado por toda a árvore em vez de uma instância isolada em `App.tsx`; `useLabCategories`, `usePrompts` e `useTrendingSkills` agora chamam `addError()` quando as tentativas de retry se esgotam — antes só a faixa "sem internet" do painel de erro funcionava de verdade, os cards de erro com ação de retry nunca eram acionados
+
+### Descoberto (documentado em TRADEOFFS.md, não corrigido nesta sessão)
+
+- Dois catálogos de avatar paralelos e desincronizados: `AvatarScreen.tsx` (só localStorage) vs `Store.tsx`/`Inventory.tsx` (persiste no Supabase) — usam IDs/imagens diferentes
+- "Histórico de lições" (issue #150) não existe como dado hoje — só contadores agregados; é feature nova, não uma paginação a adicionar numa lista existente
 
 ### Pendente
 
-- Paginação no histórico de lições
-- Upload de avatar e "Salvar Resultado" do laboratório persistidos em Storage (issue #151)
+- Paginação no histórico de lições (exige construir o dado primeiro)
+- Unificar os dois catálogos de avatar; persistir "Salvar Resultado" do laboratório (issue #151)
 - Testes de integração reais contra Supabase local (RLS + migrations)
 - Seeds/dados de demonstração para loja, missões e ranking
 

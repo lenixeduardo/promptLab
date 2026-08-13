@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import { getTrendingSkills, DbTrendingSkill } from "@/lib/db"
 import { TRENDING_SKILLS, TrendingSkill } from "@/data/trendingSkillsData"
 import { errorLogger } from "@/lib/errorLogging"
+import { useErrorRecoveryContext } from "@/contexts/useErrorRecoveryContext"
 
 const MAX_RETRIES = 3
 const INITIAL_DELAY_MS = 1000
@@ -26,6 +27,7 @@ export function useTrendingSkills(category?: string) {
   const [error, setError] = useState<string | null>(null)
   const retryCountRef = useRef(0)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const errorRecovery = useErrorRecoveryContext()
 
   const fetchSkillsWithRetry = async (attemptNum = 0): Promise<void> => {
     try {
@@ -44,6 +46,9 @@ export function useTrendingSkills(category?: string) {
         } else {
           setError(result.error)
           errorLogger.logApiError("/db/getTrendingSkills", 500, result.error)
+          errorRecovery?.addError(result.error, "API_ERROR", [
+            { label: "Tentar novamente", action: fetchSkills },
+          ])
         }
       }
     } catch (err) {
@@ -57,6 +62,9 @@ export function useTrendingSkills(category?: string) {
           err instanceof Error ? err.message : "Falha ao carregar habilidades em trending"
         setError(errorMsg)
         errorLogger.logError(err, "useTrendingSkills.fetchSkills")
+        errorRecovery?.addError(errorMsg, "API_ERROR", [
+          { label: "Tentar novamente", action: fetchSkills },
+        ])
       }
     } finally {
       if (attemptNum >= MAX_RETRIES || (attemptNum === 0 && !error)) {
