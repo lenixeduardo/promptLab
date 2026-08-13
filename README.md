@@ -183,7 +183,7 @@ pnpm android:build:release  # APK de release
 pnpm typecheck        # TypeScript sem erros
 pnpm lint             # ESLint (0 erros; warnings de qualidade visíveis, não bloqueiam)
 pnpm format:check     # Prettier — formatação consistente
-pnpm test             # Vitest (294 testes — unit + integração + UI)
+pnpm test             # Vitest (298 testes — unit + integração + UI)
 pnpm test:e2e         # Playwright E2E (6 specs de fluxos críticos)
 pnpm build            # Build de produção
 ```

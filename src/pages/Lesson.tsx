@@ -10,7 +10,9 @@ import {
   ImageIcon,
 } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
+import { sileo } from "sileo"
 import { advanceModule, type TrackId } from "@/lib/moduleProgress"
+import { uploadLessonProof } from "@/lib/db"
 import {
   getActivities,
   getProofTask,
@@ -64,6 +66,7 @@ export default function LessonPage() {
     Record<string, Record<string, string>>
   >({})
   const [proofDataUrl, setProofDataUrl] = useState<string | null>(() => readProof(track, module))
+  const [proofUploading, setProofUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const rewardGrantedRef = useRef(false)
   const completionSoundPlayedRef = useRef(false)
@@ -189,6 +192,24 @@ export default function LessonPage() {
       setProofDataUrl(dataUrl)
     }
     reader.readAsDataURL(file)
+
+    // Offline-first: the localStorage copy above is what the UI reads from
+    // immediately. This upload persists the actual file server-side so it
+    // survives a device/browser switch — best-effort, doesn't block the UI.
+    if (user?.id) {
+      setProofUploading(true)
+      const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg"
+      uploadLessonProof(user.id, `${track}-${module}.${ext}`, file)
+        .then(({ error }) => {
+          if (error) {
+            sileo.error({
+              title: "Não foi possível salvar a comprovação no servidor",
+              description: "Ela continua salva neste dispositivo.",
+            })
+          }
+        })
+        .finally(() => setProofUploading(false))
+    }
   }
 
   function clearProof() {
@@ -288,7 +309,9 @@ export default function LessonPage() {
             className="mt-6 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-stroke-light bg-card px-4 py-10 text-center transition-colors hover:border-emerald hover:bg-surface-success/40"
           >
             <Upload className="h-8 w-8 text-emerald" />
-            <p className="text-sm font-bold text-foreground-dark">Toque para enviar um print</p>
+            <p className="text-sm font-bold text-foreground-dark">
+              {proofUploading ? "Enviando..." : "Toque para enviar um print"}
+            </p>
             <p className="text-[11px] text-foreground-tertiary">
               PNG ou JPG · da galeria ou câmera
             </p>
@@ -300,6 +323,7 @@ export default function LessonPage() {
             accept="image/*"
             capture="environment"
             className="hidden"
+            disabled={proofUploading}
             onChange={(e) => {
               const f = e.target.files?.[0]
               if (f) handleFile(f)
@@ -309,8 +333,8 @@ export default function LessonPage() {
           <div className="mt-4 flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2 text-[11px] text-amber-800">
             <ImageIcon className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>
-              O print fica salvo só no seu dispositivo. Ele serve para você validar sua prática — o
-              módulo só é concluído após o envio.
+              O print fica salvo neste dispositivo e sincronizado com sua conta. Ele serve para você
+              validar sua prática — o módulo só é concluído após o envio.
             </span>
           </div>
         </div>

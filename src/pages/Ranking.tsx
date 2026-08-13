@@ -159,11 +159,16 @@ function PodiumSpot({ user, rank }: { user: RankedUser | undefined; rank: 1 | 2 
   )
 }
 
+const PAGE_SIZE = 20
+
 export default function Ranking() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [rankedUsers, setRankedUsers] = useState<RankedUser[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [fetchLimit, setFetchLimit] = useState(PAGE_SIZE)
+  const [hasMore, setHasMore] = useState(false)
   const [userAvatarImage, setUserAvatarImage] = useState("/assets/avatar-cat.png")
 
   useEffect(() => {
@@ -176,15 +181,16 @@ export default function Ranking() {
       }
     })
 
-    async function buildRanking() {
+    async function buildRanking(limit: number, isInitial: boolean) {
       const currentXP = getLocalXP(user!.id)
       const currentGems = getLocalGems(user!.id)
       const currentName = user!.user_metadata?.full_name ?? user!.email?.split("@")[0] ?? "Você"
 
-      await updateUserXP(user!.id, currentXP, currentGems)
+      if (isInitial) await updateUserXP(user!.id, currentXP, currentGems)
 
-      const { data } = await getLeaderboard(20)
+      const { data } = await getLeaderboard(limit)
       const base: LeaderboardEntry[] = data && data.length > 0 ? data : [...MOCK_ENTRIES]
+      setHasMore(data !== null && data.length === limit)
 
       const others = base.filter((e) => e.id !== user!.id)
 
@@ -209,23 +215,32 @@ export default function Ranking() {
       })
 
       setRankedUsers(ranked)
-      setLoading(false)
     }
 
-    buildRanking().catch(() => {
-      setRankedUsers(
-        MOCK_ENTRIES.map((entry, i) => ({
-          ...entry,
-          position: i + 1,
-          isCurrentUser: false,
-          level: getLevel(entry.xp),
-          levelTitle: getLevelTitle(getLevel(entry.xp)),
-        }))
-      )
-      setLoading(false)
-    })
+    buildRanking(fetchLimit, fetchLimit === PAGE_SIZE)
+      .catch(() => {
+        setRankedUsers(
+          MOCK_ENTRIES.map((entry, i) => ({
+            ...entry,
+            position: i + 1,
+            isCurrentUser: false,
+            level: getLevel(entry.xp),
+            levelTitle: getLevelTitle(getLevel(entry.xp)),
+          }))
+        )
+      })
+      .finally(() => {
+        setLoading(false)
+        setLoadingMore(false)
+      })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id])
+  }, [user?.id, fetchLimit])
+
+  const handleLoadMore = () => {
+    if (loadingMore) return
+    setLoadingMore(true)
+    setFetchLimit((n) => n + PAGE_SIZE)
+  }
 
   const top3 = [rankedUsers[0], rankedUsers[1], rankedUsers[2]]
   const rest = rankedUsers.slice(3)
@@ -447,10 +462,14 @@ export default function Ranking() {
                   </div>
                 ))}
 
-                {rankedUsers.length >= 20 && (
-                  <p className="mt-2 text-center text-xs text-foreground-tertiary py-2">
-                    Mostrando top 20 · mais posições em breve
-                  </p>
+                {hasMore && (
+                  <button
+                    onClick={handleLoadMore}
+                    disabled={loadingMore}
+                    className="mx-auto mt-2 rounded-full border border-stroke-light px-5 py-2 text-sm font-semibold text-primary-dark transition-colors hover:bg-surface-soft disabled:opacity-50"
+                  >
+                    {loadingMore ? "Carregando..." : "Carregar mais"}
+                  </button>
                 )}
               </div>
             )}

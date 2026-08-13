@@ -288,7 +288,10 @@ export interface LeaderboardEntry {
   xp: number
 }
 
-export async function getLeaderboard(limit = 20): Promise<DbResult<LeaderboardEntry[]>> {
+export async function getLeaderboard(
+  limit = 20,
+  offset = 0
+): Promise<DbResult<LeaderboardEntry[]>> {
   if (!isSupabaseConfigured()) return { data: null, error: "Supabase não configurado" }
   try {
     // `leaderboard_entries` is a narrow view (id, full_name, avatar_url, xp)
@@ -299,7 +302,7 @@ export async function getLeaderboard(limit = 20): Promise<DbResult<LeaderboardEn
       .select("id,full_name,avatar_url,xp")
       .gte("xp", 0)
       .order("xp", { ascending: false })
-      .limit(limit)
+      .range(offset, offset + limit - 1)
     if (error) throw error
     return { data: data as LeaderboardEntry[], error: null }
   } catch (err) {
@@ -823,5 +826,47 @@ export async function deleteReview(reviewId: string, userId: string): Promise<Db
     return { data: null, error: null }
   } catch (err) {
     return { data: null, error: getErrorMessage(err, "Failed to delete review") }
+  }
+}
+
+// ── Storage: lesson proof uploads ───────────────────────────────────────────
+
+const LESSON_PROOFS_BUCKET = "lesson-proofs"
+
+/**
+ * Uploads a lesson-proof image to the private `lesson-proofs` Storage bucket,
+ * scoped under `${userId}/...` so RLS on storage.objects can enforce
+ * ownership (see supabase/migrations/20260813_021_lesson_proofs_storage.sql).
+ * Returns the storage path (not a public URL — the bucket is private).
+ */
+export async function uploadLessonProof(
+  userId: string,
+  fileName: string,
+  file: Blob
+): Promise<DbResult<string>> {
+  if (!isSupabaseConfigured()) return { data: null, error: "Supabase não configurado" }
+  try {
+    const path = `${userId}/${fileName}`
+    const { error } = await supabase.storage
+      .from(LESSON_PROOFS_BUCKET)
+      .upload(path, file, { upsert: true })
+    if (error) throw error
+    return { data: path, error: null }
+  } catch (err) {
+    return { data: null, error: getErrorMessage(err, "Erro ao enviar comprovação") }
+  }
+}
+
+/** Signed URL (short-lived) to display a previously uploaded lesson proof. */
+export async function getLessonProofUrl(path: string): Promise<DbResult<string>> {
+  if (!isSupabaseConfigured()) return { data: null, error: "Supabase não configurado" }
+  try {
+    const { data, error } = await supabase.storage
+      .from(LESSON_PROOFS_BUCKET)
+      .createSignedUrl(path, 3600)
+    if (error) throw error
+    return { data: data.signedUrl, error: null }
+  } catch (err) {
+    return { data: null, error: getErrorMessage(err, "Erro ao carregar comprovação") }
   }
 }

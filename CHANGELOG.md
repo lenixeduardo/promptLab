@@ -33,10 +33,17 @@ Para o detalhamento completo por item e estimativas de esforço, veja [ROADMAP.m
 - Repositório inteiro formatado com Prettier e `format:check` promovido a gate no CI (estava configurado mas não aplicado)
 - MVP (v0.1) isolado como seção própria em `PRODUCT.md`, separado do estado atual do produto (v0.3)
 
+### Adicionado (continuação)
+
+- Paginação real em `getLeaderboard`, com "carregar mais" em `Ranking.tsx`
+- Seção "O que dizem sobre o PromptLabz" em `Community.tsx`, consumindo `getReviews` de verdade (antes a função tinha paginação implementada mas nenhum consumidor)
+- Upload real de comprovação de lição (`Lesson.tsx`) para o bucket privado `lesson-proofs` no Supabase Storage, com RLS por `auth.uid()` (migration `20260813_021_lesson_proofs_storage.sql`); `localStorage` continua como cache local imediato (offline-first)
+- Testes cobrindo os fluxos de paginação novos (`db.test.ts`, `News.test.tsx`, `Notifications.test.tsx`, `Community.test.tsx`)
+
 ### Pendente
 
-- Paginação em `getLeaderboard` e no histórico de lições
-- Upload persistido em Supabase Storage (issue #151)
+- Paginação no histórico de lições
+- Upload de avatar e "Salvar Resultado" do laboratório persistidos em Storage (issue #151)
 - Testes de integração reais contra Supabase local (RLS + migrations)
 - Seeds/dados de demonstração para loja, missões e ranking
 

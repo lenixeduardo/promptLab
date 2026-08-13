@@ -293,7 +293,7 @@ describe("syncLocalProgressToSupabase", () => {
 describe("getLeaderboard", () => {
   it("consulta a view leaderboard_entries (nunca a tabela users diretamente)", async () => {
     const entries = [{ id: "u1", full_name: "Ana", avatar_url: null, xp: 300 }]
-    buildQuery({ limit: vi.fn().mockResolvedValue({ data: entries, error: null }) })
+    buildQuery({ range: vi.fn().mockResolvedValue({ data: entries, error: null }) })
 
     const result = await getLeaderboard(10)
 
@@ -303,9 +303,17 @@ describe("getLeaderboard", () => {
     expect(result.error).toBeNull()
   })
 
+  it("pagina com .range(offset, offset+limit-1)", async () => {
+    const q = buildQuery({ range: vi.fn().mockResolvedValue({ data: [], error: null }) })
+
+    await getLeaderboard(20, 40)
+
+    expect(q.range).toHaveBeenCalledWith(40, 59)
+  })
+
   it("retorna erro quando a consulta falha", async () => {
     buildQuery({
-      limit: vi.fn().mockResolvedValue({ data: null, error: { message: "Query failed" } }),
+      range: vi.fn().mockResolvedValue({ data: null, error: { message: "Query failed" } }),
     })
 
     const result = await getLeaderboard()
