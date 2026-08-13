@@ -2,17 +2,22 @@
 
 **Plataforma de aprendizado de prompt engineering para estudantes e criadores que querem dominar IA sem depender de aulas soltas ou progresso manual.**
 
+> **MVP (v0.1) em 5 funcionalidades:** autenticação · trilhas com lições interativas · sistema de vidas · central de skills · perfil/progresso. Esse core validou a hipótese do produto; tudo mais abaixo foi construído depois, incrementalmente, em v0.2/v0.3. Escopo exato em [PRODUCT.md](./PRODUCT.md#mvp-v01--escopo-real).
+
 ---
 
 ## O que é
 
 PromptLabz ajuda estudantes em transição de carreira, criadores de conteúdo e devs iniciantes a praticar prompt engineering de forma gamificada: trilhas de lições, ferramentas interativas de prompt, sistema de vidas, conquistas, ranking e uma biblioteca de 80+ skills reais do [skills.sh](https://www.skills.sh/).
 
-O **MVP (v0.1)** validou a hipótese central com 5 funcionalidades: autenticação, trilhas com lições interativas, vidas, central de skills e perfil/progresso. Tudo abaixo foi construído depois, incrementalmente, sobre esse core validado — ver [PRODUCT.md](./PRODUCT.md#mvp-v01--escopo-real) para o escopo exato do MVP e [ROADMAP.md](./ROADMAP.md) para o que foi entregue em cada versão.
-
 ---
 
 ## Funcionalidades
+
+Estado atual do produto (v0.3) — MVP + tudo que foi entregue depois, incrementalmente. Ver [ROADMAP.md](./ROADMAP.md) para o que foi entregue em cada versão.
+
+<details>
+<summary><strong>Ver todas as funcionalidades entregues (clique para expandir)</strong></summary>
 
 ### Aprendizado e Trilhas
 
@@ -71,6 +76,8 @@ O **MVP (v0.1)** validou a hipótese central com 5 funcionalidades: autenticaç�
 - **Analytics** — PostHog para eventos de produto + Google Ads/GA4 para conversões
 - **Error tracking** — Sentry integrado com painel de auditoria interno (`ErrorTrackingDashboard`)
 - **Android** — app nativo via Capacitor (builds debug e release com Gradle)
+
+</details>
 
 ---
 
@@ -176,7 +183,7 @@ pnpm android:build:release  # APK de release
 pnpm typecheck        # TypeScript sem erros
 pnpm lint             # ESLint (0 erros; warnings de qualidade visíveis, não bloqueiam)
 pnpm format:check     # Prettier — formatação consistente
-pnpm test             # Vitest (287 testes — unit + integração + UI)
+pnpm test             # Vitest (294 testes — unit + integração + UI)
 pnpm test:e2e         # Playwright E2E (6 specs de fluxos críticos)
 pnpm build            # Build de produção
 ```

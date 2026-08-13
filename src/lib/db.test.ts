@@ -7,6 +7,8 @@ import {
   loadProgress,
   syncLocalProgressToSupabase,
   getLeaderboard,
+  getNewsArticles,
+  getNotifications,
   updateUserXP,
   updateUserGems,
   saveModuleProgress,
@@ -50,6 +52,7 @@ function buildQuery(overrides: Record<string, unknown> = {}) {
     gte: vi.fn().mockReturnThis(),
     order: vi.fn().mockReturnThis(),
     limit: vi.fn().mockReturnThis(),
+    range: vi.fn().mockReturnThis(),
     ...overrides,
   }
   mockFrom.mockReturnValue(q)
@@ -309,6 +312,36 @@ describe("getLeaderboard", () => {
 
     expect(result.data).toBeNull()
     expect(result.error).toBe("Query failed")
+  })
+})
+
+// ── Paginação real (.range()) ────────────────────────────────────────────
+
+describe("getNewsArticles", () => {
+  it("usa .range(offset, offset+limit-1) em vez de .limit() fixo", async () => {
+    const q = buildQuery({ range: vi.fn().mockResolvedValue({ data: [], error: null }) })
+
+    await getNewsArticles(30, 60)
+
+    expect(q.range).toHaveBeenCalledWith(60, 89)
+  })
+
+  it("por padrão busca a primeira página (offset 0)", async () => {
+    const q = buildQuery({ range: vi.fn().mockResolvedValue({ data: [], error: null }) })
+
+    await getNewsArticles(30)
+
+    expect(q.range).toHaveBeenCalledWith(0, 29)
+  })
+})
+
+describe("getNotifications", () => {
+  it("usa .range(offset, offset+limit-1) para paginar notificações do usuário", async () => {
+    const q = buildQuery({ range: vi.fn().mockResolvedValue({ data: [], error: null }) })
+
+    await getNotifications("user-1", 50, 100)
+
+    expect(q.range).toHaveBeenCalledWith(100, 149)
   })
 })
 
