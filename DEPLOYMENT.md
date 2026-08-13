@@ -93,6 +93,21 @@ supabase functions deploy send-auth-email --no-verify-jwt
 supabase functions list
 ```
 
+### Rate limit de login (opcional, mas recomendado)
+
+`login-rate-limited` bloqueia um e-mail por 15min após 5 tentativas de login falhas em 15min (ver `TRADEOFFS.md`). É **opcional por desenho**: o cliente cai automaticamente para o login direto se esta função não estiver implantada, então o app funciona normalmente sem ela — mas a proteção extra só liga depois de:
+
+```bash
+# 1. Aplique a migration que cria a tabela de tentativas
+supabase db push   # ou: supabase migration up
+
+# 2. Implante a function
+supabase functions deploy login-rate-limited
+
+# Não precisa de secrets extras — usa SUPABASE_URL/ANON_KEY/SERVICE_ROLE_KEY,
+# já injetados automaticamente pelo runtime das Edge Functions.
+```
+
 ### Configurar Hook de Email no Supabase
 
 Dashboard → Authentication → Hooks → **Send Email Hook**:

@@ -1,11 +1,77 @@
+import { FunctionsHttpError } from "@supabase/supabase-js"
 import { supabase, getErrorMessage } from "@/lib/supabase"
 import { useAuthContext } from "@/contexts/AuthContext"
+
+interface RateLimitedLoginResponse {
+  session: { access_token: string; refresh_token: string }
+  user: unknown
+}
+
+function isRateLimitedLoginResponse(data: unknown): data is RateLimitedLoginResponse {
+  if (!data || typeof data !== "object") return false
+  const session = (data as { session?: unknown }).session
+  if (!session || typeof session !== "object") return false
+  const { access_token, refresh_token } = session as Record<string, unknown>
+  return typeof access_token === "string" && typeof refresh_token === "string"
+}
+
+/**
+ * Tries the login-rate-limited Edge Function first (real server-side rate
+ * limiting — see TRADEOFFS.md). Returns null whenever the function isn't
+ * deployed, is unreachable, or responds with anything unexpected, so the
+ * caller falls back to the direct supabase.auth.signInWithPassword call.
+ * Login must never depend on this function being up.
+ */
+async function tryRateLimitedLogin(email: string, password: string) {
+  try {
+    const { data, error } = await supabase.functions.invoke("login-rate-limited", {
+      body: { email, password },
+    })
+
+    if (error) {
+      if (error instanceof FunctionsHttpError) {
+        const status: number | undefined = error.context?.status
+        // 429 (rate limited) and 401 (the function itself rejected the
+        // credentials) are deliberate responses from our own function —
+        // honor them instead of silently retrying against GoTrue directly.
+        if (status === 429 || status === 401) {
+          let message = "Erro ao fazer login"
+          try {
+            const body = await error.context.json()
+            if (typeof body?.error === "string") message = body.error
+          } catch {
+            /* body wasn't JSON — keep the generic message */
+          }
+          return { success: false as const, error: message }
+        }
+      }
+      // 404 (not deployed), 5xx, relay/network errors, or anything else
+      // unexpected — fall through to the direct call.
+      return null
+    }
+
+    if (!isRateLimitedLoginResponse(data)) return null
+
+    const { error: setErr } = await supabase.auth.setSession({
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+    })
+    if (setErr) return null
+
+    return { success: true as const, user: data.user }
+  } catch {
+    return null
+  }
+}
 
 export function useAuth() {
   const { user, loading, error } = useAuthContext()
 
   const login = async (email: string, password: string) => {
     try {
+      const rateLimited = await tryRateLimitedLogin(email, password)
+      if (rateLimited) return rateLimited
+
       const { data, error: err } = await supabase.auth.signInWithPassword({
         email,
         password,

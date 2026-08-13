@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { renderHook, act } from "@testing-library/react"
+import { FunctionsHttpError } from "@supabase/supabase-js"
 import { useAuth } from "./useAuth"
 
 // Mock Supabase
@@ -11,6 +12,10 @@ vi.mock("@/lib/supabase", () => ({
       signOut: vi.fn(),
       resetPasswordForEmail: vi.fn(),
       signInWithOAuth: vi.fn(),
+      setSession: vi.fn(),
+    },
+    functions: {
+      invoke: vi.fn(),
     },
   },
   getErrorMessage: (err: unknown, fallback: string) =>
@@ -27,8 +32,15 @@ vi.mock("@/contexts/AuthContext", () => ({
 import { supabase } from "@/lib/supabase"
 
 const mockAuth = supabase.auth as any
+const mockFunctions = supabase.functions as any
 
-beforeEach(() => vi.clearAllMocks())
+beforeEach(() => {
+  vi.clearAllMocks()
+  // Default: the rate-limited login function isn't reachable/deployed, so
+  // every existing test below exercises the direct signInWithPassword
+  // fallback path unless it explicitly overrides this mock.
+  mockFunctions.invoke.mockResolvedValue({ data: null, error: new Error("not found") })
+})
 
 describe("useAuth — login", () => {
   it("retorna sucesso ao fazer login com credenciais válidas", async () => {
@@ -74,6 +86,157 @@ describe("useAuth — login", () => {
 
     expect(res.success).toBe(false)
     expect(res.error).toBe("Erro ao fazer login")
+  })
+})
+
+describe("useAuth — login com rate limiting (Edge Function)", () => {
+  it("usa a sessão retornada pela função quando ela responde com sucesso, sem chamar signInWithPassword direto", async () => {
+    mockFunctions.invoke.mockResolvedValue({
+      data: {
+        session: { access_token: "at-123", refresh_token: "rt-123" },
+        user: { id: "u1", email: "test@test.com" },
+      },
+      error: null,
+    })
+    mockAuth.setSession.mockResolvedValue({ data: {}, error: null })
+
+    const { result } = renderHook(() => useAuth())
+    let res: any
+    await act(async () => {
+      res = await result.current.login("test@test.com", "senha123")
+    })
+
+    expect(res.success).toBe(true)
+    expect(res.user?.email).toBe("test@test.com")
+    expect(mockAuth.setSession).toHaveBeenCalledWith({
+      access_token: "at-123",
+      refresh_token: "rt-123",
+    })
+    expect(mockAuth.signInWithPassword).not.toHaveBeenCalled()
+  })
+
+  it("surfaces o erro 429 (rate limitado) da função sem tentar login direto", async () => {
+    const response = {
+      status: 429,
+      json: async () => ({ error: "Muitas tentativas. Tente novamente em 10 min." }),
+    } as unknown as Response
+    mockFunctions.invoke.mockResolvedValue({
+      data: null,
+      error: new FunctionsHttpError(response),
+    })
+
+    const { result } = renderHook(() => useAuth())
+    let res: any
+    await act(async () => {
+      res = await result.current.login("test@test.com", "senha123")
+    })
+
+    expect(res.success).toBe(false)
+    expect(res.error).toBe("Muitas tentativas. Tente novamente em 10 min.")
+    expect(mockAuth.signInWithPassword).not.toHaveBeenCalled()
+  })
+
+  it("surfaces o erro 401 (credenciais inválidas) reportado pela função, sem retry direto", async () => {
+    const response = {
+      status: 401,
+      json: async () => ({ error: "Credenciais inválidas" }),
+    } as unknown as Response
+    mockFunctions.invoke.mockResolvedValue({
+      data: null,
+      error: new FunctionsHttpError(response),
+    })
+
+    const { result } = renderHook(() => useAuth())
+    let res: any
+    await act(async () => {
+      res = await result.current.login("test@test.com", "senhaerrada")
+    })
+
+    expect(res.success).toBe(false)
+    expect(res.error).toBe("Credenciais inválidas")
+    expect(mockAuth.signInWithPassword).not.toHaveBeenCalled()
+  })
+
+  it("cai para o login direto quando a função responde 404 (não implantada)", async () => {
+    const response = { status: 404, json: async () => ({}) } as unknown as Response
+    mockFunctions.invoke.mockResolvedValue({
+      data: null,
+      error: new FunctionsHttpError(response),
+    })
+    mockAuth.signInWithPassword.mockResolvedValue({
+      data: { user: { id: "123", email: "test@test.com" } },
+      error: null,
+    })
+
+    const { result } = renderHook(() => useAuth())
+    let res: any
+    await act(async () => {
+      res = await result.current.login("test@test.com", "senha123")
+    })
+
+    expect(res.success).toBe(true)
+    expect(mockAuth.signInWithPassword).toHaveBeenCalledWith({
+      email: "test@test.com",
+      password: "senha123",
+    })
+  })
+
+  it("cai para o login direto quando a chamada à função lança uma exceção de rede", async () => {
+    mockFunctions.invoke.mockRejectedValue(new TypeError("Failed to fetch"))
+    mockAuth.signInWithPassword.mockResolvedValue({
+      data: { user: { id: "123", email: "test@test.com" } },
+      error: null,
+    })
+
+    const { result } = renderHook(() => useAuth())
+    let res: any
+    await act(async () => {
+      res = await result.current.login("test@test.com", "senha123")
+    })
+
+    expect(res.success).toBe(true)
+    expect(mockAuth.signInWithPassword).toHaveBeenCalled()
+  })
+
+  it("cai para o login direto quando a função responde com um formato inesperado (sem session)", async () => {
+    mockFunctions.invoke.mockResolvedValue({ data: { foo: "bar" }, error: null })
+    mockAuth.signInWithPassword.mockResolvedValue({
+      data: { user: { id: "123", email: "test@test.com" } },
+      error: null,
+    })
+
+    const { result } = renderHook(() => useAuth())
+    let res: any
+    await act(async () => {
+      res = await result.current.login("test@test.com", "senha123")
+    })
+
+    expect(res.success).toBe(true)
+    expect(mockAuth.signInWithPassword).toHaveBeenCalled()
+  })
+
+  it("cai para o login direto quando setSession falha ao hidratar a sessão retornada", async () => {
+    mockFunctions.invoke.mockResolvedValue({
+      data: {
+        session: { access_token: "at-123", refresh_token: "rt-123" },
+        user: { id: "u1", email: "test@test.com" },
+      },
+      error: null,
+    })
+    mockAuth.setSession.mockResolvedValue({ data: {}, error: { message: "invalid session" } })
+    mockAuth.signInWithPassword.mockResolvedValue({
+      data: { user: { id: "123", email: "test@test.com" } },
+      error: null,
+    })
+
+    const { result } = renderHook(() => useAuth())
+    let res: any
+    await act(async () => {
+      res = await result.current.login("test@test.com", "senha123")
+    })
+
+    expect(res.success).toBe(true)
+    expect(mockAuth.signInWithPassword).toHaveBeenCalled()
   })
 })
 
