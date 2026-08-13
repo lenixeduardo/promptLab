@@ -27,6 +27,7 @@ import {
   type FocusMode,
 } from "@/lib/promptEnhancer";
 import { AppBottomNav } from "@/components/AppBottomNav";
+import { BackTapSetupCard } from "@/components/BackTapSetupCard";
 
 // ── Constants ─────────────────────────────────────────────────────────────
 
@@ -623,6 +624,11 @@ export default function PromptEnhancerPage() {
           </div>
         </div>
       )}
+
+      {/* Back Tap quick access setup guide */}
+      <div className="px-4 pb-6">
+        <BackTapSetupCard />
+      </div>
 
       <AppBottomNav />
     </div>
