@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2"
-import { corsHeaders } from "../_shared/cors.ts"
+import { resolveCorsHeaders } from "../_shared/cors.ts"
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!
 const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!
@@ -18,13 +18,6 @@ const PREMIUM_DAILY_LIMIT = 200
 
 const PREMIUM_STATUSES = new Set(["active", "trial"])
 
-function jsonResponse(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  })
-}
-
 function buildSystemPrompt(mode: string) {
   return `Você é um avaliador especialista em engenharia de prompts, ajudando usuários de uma plataforma de aprendizado (PromptLabz) a melhorar seus prompts para modelos de linguagem.
 
@@ -41,6 +34,15 @@ Responda em português do Brasil. Seja objetivo e prático.`
 }
 
 Deno.serve(async (req) => {
+  const corsHeaders = resolveCorsHeaders(req)
+
+  function jsonResponse(body: unknown, status = 200) {
+    return new Response(JSON.stringify(body), {
+      status,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    })
+  }
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders })
   }

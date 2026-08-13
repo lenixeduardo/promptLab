@@ -37,15 +37,19 @@ O cooldown de 3s em `Login.tsx` é feedback de UX, não proteção real contra b
 ## Próximos Passos (priorizados)
 
 **Curto prazo (v0.3, em andamento)**
-- Paginação/infinite scroll no histórico de lições e nas listagens do backend (`getReviews`, `getNewsArticles`, `getNotifications` hoje usam `LIMIT` fixo, sem `.range()`)
+- Abrir PR da branch de correções para `main` e deixar o CI rodar de fato (o commit com as correções desta auditoria só existe na branch de trabalho até isso acontecer — README/CHANGELOG/TRADEOFFS.md só ficam visíveis para quem olha `main` depois do merge)
+- Paginação/infinite scroll no histórico de lições e nas listagens do backend (`getReviews`, `getNewsArticles`, `getNotifications` hoje usam `LIMIT` fixo, sem `.range()`) — rastreado na issue [#150](https://github.com/lenixeduardo/promptLabz/issues/150)
+- Persistir upload real (avatar / print de comprovação) em Supabase Storage — hoje fica só em `localStorage`/base64
 - `supabase.integration.test.ts` reescrito para autenticar um usuário de teste real antes de gravar (hoje ele grava direto com a anon key sem sessão — rodar contra o projeto real quebraria por causa das políticas de RLS que exigem `auth.uid() = user_id`; a correção correta é subir um Supabase local efêmero no CI via `supabase start` + migrations, não usar a anon key de produção sem autenticação)
 - Seeds/dados de demonstração para loja, missões e ranking
 - CI: `pnpm smoke:supabase` e `pnpm test:e2e` foram adicionados ao workflow como passos não-bloqueantes (`continue-on-error: true`) para começar a gerar sinal real sem arriscar quebrar o pipeline por instabilidade de ambiente; promovê-los a bloqueantes depois de alguns ciclos verdes
+- Rodar `pnpm format` no repositório inteiro e adicionar `format:check` ao CI — o Prettier já está configurado (`.prettierrc`, `eslint-config-prettier`), mas o código existente ainda não foi reformatado (877 arquivos divergem hoje); é um diff grande demais para incluir na mesma rodada das correções funcionais desta auditoria
 
 **Médio prazo (v0.4)**
 - Migrar conteúdo de `src/data` para tabelas do Supabase com seeds
-- Integrar Sentry de forma mais completa (eventos de `errorLogging.ts` além de exceções não tratadas)
-- TypeScript strict mode + reativação de `no-explicit-any`/`no-unused-vars` no ESLint
+- Ligar `addError()` do `useErrorRecovery` a erros reais de rede/API (hoje o hook está montado globalmente e a faixa "sem internet" funciona de verdade, mas os cards de erro com ação de retry não são acionados por nenhum call site ainda)
+- Redefinir o MVP documentado em PRODUCT.md/README para 3-5 funcionalidades centrais, movendo o restante explicitamente para "roadmap" — o produto entregue já passou bem do escopo de MVP
+- TypeScript strict mode
 - Cache via Service Worker (PWA) para skills e trilhas
 
 **Longo prazo (v1.0)**

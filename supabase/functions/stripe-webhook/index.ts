@@ -1,6 +1,6 @@
 import Stripe from "npm:stripe@14"
 import { createClient } from "npm:@supabase/supabase-js@2"
-import { corsHeaders } from "../_shared/cors.ts"
+import { resolveCorsHeaders } from "../_shared/cors.ts"
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
   apiVersion: "2024-06-20",
@@ -228,6 +228,8 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 }
 
 Deno.serve(async (req) => {
+  const corsHeaders = resolveCorsHeaders(req)
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders })
   }
