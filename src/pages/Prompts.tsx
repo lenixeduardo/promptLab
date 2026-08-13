@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 import {
-  ArrowRight, Briefcase,
+  ArrowRight, Briefcase, Search, X,
   Lightbulb, Megaphone, Code2, Apple, ClipboardList, BarChart3,
   MessageSquare, Settings, Palette, Headphones, Users,
   type LucideIcon,
@@ -45,13 +45,20 @@ function CategoryCard({ cat, onClick }: { cat: LabCategory; onClick: () => void 
 export default function Prompts() {
   const navigate = useNavigate()
   const [activeDiff, setActiveDiff] = useState<DiffFilter>("Todos")
-  const { categories, promptOfTheDay, loading, error } = useLabCategories()
+  const [search, setSearch] = useState("")
+  const { categories, promptOfTheDay, error } = useLabCategories()
 
   useEffect(() => {
     if (error) {
       sileo.error({ title: `Erro ao carregar categorias: ${error}` })
     }
   }, [error])
+
+  const filteredCategories = useMemo(() => {
+    const q = search.toLowerCase().trim()
+    if (!q) return categories
+    return categories.filter((cat) => cat.label.toLowerCase().includes(q))
+  }, [categories, search])
 
   return (
     <div className="min-h-screen bg-white pb-24 lg:pb-8">
@@ -75,6 +82,28 @@ export default function Prompts() {
       </div>
 
       <div className="px-4 pt-4 lg:max-w-5xl lg:mx-auto">
+        {/* Busca de categorias */}
+        <div className="mb-4 flex items-center gap-2 rounded-full border border-stroke-light bg-surface-soft px-4 py-2.5">
+          <Search className="h-4 w-4 shrink-0 text-foregroundMuted" />
+          <input
+            type="text"
+            placeholder="Buscar categoria..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            aria-label="Buscar categoria de prompts"
+            className="flex-1 bg-transparent text-sm text-foregroundDark placeholder:text-foregroundPlaceholder focus:outline-none"
+          />
+          {search && (
+            <button
+              onClick={() => setSearch("")}
+              aria-label="Limpar busca"
+              className="rounded-full p-0.5 text-foregroundMuted"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+
         {/* Difficulty filter tabs */}
         <div role="tablist" className="no-scrollbar mb-5 flex gap-2 overflow-x-auto pb-1">
           {DIFF_TABS.map((d) => (
@@ -96,15 +125,21 @@ export default function Prompts() {
 
         {/* Categories section */}
         <h2 className="mb-3 text-base font-bold text-foregroundDark">Categorias</h2>
-        <div className="mb-6 grid grid-cols-4 lg:grid-cols-6 gap-2.5">
-          {categories.map((cat) => (
-            <CategoryCard
-              key={cat.id}
-              cat={cat}
-              onClick={() => navigate(`/prompts/category/${cat.id}`)}
-            />
-          ))}
-        </div>
+        {filteredCategories.length === 0 ? (
+          <p className="mb-6 py-6 text-center text-sm text-foregroundMuted">
+            Nenhuma categoria encontrada para "{search}".
+          </p>
+        ) : (
+          <div className="mb-6 grid grid-cols-4 lg:grid-cols-6 gap-2.5">
+            {filteredCategories.map((cat) => (
+              <CategoryCard
+                key={cat.id}
+                cat={cat}
+                onClick={() => navigate(`/prompts/category/${cat.id}`)}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Em destaque */}
         <div className="mb-2 flex items-center justify-between">

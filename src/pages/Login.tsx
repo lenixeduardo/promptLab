@@ -77,7 +77,7 @@ export default function Login() {
       sileo.success({ title: "Login realizado com sucesso!" })
       navigate("/home")
     } else {
-      errorLogger.logAuthEvent("login", email, false)
+      errorLogger.logAuthEvent("login", "unknown", false)
       sileo.error({ title: result.error || "Erro ao fazer login" })
     }
     setLoading(false)
@@ -146,7 +146,11 @@ export default function Login() {
             role="form"
             aria-label="Formulário de login"
           >
+            <label htmlFor="login-email" className="sr-only">
+              E-mail ou nome de usuário
+            </label>
             <Input
+              id="login-email"
               type="text"
               placeholder="E-mail ou nome de usuário"
               value={email}
@@ -155,7 +159,6 @@ export default function Login() {
               autoComplete="username"
               required
               disabled={loading}
-              aria-label="E-mail ou nome de usuário"
               aria-required="true"
               aria-describedby="email-help-login"
             />
@@ -164,7 +167,11 @@ export default function Login() {
             </small>
 
             <div className="relative">
+              <label htmlFor="login-password" className="sr-only">
+                Senha
+              </label>
               <Input
+                id="login-password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Senha"
                 value={password}
@@ -173,7 +180,6 @@ export default function Login() {
                 autoComplete="current-password"
                 required
                 disabled={loading}
-                aria-label="Senha"
                 aria-required="true"
                 aria-describedby="password-help-login"
                 className="pr-12"

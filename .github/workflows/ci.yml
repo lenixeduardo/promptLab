@@ -38,3 +38,25 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      # Health check against the real Supabase project. Non-blocking: a transient
+      # outage or missing secret on a fork PR shouldn't fail the whole pipeline.
+      - name: Supabase smoke test
+        run: pnpm smoke:supabase
+        continue-on-error: true
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      # E2E specs (Playwright) — added non-blocking while we build confidence in
+      # headless-runner stability; see TRADEOFFS.md for the plan to make it a gate.
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+        continue-on-error: true
+
+      - name: E2E tests
+        run: pnpm test:e2e
+        continue-on-error: true
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}

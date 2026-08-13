@@ -117,8 +117,8 @@ Browser (React SPA)          Android (Capacitor)
 
 ```bash
 # 1. Clone e instale
-git clone https://github.com/lenixeduardo/promptLab.git
-cd promptLab
+git clone https://github.com/lenixeduardo/promptLabz.git
+cd promptLabz
 pnpm install
 
 # 2. Configure as variáveis de ambiente
@@ -164,13 +164,14 @@ pnpm android:build:release  # APK de release
 
 ```bash
 pnpm typecheck        # TypeScript sem erros
-pnpm lint             # ESLint sem warnings
-pnpm test             # Vitest (248 testes — unit + integração + UI)
-pnpm test:e2e         # Playwright E2E
+pnpm lint             # ESLint (0 erros; warnings de qualidade visíveis, não bloqueiam)
+pnpm format:check     # Prettier — formatação consistente
+pnpm test             # Vitest (287 testes — unit + integração + UI)
+pnpm test:e2e         # Playwright E2E (6 specs de fluxos críticos)
 pnpm build            # Build de produção
 ```
 
-**Cobertura atual:** hooks, components, pages, contexts — 32 arquivos de teste.
+**Cobertura atual:** hooks, components, pages, contexts — 36 arquivos de teste Vitest + 6 specs Playwright.
 
 ---
 
@@ -178,13 +179,17 @@ pnpm build            # Build de produção
 
 > Acesse em: **[promptlabz.vercel.app](https://promptlabz.vercel.app)**
 
-| | |
+| Home | Atividade interativa |
 |---|---|
-| **Home** — Progresso, streak, trilha e acesso rápido | **Trilha de Aprendizado** — Módulos sequenciais com lições interativas |
-| **Ranking** — Pódio com top 3 e lista de usuários | **Skills** — 80+ skills com busca, filtros e favoritos |
-| **PromptLab** — Editor com avaliação em tempo real | **PromptAnalyzer** — Análise de prompts com métricas de clareza |
-| **Loja** — Avatares e power-ups comprados com gemas | **Perfil** — Avatar, XP, gemas, conquistas e certificados |
-| **Dark mode** — Tema claro/escuro em todo o app | **Notícias** — Feed diário de tecnologia atualizado via cron |
+| ![Home — progresso, streak e trilha](./homepage-screenshot.png) | ![Atividade de lição em andamento](./activity-demo-full.png) |
+
+| Preencher lacuna (respondido) | Ordenar etapas |
+|---|---|
+| ![Fill-in-the-blank respondido](./activity-fillblank-answered.png) | ![Atividade de ordenação](./activity-order.png) |
+
+| Combinar pares | Home (mobile) |
+|---|---|
+| ![Atividade de combinar pares](./activity-match.png) | ![Home em viewport mobile](./homepage-mobile-screenshot.png) |
 
 ---
 
@@ -221,6 +226,8 @@ android/           # Projeto Capacitor Android (gerado — não editar manualmen
 
 ## Decisões Técnicas
 
+> Versão resumida abaixo. Lista completa + próximos passos priorizados em [TRADEOFFS.md](./TRADEOFFS.md).
+
 - **Supabase** em vez de Firebase: SQL + RLS nativo permite segurança declarativa e queries complexas para analytics futuro
 - **Conteúdo em `src/data`** em vez de CMS: acelera o MVP — migração para DB planejada na v0.3
 - **React SPA** em vez de Next.js: produto não é SEO-crítico; SSR traria complexidade sem benefício real
@@ -238,10 +245,27 @@ android/           # Projeto Capacitor Android (gerado — não editar manualmen
 > **Acesse em:** [promptlabz.vercel.app](https://promptlabz.vercel.app)
 >
 > **Ou rode localmente:**
-> 1. Clone o repositório: `git clone https://github.com/lenixeduardo/promptLab.git`
+> 1. Clone o repositório: `git clone https://github.com/lenixeduardo/promptLabz.git`
 > 2. Instale as dependências: `pnpm install`
 > 3. Inicie o servidor: `pnpm dev`
 > 4. Acesse `http://localhost:5173` — o app funciona **sem credenciais Supabase** (modo degradado com dados locais)
+
+---
+
+## Credenciais Demo
+
+Para testar o fluxo completo (login, progresso, XP, streak, conquistas) sem jogar do zero, popule o banco local/dev com 5 usuários de teste já com histórico:
+
+```bash
+SUPABASE_SERVICE_ROLE_KEY=... VITE_SUPABASE_URL=... node scripts/seed-test-users.mjs
+```
+
+| Usuário | E-mail | Senha | Perfil |
+|---|---|---|---|
+| Ana | `teste.ana@promptlabz.dev` | `TestePromptLabz2026!` | Iniciante, poucos módulos concluídos |
+| Bruno, Carla, Diego, Elisa | `teste.{nome}@promptlabz.dev` | `TestePromptLabz2026!` | Progresso crescente por persona (ver `scripts/seed-test-users.mjs`) |
+
+> Requer a service role key do projeto Supabase (nunca rode contra produção sem certeza — cria contas reais).
 
 ---
 
@@ -266,6 +290,8 @@ android/           # Projeto Capacitor Android (gerado — não editar manualmen
 | [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) | Tokens de design, paleta, tipografia, componentes, animações |
 | [PRODUCT.md](./PRODUCT.md) | Requisitos, regras de negócio, casos de borda |
 | [PERSONAS.md](./PERSONAS.md) | Perfis dos usuários-alvo |
-| [ROADMAP.md](./ROADMAP.md) | Versões, features planejadas, trade-offs |
+| [ROADMAP.md](./ROADMAP.md) | Versões, features planejadas, estimativas de esforço |
+| [CHANGELOG.md](./CHANGELOG.md) | Histórico de mudanças por versão (v0.1, v0.2, v0.3...) |
+| [TRADEOFFS.md](./TRADEOFFS.md) | Decisões técnicas ("por que X e não Y") e próximos passos priorizados |
 | [DEPLOYMENT.md](./DEPLOYMENT.md) | Guia de deploy Vercel + Supabase + variáveis de ambiente |
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | Como contribuir, convenções, testes |

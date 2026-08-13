@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { supabase } from "@/lib/supabase";
+import { z } from "zod";
 import { getErrorMessage } from "@/lib/utils";
 import {
   getUserReview,
@@ -22,6 +22,12 @@ import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
+
+// Espelha as constraints de `reviews` no banco (rating 1-5, comment <= 2000 chars)
+const reviewSchema = z.object({
+  rating: z.number().int().min(1, "Selecione uma avaliação entre 1 e 5 estrelas").max(5),
+  comment: z.string().trim().max(2000, "O comentário pode ter no máximo 2000 caracteres").optional(),
+});
 
 interface ReviewModalProps {
   open: boolean;
@@ -83,8 +89,9 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
   };
 
   const handleSubmit = async () => {
-    if (rating < 1 || rating > 5) {
-      setError("Please select a rating between 1 and 5 stars");
+    const parsed = reviewSchema.safeParse({ rating, comment: comment.trim() || undefined });
+    if (!parsed.success) {
+      setError(parsed.error.issues[0]?.message ?? "Dados inválidos");
       return;
     }
 

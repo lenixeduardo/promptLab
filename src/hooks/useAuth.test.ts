@@ -13,6 +13,8 @@ vi.mock("@/lib/supabase", () => ({
       signInWithOAuth: vi.fn(),
     },
   },
+  getErrorMessage: (err: unknown, fallback: string) =>
+    err && typeof err === "object" && "message" in err ? String((err as { message: unknown }).message) : fallback,
 }))
 
 // Mock AuthContext

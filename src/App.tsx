@@ -20,6 +20,8 @@ import { QuickEnhanceModal } from "@/components/QuickEnhanceModal"
 import { WelcomeBackScreen } from "@/components/WelcomeBackScreen"
 import { useAchievements } from "@/hooks/useAchievements"
 import { AppLayout } from "@/components/AppLayout"
+import { ErrorRecoveryPanel } from "@/components/ErrorRecoveryPanel"
+import { useErrorRecovery } from "@/hooks/useErrorRecovery"
 import { getUserProfile, loadProgress } from "@/lib/db"
 import { getLocalXP, getLocalGems, saveLocalXP, saveLocalGems, XP_UPDATE_EVENT, GEMS_UPDATE_EVENT } from "@/lib/xp"
 import { syncModuleProgressFromServer } from "@/lib/moduleProgress"
@@ -160,6 +162,19 @@ function ProfileSyncTracker() {
   return null
 }
 
+// ── Global offline/error recovery banner ──────────────────────────────────
+function OfflineIndicator() {
+  const { errors, isOnline, removeError, executeRecovery } = useErrorRecovery()
+  return (
+    <ErrorRecoveryPanel
+      errors={errors}
+      isOnline={isOnline}
+      onRemoveError={removeError}
+      onExecuteRecovery={executeRecovery}
+    />
+  )
+}
+
 // ── Welcome Back: greets users who were away for 2+ days ─────────────────
 function WelcomeBackTracker() {
   const { user } = useAuth()
@@ -201,6 +216,7 @@ export default function App() {
           <MissionTracker />
           <ProfileSyncTracker />
           <WelcomeBackTracker />
+          <OfflineIndicator />
           <Toaster position="top-right" />
           <QuickEnhanceModal />
           <Suspense fallback={<LoadingScreen />}>

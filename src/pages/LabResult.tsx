@@ -1,26 +1,17 @@
+import { useEffect } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import { ArrowRight, CheckCircle2, BookmarkPlus } from "lucide-react"
+import { sileo } from "sileo"
 import { AppBottomNav } from "@/components/AppBottomNav"
 
-const DEFAULT_RESULT = {
-  score: 92,
-  label: "Excelente!",
-  stars: 4.5,
-  originalPrompt: `Você é um especialista em marketing digital e copywriting para produtos SaaS. Crie uma landing page completa e persuasiva para [NOME DO PRODUTO], uma ferramenta de [CATEGORIA] voltada para [PÚBLICO-ALVO], com headline, benefícios claros, prova social e CTA persuasivo.`,
-  analysis: `O prompt apresenta estrutura sólida com contexto claro, objetivo bem definido e elementos de output especificados. A definição de papel ("especialista em marketing") ativa o modo de especialista da IA, elevando a qualidade do resultado. Os elementos solicitados (headline, benefícios, prova social, CTA) são os corretos para uma landing page de alto desempenho.
-
-Pontos fortes: contexto profissional, estrutura de saída clara, tom orientado a conversão. Leve oportunidade: especificar o estágio do produto (early-stage vs. growth) poderia refinar ainda mais o output.`,
-  feedback: [
-    "Contexto bem definido com papel de especialista",
-    "Estrutura de saída clara e orientada a resultados",
-    "Tom persuasivo alinhado com conversão",
-    "Público-alvo parametrizável (boa flexibilidade)",
-  ],
-  aiCompatibility: [
-    { name: "GPT-4", ok: true },
-    { name: "Claude", ok: true },
-    { name: "Gemini", ok: true },
-  ],
+interface LabResultState {
+  score: number
+  label: string
+  stars: number
+  originalPrompt: string
+  analysis: string
+  feedback: string[]
+  aiCompatibility: { name: string; ok: boolean }[]
 }
 
 function StarRating({ stars }: { stars: number }) {
@@ -49,7 +40,24 @@ function StarRating({ stars }: { stars: number }) {
 export default function LabResult() {
   const navigate = useNavigate()
   const location = useLocation()
-  const result = (location.state as typeof DEFAULT_RESULT) ?? DEFAULT_RESULT
+  const result = location.state as LabResultState | null
+
+  useEffect(() => {
+    if (!result) {
+      sileo.error({
+        title: "Nenhum resultado encontrado",
+        description: "Analise um prompt no laboratório para ver o resultado aqui.",
+      })
+      navigate("/lab", { replace: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  if (!result) return null
+
+  const handleSaveResult = () => {
+    sileo.info({ title: "Em breve", description: "Salvar resultados do laboratório estará disponível em breve." })
+  }
 
   return (
     <div className="min-h-screen bg-white pb-32 lg:pb-8">
@@ -153,7 +161,10 @@ export default function LabResult() {
       {/* Fixed bottom action */}
       <div className="fixed bottom-[72px] left-0 right-0 z-30 border-t border-pageBgLight bg-white px-4 py-3">
         <div className="mx-auto max-w-[460px]">
-          <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-dark py-3 text-sm font-semibold text-white transition-all active:scale-95 hover:bg-emerald">
+          <button
+            onClick={handleSaveResult}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-dark py-3 text-sm font-semibold text-white transition-all active:scale-95 hover:bg-emerald"
+          >
             <BookmarkPlus className="h-4 w-4" />
             Salvar Resultado
           </button>

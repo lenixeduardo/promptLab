@@ -12,7 +12,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 import { advanceModule, type TrackId } from "@/lib/moduleProgress";
 import { getActivities, getProofTask, TRACK_TOTALS, isMatch, isOrder, isEssay, isContentSlide } from "@/lib/lessonContent";
-import type { LessonActivity } from "@/lib/lessonContent";
+import type { LessonActivity, Question } from "@/lib/lessonContent";
 import { ActivityRenderer } from "@/components/activities/ActivityRenderer";
 import { scopedKey } from "@/lib/userScope";
 import { completeMission } from "@/lib/missions";
@@ -111,7 +111,7 @@ export default function LessonPage() {
     }
     const answer = answers[activity.id]
     if (!answer) return acc
-    return acc + (answer === (activity as any).correct ? 1 : 0)
+    return acc + (answer === (activity as Question).correct ? 1 : 0)
   }, 0)
 
   // Keep scoreRef in sync so the lessonComplete effect reads the latest value
@@ -122,7 +122,7 @@ export default function LessonPage() {
     setSelected(id)
     setAnswers((prev) => ({ ...prev, [currentActivity.id]: id }))
     // Consume a life when the user picks a wrong answer on MC/fill-blank
-    const correct = (currentActivity as any).correct as string | undefined
+    const correct = (currentActivity as Question).correct as string | undefined
     if (correct && id !== correct) {
       consumeLife()
     } else if (correct) {
@@ -239,7 +239,7 @@ export default function LessonPage() {
 
   if (finished && needsProof && !proofDone) {
     return (
-      <div className="flex min-h-screen flex-col bg-white">
+      <div className="flex min-h-screen flex-col bg-white lg:mx-auto lg:max-w-2xl">
         <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-stroke-muted bg-card px-4 py-3">
           <Link to="/learn" className="rounded-full p-1.5 text-forest hover:bg-surface-success">
             <ArrowLeft className="h-5 w-5" />
@@ -304,7 +304,7 @@ export default function LessonPage() {
 
   if (finished) {
     return (
-      <div className="flex min-h-screen flex-col bg-white">
+      <div className="flex min-h-screen flex-col bg-white lg:mx-auto lg:max-w-2xl">
         <TrailCompleteCelebration
           active={!!trailCelebration}
           trackLabel={trailCelebration?.trackLabel ?? track.toUpperCase()}
@@ -412,7 +412,7 @@ export default function LessonPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-white lg:mx-auto lg:max-w-2xl">
       <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-stroke-muted bg-card px-4 py-3">
         <Link to="/learn" className="rounded-full p-1.5 text-forest hover:bg-surface-success">
           <ArrowLeft className="h-5 w-5" />

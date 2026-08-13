@@ -40,6 +40,7 @@ import { AppBottomNav } from "@/components/AppBottomNav";
 import { cn } from "@/lib/utils";
 import { useModuleProgress, type TrackId } from "@/lib/moduleProgress";
 import { useLives } from "@/contexts/useLives";
+import { sileo } from "sileo";
 
 type Status = "completed" | "current" | "locked";
 
@@ -136,7 +137,7 @@ export default function LearningLabPage() {
   const navigate = useNavigate();
   const track = (searchParams.get("track") as TrackId) || "a1";
   const completions = useTrackCompletion();
-  const { lives } = useLives();
+  const { lives, canPlay, msUntilNextLife } = useLives();
 
   const trackUnlocked: Record<TrackId, boolean> = {
     a1: true,
@@ -207,23 +208,38 @@ export default function LearningLabPage() {
             const offsets = ["ml-0", "ml-16", "ml-28", "ml-16", "ml-0", "ml-16", "ml-28"];
             const offset = offsets[i % offsets.length];
             const isLast = i === active.modules.length - 1;
+            const blockedByLives = isCurrent && !canPlay;
+
+            const handleBlockedClick = (e: React.MouseEvent) => {
+              e.preventDefault();
+              const minutes = Math.ceil(msUntilNextLife() / 60000);
+              sileo.error({
+                title: "Sem vidas no momento",
+                description: `Você recupera uma vida em ${minutes} min. Volte em breve para continuar.`,
+              });
+            };
 
             return (
               <div key={i} className={cn("relative flex flex-col items-start gap-1 lg:ml-0", offset)}>
                 <Link
                   to={isLocked ? "/learn" : `/lesson?track=${active.id}&module=${i}`}
+                  onClick={blockedByLives ? handleBlockedClick : undefined}
+                  aria-disabled={blockedByLives}
                   className={cn(
                     "relative flex h-20 w-20 items-center justify-center rounded-full border-4 transition-transform active:scale-95",
                     isDone && "bg-emerald border-emerald-dark text-white shadow-lg shadow-emerald/30",
                     isCurrent && "bg-luxury border-amber-500 text-luxury-foreground shadow-lg shadow-luxury/40 animate-pulse will-change-[opacity]",
                     isLocked && "bg-surface-soft border-stroke-light text-neutral",
+                    blockedByLives && "opacity-60 saturate-50",
                   )}
-                  aria-label={m.title}
+                  aria-label={blockedByLives ? `${m.title} — sem vidas disponíveis` : m.title}
                 >
                   {isDone ? (
                     <Check className="h-8 w-8" strokeWidth={3} />
                   ) : isLocked ? (
                     <Lock className="h-6 w-6" />
+                  ) : blockedByLives ? (
+                    <Heart className="h-6 w-6" />
                   ) : (
                     <Icon className="h-8 w-8" strokeWidth={2.2} />
                   )}

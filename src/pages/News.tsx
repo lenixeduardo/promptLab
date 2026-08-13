@@ -125,10 +125,16 @@ export default function News() {
   const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null)
 
   useEffect(() => {
-    getNewsArticles().then(({ data }) => {
-      setArticles(data && data.length > 0 ? data.map(mapDbArticle) : NEWS_ARTICLES)
-      setLoading(false)
-    })
+    getNewsArticles()
+      .then(({ data }) => {
+        setArticles(data && data.length > 0 ? data.map(mapDbArticle) : NEWS_ARTICLES)
+      })
+      .catch(() => {
+        setArticles(NEWS_ARTICLES)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [])
 
   const filtered =

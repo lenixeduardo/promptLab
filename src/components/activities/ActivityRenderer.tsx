@@ -164,12 +164,12 @@ export const ActivityRenderer = memo(function ActivityRenderer({
       )}
 
       {/* Explicação (só após responder) */}
-      {answered && (activity as any).explanation && (
+      {answered && activity.explanation && (
         <div
           className={cn(
             "mt-2 rounded-2xl border-2 p-4",
             activityType === "multiple-choice" || activityType === "fill-blank"
-              ? selected === (activity as any).correct
+              ? selected === (activity as Question).correct
                 ? "border-emerald bg-surface-success"
                 : "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/40"
               : "border-emerald bg-surface-success",
@@ -178,23 +178,23 @@ export const ActivityRenderer = memo(function ActivityRenderer({
           <div className="flex items-start gap-2">
             <Lightbulb className={cn(
               "h-5 w-5 shrink-0",
-              selected === (activity as any).correct || isMatch(activity) || isOrder(activity)
+              selected === (activity as Question).correct || isMatch(activity) || isOrder(activity)
                 ? "text-emerald-dark" : "text-red-500 dark:text-red-400",
             )} />
             <div>
               <p className={cn(
                 "text-sm font-bold",
-                selected === (activity as any).correct || isMatch(activity) || isOrder(activity)
+                selected === (activity as Question).correct || isMatch(activity) || isOrder(activity)
                   ? "text-emerald-dark" : "text-red-700 dark:text-red-300",
               )}>
-                {(activity as any).type === "match" || (activity as any).type === "order"
+                {activityType === "match" || activityType === "order"
                   ? "Atividade concluída!"
-                  : selected === (activity as any).correct
+                  : selected === (activity as Question).correct
                     ? "Mandou bem!"
                     : "Quase lá!"}
               </p>
               <p className="mt-1 text-xs text-foreground-secondary">
-                {(activity as any).explanation}
+                {activity.explanation}
               </p>
             </div>
           </div>

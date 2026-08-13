@@ -1,5 +1,9 @@
 -- Supabase Database Schema for PromptLabz
 -- Keep this file as a readable snapshot. Versioned changes live in supabase/migrations.
+--
+-- ⚠️  This snapshot is NOT auto-generated and may lag behind supabase/migrations/.
+-- For the current, authoritative schema, read the migrations in order (or run
+-- `supabase db dump --schema public` against a project with all migrations applied).
 
 CREATE OR REPLACE FUNCTION public.set_updated_at()
 RETURNS TRIGGER AS $$
