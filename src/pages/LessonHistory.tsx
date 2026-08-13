@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { CheckCircle2 } from "lucide-react"
+import { AlertTriangle, CheckCircle2 } from "lucide-react"
 import { AppPageHeader } from "@/components/AppPageHeader"
 import { AppBottomNav } from "@/components/AppBottomNav"
 import { useAuth } from "@/hooks/useAuth"
@@ -41,6 +41,7 @@ export default function LessonHistory() {
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
   const [hasMore, setHasMore] = useState(false)
+  const [error, setError] = useState(false)
 
   const totalCompleted = ALL_TRACKS.reduce((sum, track) => sum + getCompletedCount(track), 0)
 
@@ -50,7 +51,11 @@ export default function LessonHistory() {
       return
     }
     getLessonCompletions(user.id, PAGE_SIZE, 0)
-      .then(({ data }) => {
+      .then(({ data, error: err }) => {
+        if (err) {
+          setError(true)
+          return
+        }
         setCompletions(data ?? [])
         setHasMore((data?.length ?? 0) === PAGE_SIZE)
       })
@@ -61,7 +66,8 @@ export default function LessonHistory() {
     if (!user?.id || loadingMore) return
     setLoadingMore(true)
     getLessonCompletions(user.id, PAGE_SIZE, completions.length)
-      .then(({ data }) => {
+      .then(({ data, error: err }) => {
+        if (err) return
         setCompletions((prev) => [...prev, ...(data ?? [])])
         setHasMore((data?.length ?? 0) === PAGE_SIZE)
       })
@@ -83,6 +89,16 @@ export default function LessonHistory() {
             {[...Array(5)].map((_, i) => (
               <div key={i} className="h-16 animate-pulse rounded-2xl bg-stroke-muted/30" />
             ))}
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center gap-3 py-16 text-center">
+            <AlertTriangle className="h-12 w-12 text-stroke-light" />
+            <p className="text-sm font-semibold text-foregroundMuted">
+              Não foi possível carregar seu histórico
+            </p>
+            <p className="max-w-xs text-xs text-foregroundMuted">
+              Verifique sua conexão e tente novamente em instantes.
+            </p>
           </div>
         ) : completions.length === 0 ? (
           <div className="flex flex-col items-center gap-3 py-16 text-center">

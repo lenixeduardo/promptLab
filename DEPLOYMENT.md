@@ -34,10 +34,15 @@ supabase link --project-ref SEU_PROJECT_REF
 supabase db push
 ```
 
-As migrations em `supabase/migrations/` serão aplicadas em ordem:
+As migrations em `supabase/migrations/` serão aplicadas em ordem (24 arquivos atualmente, de `20260610_000` a `20260813_024`) — algumas das mais recentes:
 - `20260610_000_initial_schema.sql` — tabelas base, RLS, trigger
 - `20260610_001_users_premium.sql` — campos premium, indexes Stripe
 - `20260610_002_community_tables.sql` — tabelas de comunidade (futuro)
+- `20260813_022_lesson_completions.sql` — histórico de lições individuais (RLS append-only)
+- `20260813_023_login_attempts.sql` — bookkeeping do rate limiter de login (service role only)
+- `20260813_024_login_attempts_atomic.sql` — incremento atômico do contador de tentativas
+
+Lista completa sempre em `ls supabase/migrations/` — este README lista só os marcos, não é exaustivo.
 
 ### Configurar Auth Providers
 
@@ -219,7 +224,7 @@ Os secrets `DAILY_NEWS_SECRET` e `SUPABASE_URL` são lidos pelo workflow `.githu
 ## 6. Checklist Pré-Deploy
 
 ```
-[ ] supabase db push rodou sem erros (todas as 14+ migrations aplicadas)
+[ ] supabase db push rodou sem erros (todas as 24+ migrations aplicadas)
 [ ] Edge Function send-auth-email deployada e testada
 [ ] Hook de email configurado no Supabase Auth
 [ ] VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY configurados no Vercel

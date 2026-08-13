@@ -82,18 +82,15 @@ Deno.serve(async (req) => {
     const { data, error } = await anonClient.auth.signInWithPassword({ email, password })
 
     if (error || !data.session) {
-      const windowExpired =
-        !attempt?.window_start ||
-        now.getTime() - new Date(attempt.window_start).getTime() > WINDOW_MS
-      const newCount = windowExpired ? 1 : (attempt?.attempt_count ?? 0) + 1
-      const lockedUntil =
-        newCount >= MAX_ATTEMPTS ? new Date(now.getTime() + LOCKOUT_MS).toISOString() : null
-
-      await supabaseAdmin.from("login_attempts").upsert({
-        email,
-        attempt_count: newCount,
-        window_start: windowExpired ? now.toISOString() : attempt!.window_start,
-        locked_until: lockedUntil,
+      // Atomic increment via a single SECURITY DEFINER UPSERT (see migration
+      // 20260813_024_login_attempts_atomic.sql) — a plain JS read-then-write
+      // here would let concurrent requests for the same email read the same
+      // pre-increment count and undercount attempts, weakening the lockout.
+      await supabaseAdmin.rpc("record_failed_login_attempt", {
+        p_email: email,
+        p_window_ms: WINDOW_MS,
+        p_max_attempts: MAX_ATTEMPTS,
+        p_lockout_ms: LOCKOUT_MS,
       })
 
       return jsonResponse({ error: error?.message ?? "Credenciais inválidas" }, 401)

@@ -27,6 +27,7 @@ Estado atual do produto (v0.3) — MVP + tudo que foi entregue depois, increment
 - **Certificados** — geração de certificados em PDF ao concluir trilhas (com QR code e mascote)
 - **Central de Skills** — 80+ skills catalogadas com busca full-text, filtro por categoria (7 categorias), ranking por instalações e favoritos
 - **Onboarding** — fluxo de boas-vindas para novos usuários
+- **Histórico de Lições** (`/lesson-history`) — lista paginada (server-side) de cada lição concluída com data, acessível a partir do card "Lições" no Perfil
 
 ### Ferramentas de Prompt
 

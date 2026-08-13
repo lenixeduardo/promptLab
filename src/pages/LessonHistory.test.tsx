@@ -59,6 +59,16 @@ describe("LessonHistory — estados", () => {
     renderPage()
     expect(await screen.findByText("Trilha A1")).toBeInTheDocument()
   })
+
+  it("mostra um estado de erro distinto quando a busca falha, em vez do estado vazio", async () => {
+    vi.mocked(getLessonCompletions).mockResolvedValue({
+      data: null,
+      error: "Erro de rede",
+    })
+    renderPage()
+    expect(await screen.findByText("Não foi possível carregar seu histórico")).toBeInTheDocument()
+    expect(screen.queryByText("Nenhuma lição com data registrada ainda")).not.toBeInTheDocument()
+  })
 })
 
 describe("LessonHistory — paginação", () => {

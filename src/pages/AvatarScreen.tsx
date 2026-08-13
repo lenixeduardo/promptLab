@@ -96,10 +96,16 @@ export default function AvatarScreen() {
       </div>
 
       {/* Filter tabs */}
-      <div className="mb-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">
+      <div
+        className="mb-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]"
+        role="tablist"
+        aria-label="Filtrar avatares por raridade"
+      >
         {FILTER_TABS.map(({ label, value }) => (
           <button
             key={value}
+            role="tab"
+            aria-selected={filter === value}
             onClick={() => setFilter(value)}
             className={cn(
               "shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold transition-colors",
