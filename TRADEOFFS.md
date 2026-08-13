@@ -48,6 +48,10 @@ O cooldown de 3s em `Login.tsx` continua sendo só feedback de UX (evita duplo-c
 
 O incremento do contador de tentativas é atômico: em vez de um SELECT seguido de um UPSERT em JS (que deixaria requisições concorrentes para o mesmo e-mail lerem a mesma contagem antes de qualquer uma escrever, subcontando falhas), a Edge Function chama a função `record_failed_login_attempt` (migration `20260813_024_login_attempts_atomic.sql`), um único UPSERT `SECURITY DEFINER` no Postgres que o próprio banco serializa via lock de linha.
 
+### Compra na Loja: falha silenciosa corrigida com rollback local
+
+`Store.tsx::handleBuyAvatar/handleBuyPowerUp` chamava `await updateUserGems(...)` e `await syncInventoryToServer(...)` dentro de um `try/catch`, mas essas duas funções nunca lançam exceção em caso de erro — elas retornam `{ error }` (padrão `DbResult<T>` usado em todo `db.ts`). Isso significa que o `catch` nunca disparava para uma falha real do servidor: o toast de sucesso aparecia mesmo quando a gravação falhava, o usuário ficava com as gemas debitadas localmente e sem o item, e a próxima sincronização com o servidor podia reverter silenciosamente o item "comprado" da UI. Corrigido checando `gemsResult.error`/`syncResult.error` explicitamente e, em caso de falha, revertendo gemas (`saveLocalGems`) e inventário (`saveInventory`) ao estado anterior à compra — coberto por 4 testes novos em `Store.test.tsx`.
+
 ### MVP (v0.1) redefinido para 5 funcionalidades, produto atual descrito à parte
 
 `PRODUCT.md` e `README.md` descreviam só o estado atual do produto (v0.3, 11+ funcionalidades) sem nunca isolar o que era, de fato, o MVP que validou a hipótese central. Isso foi corrigido: `PRODUCT.md` agora tem uma seção "MVP (v0.1) — Escopo Real" com as 5 funcionalidades centrais (auth, trilhas, vidas, skills, perfil/progresso), e o restante é explicitamente rotulado como construído depois, incrementalmente, sobre esse core validado.

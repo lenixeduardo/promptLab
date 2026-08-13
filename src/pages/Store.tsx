@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/hooks/useAuth"
 import { useAvatar } from "@/components/AvatarProvider"
-import { loadInventory, addPowerUp, addAvatar } from "@/lib/inventory"
+import { loadInventory, saveInventory, addPowerUp, addAvatar } from "@/lib/inventory"
 import { getLocalGems, saveLocalGems } from "@/lib/xp"
 import { updateUserGems, syncInventoryToServer, fetchInventoryFromServer } from "@/lib/db"
 import { AVATARS } from "@/data/avatarsData"
@@ -53,6 +53,8 @@ export default function Store() {
   async function handleBuyAvatar(avatarId: string, price: number) {
     if (!user?.id || purchasingId) return
     if (ownedAvatarIds.includes(avatarId)) return
+    const prevGems = gems
+    const prevInventory = loadInventory(user.id)
     const newGems = deductGems(price)
     if (newGems === null) return
     setPurchasingId(avatarId)
@@ -62,10 +64,26 @@ export default function Store() {
       // Also persists to Supabase (updateUserAvatar) and updates the shared
       // AvatarProvider state, so Home/Profile reflect it immediately.
       setEquipped(avatarId)
-      await updateUserGems(user.id, newGems)
-      await syncInventoryToServer(user.id, inv)
+      const [gemsResult, syncResult] = await Promise.all([
+        updateUserGems(user.id, newGems),
+        syncInventoryToServer(user.id, inv),
+      ])
+      // updateUserGems/syncInventoryToServer never throw on failure — they
+      // return { error } — so this check (not a bare await) is what actually
+      // detects a failed purchase instead of always showing success.
+      if (gemsResult.error || syncResult.error) {
+        throw new Error(gemsResult.error ?? syncResult.error ?? "Erro ao salvar compra")
+      }
       sileo.success({ title: "Avatar desbloqueado! 🎉" })
     } catch {
+      // Purchase didn't persist server-side — undo the local gem deduction
+      // and inventory grant instead of leaving the user out gems for
+      // nothing. setEquipped's own failure path already self-heals on the
+      // next getUserProfile() hydration, so it's left as-is here.
+      saveLocalGems(user.id, prevGems)
+      setGems(prevGems)
+      saveInventory(user.id, prevInventory)
+      setOwnedAvatarIds(prevInventory.ownedAvatarIds)
       sileo.error({ title: "Erro ao salvar. Tente novamente." })
     } finally {
       setPurchasingId(null)
@@ -74,15 +92,25 @@ export default function Store() {
 
   async function handleBuyPowerUp(id: PowerUpId, price: number) {
     if (!user?.id || purchasingId) return
+    const prevGems = gems
+    const prevInventory = loadInventory(user.id)
     const newGems = deductGems(price)
     if (newGems === null) return
     setPurchasingId(id)
     try {
       const inv = addPowerUp(user.id, id)
-      await updateUserGems(user.id, newGems)
-      await syncInventoryToServer(user.id, inv)
+      const [gemsResult, syncResult] = await Promise.all([
+        updateUserGems(user.id, newGems),
+        syncInventoryToServer(user.id, inv),
+      ])
+      if (gemsResult.error || syncResult.error) {
+        throw new Error(gemsResult.error ?? syncResult.error ?? "Erro ao salvar compra")
+      }
       sileo.success({ title: "Power-up adicionado! ⚡" })
     } catch {
+      saveLocalGems(user.id, prevGems)
+      setGems(prevGems)
+      saveInventory(user.id, prevInventory)
       sileo.error({ title: "Erro ao salvar. Tente novamente." })
     } finally {
       setPurchasingId(null)
@@ -91,7 +119,7 @@ export default function Store() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-white">
-      <div className="mx-auto flex w-full max-w-[420px] flex-col px-5 pb-10 pt-8">
+      <div className="mx-auto flex w-full max-w-[420px] flex-col px-5 pb-10 pt-8 lg:max-w-2xl">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <button

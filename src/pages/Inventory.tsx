@@ -52,7 +52,7 @@ export default function Inventory() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-white">
-      <div className="mx-auto flex w-full max-w-[420px] flex-col px-5 pb-10 pt-8">
+      <div className="mx-auto flex w-full max-w-[420px] flex-col px-5 pb-10 pt-8 lg:max-w-2xl">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <button
