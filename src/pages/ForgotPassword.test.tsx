@@ -36,17 +36,15 @@ function renderForgotPassword() {
 beforeEach(() => vi.clearAllMocks())
 
 describe("ForgotPassword — renderização", () => {
-  it("exibe campo de e-mail", () => {
+  it("exibe campo de e-mail com label visível", () => {
     renderForgotPassword()
-    expect(
-      screen.getByPlaceholderText("Digite seu e-mail cadastrado")
-    ).toBeInTheDocument()
+    expect(screen.getByLabelText("E-mail")).toBeInTheDocument()
   })
 
-  it("exibe botão 'Enviar link de redefinição'", () => {
+  it("exibe botão 'Enviar link'", () => {
     renderForgotPassword()
     expect(
-      screen.getByRole("button", { name: /enviar link de redefinição/i })
+      screen.getByRole("button", { name: /enviar link/i })
     ).toBeInTheDocument()
   })
 
@@ -57,40 +55,30 @@ describe("ForgotPassword — renderização", () => {
 })
 
 describe("ForgotPassword — submissão", () => {
-  it("exibe tela de sucesso após envio", async () => {
+  it("exibe tela de sucesso após envio, sem revelar se o e-mail existe", async () => {
     mockResetPassword.mockResolvedValue({ success: true })
 
     renderForgotPassword()
-    await userEvent.type(
-      screen.getByPlaceholderText("Digite seu e-mail cadastrado"),
-      "user@test.com"
-    )
-    await userEvent.click(
-      screen.getByRole("button", { name: /enviar link de redefinição/i })
-    )
+    await userEvent.type(screen.getByLabelText("E-mail"), "user@test.com")
+    await userEvent.click(screen.getByRole("button", { name: /enviar link/i }))
 
     await waitFor(() =>
-      expect(screen.getByText("E-mail enviado!")).toBeInTheDocument()
+      expect(screen.getByRole("status")).toHaveTextContent(/verifique seu e-mail/i)
     )
     expect(
-      screen.getByText(/verifique sua caixa de entrada/i)
+      screen.getByText(/se existir uma conta com esse e-mail/i)
     ).toBeInTheDocument()
   })
 
   it("exibe mensagem de erro quando reset falha", async () => {
-    mockResetPassword.mockResolvedValue({ success: false, error: "Email não encontrado" })
+    mockResetPassword.mockResolvedValue({ success: false, error: "Falha ao enviar" })
 
     renderForgotPassword()
-    await userEvent.type(
-      screen.getByPlaceholderText("Digite seu e-mail cadastrado"),
-      "nao@existe.com"
-    )
-    await userEvent.click(
-      screen.getByRole("button", { name: /enviar link de redefinição/i })
-    )
+    await userEvent.type(screen.getByLabelText("E-mail"), "user@test.com")
+    await userEvent.click(screen.getByRole("button", { name: /enviar link/i }))
 
     await waitFor(() =>
-      expect(sileo.error).toHaveBeenCalledWith({ title: "Email não encontrado" })
+      expect(sileo.error).toHaveBeenCalledWith({ title: "Falha ao enviar" })
     )
   })
 
@@ -98,13 +86,8 @@ describe("ForgotPassword — submissão", () => {
     mockResetPassword.mockImplementation(() => new Promise(() => {}))
 
     renderForgotPassword()
-    await userEvent.type(
-      screen.getByPlaceholderText("Digite seu e-mail cadastrado"),
-      "user@test.com"
-    )
-    await userEvent.click(
-      screen.getByRole("button", { name: /enviar link de redefinição/i })
-    )
+    await userEvent.type(screen.getByLabelText("E-mail"), "user@test.com")
+    await userEvent.click(screen.getByRole("button", { name: /enviar link/i }))
 
     expect(screen.getByRole("button", { name: /enviando/i })).toBeDisabled()
   })

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import {
   ArrowRight, Briefcase,
   Lightbulb, Megaphone, Code2, Apple, ClipboardList, BarChart3,
@@ -10,6 +10,8 @@ import { sileo } from "sileo"
 import { type LabCategory } from "@/data/labCategoriesData"
 import { useLabCategories } from "@/hooks/useLabCategories"
 import { AppBottomNav } from "@/components/AppBottomNav"
+import { PageSEO } from "@/components/PageSEO"
+import { useAuthContext } from "@/contexts/AuthContext"
 
 type DiffFilter = "Todos" | "Iniciante" | "Intermediario" | "Avancado"
 
@@ -44,6 +46,7 @@ function CategoryCard({ cat, onClick }: { cat: LabCategory; onClick: () => void 
 
 export default function Prompts() {
   const navigate = useNavigate()
+  const { user } = useAuthContext()
   const [activeDiff, setActiveDiff] = useState<DiffFilter>("Todos")
   const { categories, promptOfTheDay, loading, error } = useLabCategories()
 
@@ -53,8 +56,21 @@ export default function Prompts() {
     }
   }, [error])
 
+  const goToCategory = (categoryId: string) => {
+    if (!user) {
+      navigate("/signup")
+      return
+    }
+    navigate(`/prompts/category/${categoryId}`)
+  }
+
   return (
-    <div className="min-h-screen bg-white pb-24 lg:pb-8">
+    <div className="min-h-dvh bg-white pb-24 lg:pb-8">
+      <PageSEO
+        title="Laboratório de Prompts — Prompts para ChatGPT, Claude e Gemini"
+        description="Explore categorias e prompts prontos para ChatGPT, Claude e Gemini no Laboratório de Prompts do PromptLabz. Crie uma conta grátis para usar todos os prompts."
+        canonicalPath="/prompts"
+      />
       {/* Hero banner */}
       <div className="relative overflow-hidden bg-gradient-to-br from-[#C8EDD8] via-[#D5F0E2] to-pageBgLight px-5 pb-6 pt-12">
         <div className="flex items-start justify-between">
@@ -101,7 +117,7 @@ export default function Prompts() {
             <CategoryCard
               key={cat.id}
               cat={cat}
-              onClick={() => navigate(`/prompts/category/${cat.id}`)}
+              onClick={() => goToCategory(cat.id)}
             />
           ))}
         </div>
@@ -110,7 +126,7 @@ export default function Prompts() {
         <div className="mb-2 flex items-center justify-between">
           <h2 className="text-base font-bold text-foregroundDark">Em destaque</h2>
           <button
-            onClick={() => navigate("/prompts/category/Criatividade")}
+            onClick={() => goToCategory("Criatividade")}
             className="text-xs font-semibold text-primary-dark"
           >
             Ver todos &gt;
@@ -133,16 +149,30 @@ export default function Prompts() {
             </div>
           </div>
           <button
-            onClick={() => navigate(`/prompts/category/${promptOfTheDay?.categoryId}`)}
+            onClick={() => promptOfTheDay?.categoryId && goToCategory(promptOfTheDay.categoryId)}
             className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary-dark py-3 text-sm font-semibold text-white transition-all active:scale-95 hover:bg-emerald"
           >
             Usar prompt
             <ArrowRight className="h-4 w-4" />
           </button>
         </div>
+
+        {!user && (
+          <div className="mb-8 mt-6 rounded-2xl border border-stroke-muted bg-pageBgLight p-4 text-center">
+            <p className="text-sm font-semibold text-foregroundDark">
+              Crie uma conta grátis para usar todos os prompts
+            </p>
+            <Link
+              to="/signup"
+              className="mt-3 inline-flex h-11 items-center justify-center rounded-full bg-primary-dark px-6 text-sm font-bold text-white hover:bg-emerald"
+            >
+              Começar grátis
+            </Link>
+          </div>
+        )}
       </div>
 
-      <AppBottomNav />
+      {user && <AppBottomNav />}
     </div>
   )
 }

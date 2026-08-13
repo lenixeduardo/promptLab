@@ -47,78 +47,64 @@ export default function ForgotPassword() {
         </Link>
 
         {/* Title */}
-        <h1 className="mb-5 text-center text-4xl font-extrabold text-primary-dark">
-          Esqueci minha senha
-        </h1>
+        <div className="mb-5 text-center">
+          <h1 className="text-3xl font-extrabold text-primary-dark">
+            Recupere seu acesso
+          </h1>
+          <p className="mt-1 text-sm text-foregroundSecondary">
+            Enviaremos um link para você criar uma nova senha.
+          </p>
+        </div>
 
-        {/* Mascot + speech bubble */}
-        <div className="mb-5 flex items-center justify-center gap-2">
+        {/* Mascot */}
+        <div className="mb-5 flex items-center justify-center">
           <img
             src="/assets/mascot-login-new.png"
-            alt="Mascot"
-            className="h-36 w-auto object-contain drop-shadow-md"
+            alt=""
+            className="h-28 w-auto object-contain drop-shadow-md"
           />
-          <div className="relative rounded-2xl border border-stroke-light bg-white px-3 py-2 text-sm font-medium leading-snug text-foregroundDark shadow-sm">
-            Não se preocupe! Vamos resolver isso
-            {/* bubble tail pointing left */}
-            <div
-              style={{
-                position: "absolute",
-                left: -8,
-                top: 12,
-                width: 0,
-                height: 0,
-                borderTop: "6px solid transparent",
-                borderBottom: "6px solid transparent",
-                borderRight: "8px solid #BFE3CC",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                left: -6,
-                top: 12,
-                width: 0,
-                height: 0,
-                borderTop: "6px solid transparent",
-                borderBottom: "6px solid transparent",
-                borderRight: "8px solid white",
-              }}
-            />
-          </div>
         </div>
 
         {/* Card */}
         <Card className="w-full border-stroke-muted bg-surface-success p-6 shadow-md sm:p-7">
           {sent ? (
-            <div className="flex flex-col items-center gap-3 py-2 text-center">
+            <div
+              className="flex flex-col items-center gap-3 py-2 text-center"
+              role="status"
+              aria-live="polite"
+            >
               <Mail className="h-10 w-10 text-link" strokeWidth={1.8} />
-              <p className="text-base font-semibold text-primary-dark">E-mail enviado!</p>
+              <p className="text-base font-semibold text-primary-dark">Verifique seu e-mail</p>
               <p className="text-sm text-foregroundSecondary">
-                Verifique sua caixa de entrada e siga o link para redefinir sua senha.
+                Se existir uma conta com esse e-mail, você receberá as instruções em alguns minutos.
               </p>
             </div>
           ) : (
             <form className="flex flex-col gap-4" onSubmit={handleSubmit} role="form" aria-label="Formulário de recuperação de senha">
-              <Input
-                type="email"
-                placeholder="Digite seu e-mail cadastrado"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                icon={<Mail className="h-5 w-5" strokeWidth={2.2} />}
-                autoComplete="email"
-                required
-                disabled={loading}
-                aria-label="E-mail para recuperação de senha"
-                aria-required="true"
-                aria-describedby="email-help-forgot"
-              />
-              <p id="email-help-forgot" className="text-center text-sm text-foregroundSecondary">
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="forgot-email" className="text-sm font-semibold text-foregroundDark">
+                  E-mail
+                </label>
+                <Input
+                  id="forgot-email"
+                  type="email"
+                  placeholder="voce@exemplo.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  icon={<Mail className="h-5 w-5" strokeWidth={2.2} />}
+                  autoComplete="email"
+                  required
+                  disabled={loading}
+                  aria-required="true"
+                  aria-describedby="email-help-forgot"
+                />
+              </div>
+              <p id="email-help-forgot" className="text-sm text-foregroundSecondary">
                 Enviaremos um link de redefinição de senha para o seu e-mail.
               </p>
               <Button type="submit" size="lg" className="mt-1 w-full gap-2" disabled={loading}>
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-                {loading ? "Enviando..." : "Enviar link de redefinição"}
+                {loading ? "Enviando..." : "Enviar link"}
               </Button>
             </form>
           )}

@@ -131,10 +131,10 @@ export default function Login() {
         {/* Welcome heading */}
         <div className="mt-8 text-center">
           <h1 className="text-2xl font-extrabold text-primary-dark">
-            Bem-vindo de volta! <span aria-hidden="true">👋</span>
+            Bem-vindo de volta
           </h1>
           <p className="mt-1 text-sm text-foregroundSecondary">
-            Entre para continuar sua jornada criativa
+            Entre para continuar sua trilha.
           </p>
         </div>
 
@@ -146,47 +146,57 @@ export default function Login() {
             role="form"
             aria-label="Formulário de login"
           >
-            <Input
-              type="text"
-              placeholder="E-mail ou nome de usuário"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              icon={<User className="h-5 w-5" strokeWidth={2.2} />}
-              autoComplete="username"
-              required
-              disabled={loading}
-              aria-label="E-mail ou nome de usuário"
-              aria-required="true"
-              aria-describedby="email-help-login"
-            />
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="login-email" className="text-sm font-semibold text-foregroundDark">
+                E-mail ou nome de usuário
+              </label>
+              <Input
+                id="login-email"
+                type="text"
+                placeholder="voce@exemplo.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                icon={<User className="h-5 w-5" strokeWidth={2.2} />}
+                autoComplete="username"
+                required
+                disabled={loading}
+                aria-required="true"
+                aria-describedby="email-help-login"
+              />
+            </div>
             <small id="email-help-login" className="sr-only">
               Insira o e-mail ou nome de usuário da sua conta
             </small>
 
-            <div className="relative">
-              <Input
-                type={showPassword ? "text" : "password"}
-                placeholder="Senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                icon={<Lock className="h-5 w-5" strokeWidth={2.2} />}
-                autoComplete="current-password"
-                required
-                disabled={loading}
-                aria-label="Senha"
-                aria-required="true"
-                aria-describedby="password-help-login"
-                className="pr-12"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-4 top-1/2 flex -translate-y-1/2 items-center justify-center text-primary"
-                aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
-                tabIndex={-1}
-              >
-                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-              </button>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="login-password" className="text-sm font-semibold text-foregroundDark">
+                Senha
+              </label>
+              <div className="relative">
+                <Input
+                  id="login-password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Sua senha"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  icon={<Lock className="h-5 w-5" strokeWidth={2.2} />}
+                  autoComplete="current-password"
+                  required
+                  disabled={loading}
+                  aria-required="true"
+                  aria-describedby="password-help-login"
+                  className="pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-4 top-1/2 flex -translate-y-1/2 items-center justify-center text-primary"
+                  aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
             </div>
             <small id="password-help-login" className="sr-only">
               Insira sua senha de acesso segura

@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { MemoryRouter, Routes, Route } from "react-router-dom"
+import { HelmetProvider } from "react-helmet-async"
 import Premium from "./Premium"
 
 const { mockGetSession, mockInvoke } = vi.hoisted(() => ({
@@ -32,14 +33,20 @@ vi.mock("@/components/AppBottomNav", () => ({
   AppBottomNav: () => <div data-testid="bottom-nav">Bottom Nav</div>,
 }))
 
+vi.mock("@/contexts/AuthContext", () => ({
+  useAuthContext: () => ({ user: { id: "user-1" }, loading: false, error: null }),
+}))
+
 function renderPremium(initialRoute = "/premium") {
   return render(
-    <MemoryRouter initialEntries={[initialRoute]}>
-      <Routes>
-        <Route path="/premium" element={<Premium />} />
-        <Route path="/home" element={<div>Home Page</div>} />
-      </Routes>
-    </MemoryRouter>
+    <HelmetProvider>
+      <MemoryRouter initialEntries={[initialRoute]}>
+        <Routes>
+          <Route path="/premium" element={<Premium />} />
+          <Route path="/home" element={<div>Home Page</div>} />
+        </Routes>
+      </MemoryRouter>
+    </HelmetProvider>
   )
 }
 

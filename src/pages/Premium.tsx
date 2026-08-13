@@ -15,9 +15,13 @@ import { sileo } from "sileo"
 import { supabase } from "@/lib/supabase"
 import { trackPremiumViewed } from "@/lib/analytics"
 import { tryCompleteSpecialQuest } from "@/lib/missions"
+import { PageSEO } from "@/components/PageSEO"
+import { useAuthContext } from "@/contexts/AuthContext"
+import { Link } from "react-router-dom"
 
 export default function Premium() {
   const navigate = useNavigate()
+  const { user } = useAuthContext()
 
   useEffect(() => {
     trackPremiumViewed()
@@ -57,11 +61,16 @@ export default function Premium() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-surface-success to-background px-4 py-6 pb-24 lg:pb-8">
+    <div className="min-h-dvh bg-gradient-to-b from-surface-success to-background px-4 py-6 pb-24 lg:pb-8">
+      <PageSEO
+        title="Premium — Planos PromptLabz"
+        description="Conheça os planos Premium do PromptLabz: IA ilimitada, gamificação completa e recursos exclusivos para acelerar seu aprendizado de engenharia de prompts."
+        canonicalPath="/premium"
+      />
       <div className="mx-auto w-full max-w-lg lg:max-w-2xl">
         {/* Back button */}
         <button
-          onClick={() => navigate("/home")}
+          onClick={() => navigate(user ? "/home" : "/")}
           className="mb-4 flex h-10 w-10 items-center justify-center rounded-full text-forest transition-colors hover:bg-surface-success"
           aria-label="Voltar"
         >
@@ -198,13 +207,36 @@ export default function Premium() {
         </div>
 
         {/* Footer trust line */}
-        <div className="mb-8 mt-4 flex items-center justify-center gap-1.5 text-xs font-medium text-foregroundMuted">
+        <div className="mt-4 flex items-center justify-center gap-1.5 text-xs font-medium text-foregroundMuted">
           <Lock aria-hidden className="h-3.5 w-3.5" />
           Pagamento seguro · Cancele quando quiser
         </div>
+
+        <p className="mb-8 mt-3 text-center text-xs text-foregroundMuted">
+          Ao assinar, você concorda com os{" "}
+          <Link to="/terms" className="underline underline-offset-2 hover:text-primary">
+            Termos de Uso
+          </Link>{" "}
+          e a{" "}
+          <Link to="/privacy" className="underline underline-offset-2 hover:text-primary">
+            Política de Privacidade
+          </Link>
+          .
+        </p>
       </div>
 
-      <AppBottomNav />
+      {user ? (
+        <AppBottomNav />
+      ) : (
+        <div className="fixed inset-x-0 bottom-0 border-t border-stroke-muted bg-white/95 px-5 py-3 backdrop-blur">
+          <Link
+            to="/signup"
+            className="mx-auto flex h-11 max-w-lg items-center justify-center rounded-full bg-primary-dark px-6 text-sm font-bold text-white hover:bg-emerald"
+          >
+            Começar grátis
+          </Link>
+        </div>
+      )}
     </div>
   )
 }

@@ -53,8 +53,8 @@ beforeEach(() => {
 describe("Login — renderização", () => {
   it("exibe campos de email e senha", () => {
     renderLogin()
-    expect(screen.getByPlaceholderText("E-mail ou nome de usuário")).toBeInTheDocument()
-    expect(screen.getByPlaceholderText("Senha")).toBeInTheDocument()
+    expect(screen.getByLabelText("E-mail ou nome de usuário")).toBeInTheDocument()
+    expect(screen.getByLabelText("Senha")).toBeInTheDocument()
   })
 
   it("exibe o botão de entrar", () => {
@@ -79,7 +79,7 @@ describe("Login — renderização", () => {
 
   it("permite alternar a visibilidade da senha", async () => {
     renderLogin()
-    const passwordInput = screen.getByPlaceholderText("Senha")
+    const passwordInput = screen.getByLabelText("Senha")
     expect(passwordInput).toHaveAttribute("type", "password")
 
     await userEvent.click(screen.getByRole("button", { name: /mostrar senha/i }))
@@ -92,8 +92,8 @@ describe("Login — submissão", () => {
     mockLogin.mockResolvedValue({ success: true, user: { email: "a@a.com" } })
 
     renderLogin()
-    await userEvent.type(screen.getByPlaceholderText("E-mail ou nome de usuário"), "a@a.com")
-    await userEvent.type(screen.getByPlaceholderText("Senha"), "senha123")
+    await userEvent.type(screen.getByLabelText("E-mail ou nome de usuário"), "a@a.com")
+    await userEvent.type(screen.getByLabelText("Senha"), "senha123")
     await userEvent.click(screen.getByRole("button", { name: /^entrar$/i }))
 
     await waitFor(() => expect(screen.getByText("home")).toBeInTheDocument())
@@ -103,8 +103,8 @@ describe("Login — submissão", () => {
     mockLogin.mockResolvedValue({ success: false, error: "Credenciais inválidas" })
 
     renderLogin()
-    await userEvent.type(screen.getByPlaceholderText("E-mail ou nome de usuário"), "a@a.com")
-    await userEvent.type(screen.getByPlaceholderText("Senha"), "errada")
+    await userEvent.type(screen.getByLabelText("E-mail ou nome de usuário"), "a@a.com")
+    await userEvent.type(screen.getByLabelText("Senha"), "errada")
     await userEvent.click(screen.getByRole("button", { name: /^entrar$/i }))
 
     await waitFor(() =>
@@ -116,8 +116,8 @@ describe("Login — submissão", () => {
     mockLogin.mockImplementation(() => new Promise(() => {}))
 
     renderLogin()
-    await userEvent.type(screen.getByPlaceholderText("E-mail ou nome de usuário"), "a@a.com")
-    await userEvent.type(screen.getByPlaceholderText("Senha"), "senha123")
+    await userEvent.type(screen.getByLabelText("E-mail ou nome de usuário"), "a@a.com")
+    await userEvent.type(screen.getByLabelText("Senha"), "senha123")
     await userEvent.click(screen.getByRole("button", { name: /^entrar$/i }))
 
     expect(screen.getByRole("button", { name: /entrando/i })).toBeDisabled()

@@ -286,14 +286,8 @@ export default function App() {
                   </PrivateRoute>
                 }
               />
-              <Route
-                path="/premium"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Premium /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
+              {/* Public: visitors can browse plans; auth is only required to start checkout (see Premium.tsx) */}
+              <Route path="/premium" element={<AppLayout><Premium /></AppLayout>} />
               <Route
                 path="/achievements"
                 element={
@@ -302,14 +296,8 @@ export default function App() {
                   </PrivateRoute>
                 }
               />
-              <Route
-                path="/prompts"
-                element={
-                  <PrivateRoute>
-                    <AppLayout><Prompts /></AppLayout>
-                  </PrivateRoute>
-                }
-              />
+              {/* Public preview: categories + prompt of the day. Category detail (/prompts/category/:id) stays private. */}
+              <Route path="/prompts" element={<AppLayout><Prompts /></AppLayout>} />
               <Route
                 path="/challenge"
                 element={
