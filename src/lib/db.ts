@@ -856,17 +856,3 @@ export async function uploadLessonProof(
     return { data: null, error: getErrorMessage(err, "Erro ao enviar comprovação") }
   }
 }
-
-/** Signed URL (short-lived) to display a previously uploaded lesson proof. */
-export async function getLessonProofUrl(path: string): Promise<DbResult<string>> {
-  if (!isSupabaseConfigured()) return { data: null, error: "Supabase não configurado" }
-  try {
-    const { data, error } = await supabase.storage
-      .from(LESSON_PROOFS_BUCKET)
-      .createSignedUrl(path, 3600)
-    if (error) throw error
-    return { data: data.signedUrl, error: null }
-  } catch (err) {
-    return { data: null, error: getErrorMessage(err, "Erro ao carregar comprovação") }
-  }
-}

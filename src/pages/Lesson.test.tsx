@@ -2,9 +2,23 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { MemoryRouter, Routes, Route } from "react-router-dom"
 import Lesson from "./Lesson"
+import { uploadLessonProof } from "@/lib/db"
+import { sileo } from "sileo"
 
 vi.mock("@/hooks/useAuth", () => ({
   useAuth: () => ({ user: { id: "user-1", email: "aluno@test.com" } }),
+}))
+
+vi.mock("@/lib/db", () => ({
+  uploadLessonProof: vi.fn().mockResolvedValue({ data: "user-1/a1-0.png", error: null }),
+}))
+
+vi.mock("sileo", () => ({
+  sileo: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+  },
 }))
 
 vi.mock("@/contexts/useLives", () => ({
