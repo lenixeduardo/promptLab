@@ -8,12 +8,7 @@ const appName = Deno.env.get("APP_NAME") ?? "PromptLabz"
 const hookSecret = (Deno.env.get("SEND_EMAIL_HOOK_SECRET") ?? "").replace("v1,whsec_", "")
 
 type EmailActionType =
-  | "signup"
-  | "magiclink"
-  | "recovery"
-  | "email_change"
-  | "reauthentication"
-  | string
+  "signup" | "magiclink" | "recovery" | "email_change" | "reauthentication" | string
 
 interface HookPayload {
   user: {
@@ -97,7 +92,11 @@ function buildConfirmationUrl(tokenHash: string, action: EmailActionType, redire
   return `${supabaseUrl}/auth/v1/verify?token=${encodeURIComponent(tokenHash)}&type=${encodeURIComponent(action)}&redirect_to=${encodeURIComponent(redirectTo || `${appUrl}/login`)}`
 }
 
-function buildEmailHtml(payload: HookPayload, confirmationUrl: string, tone: "default" | "new-email" = "default") {
+function buildEmailHtml(
+  payload: HookPayload,
+  confirmationUrl: string,
+  tone: "default" | "new-email" = "default"
+) {
   const name = escapeHtml(getRecipientName(payload))
   const copy = getActionCopy(payload.email_data.email_action_type)
   const mascotUrl = `${appUrl}/assets/mascot-login-new.png`
@@ -206,7 +205,7 @@ Deno.serve(async (req) => {
     const confirmationUrl = buildConfirmationUrl(
       tokenHash,
       parsed.email_data.email_action_type,
-      parsed.email_data.redirect_to,
+      parsed.email_data.redirect_to
     )
     const html = buildEmailHtml(parsed, confirmationUrl)
 
@@ -220,13 +219,13 @@ Deno.serve(async (req) => {
       const newEmailUrl = buildConfirmationUrl(
         parsed.email_data.token_hash_new,
         parsed.email_data.email_action_type,
-        parsed.email_data.redirect_to,
+        parsed.email_data.redirect_to
       )
 
       await sendWithResend(
         parsed.user.new_email,
         "Confirme novo email no PromptLabz",
-        buildEmailHtml(parsed, newEmailUrl, "new-email"),
+        buildEmailHtml(parsed, newEmailUrl, "new-email")
       )
     }
 
@@ -242,4 +241,3 @@ Deno.serve(async (req) => {
     })
   }
 })
-

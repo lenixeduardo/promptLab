@@ -14,9 +14,12 @@ interface PremiumPlanCardProps {
  * Shows an optional "Mais escolhido" badge for the yearly plan.
  */
 export function PremiumPlanCard({ plan, selected, onSelect }: PremiumPlanCardProps) {
-  const IconComp = (Icons as unknown as Record<string, React.ComponentType<{ className?: string; strokeWidth?: number }>>)[
-    plan.icon
-  ]
+  const IconComp = (
+    Icons as unknown as Record<
+      string,
+      React.ComponentType<{ className?: string; strokeWidth?: number }>
+    >
+  )[plan.icon]
 
   return (
     <button
@@ -28,7 +31,7 @@ export function PremiumPlanCard({ plan, selected, onSelect }: PremiumPlanCardPro
         "relative w-full rounded-2xl border bg-white px-5 py-4 text-left shadow-sm transition-all",
         selected
           ? "border-emerald ring-2 ring-emerald/20"
-          : "border-stroke-muted hover:border-foregroundMuted",
+          : "border-stroke-muted hover:border-foregroundMuted"
       )}
     >
       {/* Badge */}
@@ -67,7 +70,7 @@ export function PremiumPlanCard({ plan, selected, onSelect }: PremiumPlanCardPro
             <span
               className={cn(
                 "mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-all",
-                selected ? "border-emerald" : "border-stroke-light",
+                selected ? "border-emerald" : "border-stroke-light"
               )}
             >
               {selected && <span className="h-2.5 w-2.5 rounded-full bg-emerald" />}

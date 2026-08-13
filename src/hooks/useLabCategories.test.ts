@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { renderHook, waitFor } from "@testing-library/react"
 import { useLabCategories } from "./useLabCategories"
+import { ErrorRecoveryProvider } from "@/contexts/ErrorRecoveryContext"
+import { useErrorRecoveryContext } from "@/contexts/useErrorRecoveryContext"
 
 vi.mock("@/lib/db", () => ({
   getLabCategories: vi.fn(),
@@ -72,5 +74,26 @@ describe("useLabCategories", () => {
 
     await waitFor(() => expect(result.current.error).toBeDefined())
     expect(result.current.loading).toBe(false)
+  })
+})
+
+describe("useLabCategories — integração com ErrorRecoveryContext", () => {
+  beforeEach(() => {
+    mockGetLabCategories.mockClear()
+    mockGetLabConfig.mockClear()
+  })
+
+  it("reporta a falha no ErrorRecoveryContext compartilhado quando o fetch falha", async () => {
+    mockGetLabCategories.mockResolvedValue({ data: null, error: "Fetch failed" })
+    mockGetLabConfig.mockResolvedValue({ data: null, error: null })
+
+    const { result } = renderHook(
+      () => ({ lab: useLabCategories(), recovery: useErrorRecoveryContext() }),
+      { wrapper: ErrorRecoveryProvider }
+    )
+
+    await waitFor(() => expect(result.current.lab.error).toBe("Fetch failed"))
+    expect(result.current.recovery?.errors[0]?.message).toBe("Fetch failed")
+    expect(result.current.recovery?.errorCount).toBe(1)
   })
 })

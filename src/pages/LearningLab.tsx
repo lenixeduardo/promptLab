@@ -1,4 +1,4 @@
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom"
 import {
   Check,
   Lock,
@@ -35,15 +35,16 @@ import {
   SunMedium,
   Ban,
   GraduationCap,
-} from "lucide-react";
-import { AppBottomNav } from "@/components/AppBottomNav";
-import { cn } from "@/lib/utils";
-import { useModuleProgress, type TrackId } from "@/lib/moduleProgress";
-import { useLives } from "@/contexts/useLives";
+} from "lucide-react"
+import { AppBottomNav } from "@/components/AppBottomNav"
+import { cn } from "@/lib/utils"
+import { useModuleProgress, type TrackId } from "@/lib/moduleProgress"
+import { useLives } from "@/contexts/useLives"
+import { sileo } from "sileo"
 
-type Status = "completed" | "current" | "locked";
+type Status = "completed" | "current" | "locked"
 
-type Module = { title: string; icon: typeof BookOpen; xp: number };
+type Module = { title: string; icon: typeof BookOpen; xp: number }
 
 const TRACKS: { id: TrackId; label: string; subtitle: string; modules: Module[] }[] = [
   {
@@ -51,13 +52,13 @@ const TRACKS: { id: TrackId; label: string; subtitle: string; modules: Module[] 
     label: "Trilha A1",
     subtitle: "Fundamentos de prompts",
     modules: [
-      { title: "Boas-vindas",                       icon: Star,     xp: 30 },
-      { title: "O que é um prompt",                 icon: BookOpen, xp: 50 },
-      { title: "Contexto & clareza",                icon: Brain,    xp: 80 },
-      { title: "Personas e papéis (Personas)",      icon: Sparkles, xp: 80 },
-      { title: "Estruturas de prompt",              icon: Zap,      xp: 100 },
-      { title: "Poucos exemplos (Few-shot)",        icon: Palette,  xp: 120 },
-      { title: "Refino iterativo",                  icon: Clock,    xp: 120 },
+      { title: "Boas-vindas", icon: Star, xp: 30 },
+      { title: "O que é um prompt", icon: BookOpen, xp: 50 },
+      { title: "Contexto & clareza", icon: Brain, xp: 80 },
+      { title: "Personas e papéis (Personas)", icon: Sparkles, xp: 80 },
+      { title: "Estruturas de prompt", icon: Zap, xp: 100 },
+      { title: "Poucos exemplos (Few-shot)", icon: Palette, xp: 120 },
+      { title: "Refino iterativo", icon: Clock, xp: 120 },
     ],
   },
   {
@@ -65,15 +66,15 @@ const TRACKS: { id: TrackId; label: string; subtitle: string; modules: Module[] 
     label: "Trilha A2",
     subtitle: "Prompts avançados",
     modules: [
-      { title: "Cadeia de raciocínio (Chain-of-thought)", icon: Brain,    xp: 60 },
-      { title: "Decomposição de tarefas",                  icon: Layers,   xp: 90 },
-      { title: "Prompts com restrições",                   icon: Target,   xp: 100 },
-      { title: "Estilo e tom controlado",                  icon: Wand2,    xp: 110 },
-      { title: "Prompts multi-etapa",                      icon: Rocket,   xp: 130 },
-      { title: "Avaliação de respostas",                   icon: Sparkles, xp: 140 },
-      { title: "Refino guiado por dados",                  icon: Zap,      xp: 150 },
-      { title: "Engenharia de prompt (Prompt Engineering)", icon: Wand2,   xp: 160 },
-      { title: "Modelos de linguagem (LLMs)",              icon: Cpu,      xp: 170 },
+      { title: "Cadeia de raciocínio (Chain-of-thought)", icon: Brain, xp: 60 },
+      { title: "Decomposição de tarefas", icon: Layers, xp: 90 },
+      { title: "Prompts com restrições", icon: Target, xp: 100 },
+      { title: "Estilo e tom controlado", icon: Wand2, xp: 110 },
+      { title: "Prompts multi-etapa", icon: Rocket, xp: 130 },
+      { title: "Avaliação de respostas", icon: Sparkles, xp: 140 },
+      { title: "Refino guiado por dados", icon: Zap, xp: 150 },
+      { title: "Engenharia de prompt (Prompt Engineering)", icon: Wand2, xp: 160 },
+      { title: "Modelos de linguagem (LLMs)", icon: Cpu, xp: 170 },
     ],
   },
   {
@@ -81,27 +82,27 @@ const TRACKS: { id: TrackId; label: string; subtitle: string; modules: Module[] 
     label: "Trilha A3",
     subtitle: "Aplicações profissionais",
     modules: [
-      { title: "Prompts para código",                       icon: Code2,        xp: 120 },
-      { title: "Automação com IA",                          icon: Rocket,       xp: 140 },
-      { title: "Prompts para negócios",                     icon: Briefcase,    xp: 150 },
-      { title: "Fluxos com agentes (Workflows)",            icon: Layers,       xp: 160 },
-      { title: "Avaliação & métricas",                      icon: Target,       xp: 170 },
-      { title: "Segurança e proteções (Guardrails)",        icon: Sparkles,     xp: 180 },
-      { title: "Projeto final",                             icon: Star,         xp: 200 },
-      { title: "Usando agentes de IA (Agents)",             icon: Network,      xp: 180 },
-      { title: "Usando OpenRouter",                         icon: Layers,       xp: 170 },
-      { title: "Modelos locais (Local Models)",             icon: Server,       xp: 180 },
-      { title: "Claude Code na prática",                    icon: Terminal,     xp: 200 },
-      { title: "Habilidades (Skills) no Claude Code",       icon: Puzzle,       xp: 200 },
-      { title: "Personalizar modelos prontos (Templates)",  icon: FileCode,     xp: 190 },
-      { title: "O que é API key",                           icon: KeyRound,     xp: 160 },
-      { title: "Migrations e banco de dados",               icon: Database,     xp: 180 },
-      { title: "Health check (banco e backend)",            icon: Activity,     xp: 170 },
-      { title: "Cron jobs para automações",                 icon: CalendarClock, xp: 190 },
-      { title: "Node.js — O que é e para que serve",        icon: Server,       xp: 160 },
-      { title: "Git Bash — Terminal e versionamento",       icon: GitBranch,    xp: 170 },
-      { title: "npm — Gerenciador de pacotes",              icon: Package,      xp: 160 },
-      { title: "Skills em LLMs — Como usar",                icon: Brain,        xp: 180 },
+      { title: "Prompts para código", icon: Code2, xp: 120 },
+      { title: "Automação com IA", icon: Rocket, xp: 140 },
+      { title: "Prompts para negócios", icon: Briefcase, xp: 150 },
+      { title: "Fluxos com agentes (Workflows)", icon: Layers, xp: 160 },
+      { title: "Avaliação & métricas", icon: Target, xp: 170 },
+      { title: "Segurança e proteções (Guardrails)", icon: Sparkles, xp: 180 },
+      { title: "Projeto final", icon: Star, xp: 200 },
+      { title: "Usando agentes de IA (Agents)", icon: Network, xp: 180 },
+      { title: "Usando OpenRouter", icon: Layers, xp: 170 },
+      { title: "Modelos locais (Local Models)", icon: Server, xp: 180 },
+      { title: "Claude Code na prática", icon: Terminal, xp: 200 },
+      { title: "Habilidades (Skills) no Claude Code", icon: Puzzle, xp: 200 },
+      { title: "Personalizar modelos prontos (Templates)", icon: FileCode, xp: 190 },
+      { title: "O que é API key", icon: KeyRound, xp: 160 },
+      { title: "Migrations e banco de dados", icon: Database, xp: 180 },
+      { title: "Health check (banco e backend)", icon: Activity, xp: 170 },
+      { title: "Cron jobs para automações", icon: CalendarClock, xp: 190 },
+      { title: "Node.js — O que é e para que serve", icon: Server, xp: 160 },
+      { title: "Git Bash — Terminal e versionamento", icon: GitBranch, xp: 170 },
+      { title: "npm — Gerenciador de pacotes", icon: Package, xp: 160 },
+      { title: "Skills em LLMs — Como usar", icon: Brain, xp: 180 },
     ],
   },
   {
@@ -109,18 +110,18 @@ const TRACKS: { id: TrackId; label: string; subtitle: string; modules: Module[] 
     label: "Trilha A4",
     subtitle: "Prompts visuais com a técnica SAFE",
     modules: [
-      { title: "Introdução à Técnica SAFE",           icon: ImageIcon,    xp: 60 },
-      { title: "S — Sujeito",                          icon: User,         xp: 90 },
-      { title: "A — Atributos",                        icon: Palette,      xp: 100 },
-      { title: "F — Enquadramento",                    icon: Frame,        xp: 110 },
-      { title: "E — Ambiente",                         icon: SunMedium,    xp: 120 },
-      { title: "Restrições negativas",                 icon: Ban,          xp: 130 },
-      { title: "Prova final — Dissertativa SAFE",      icon: GraduationCap, xp: 200 },
+      { title: "Introdução à Técnica SAFE", icon: ImageIcon, xp: 60 },
+      { title: "S — Sujeito", icon: User, xp: 90 },
+      { title: "A — Atributos", icon: Palette, xp: 100 },
+      { title: "F — Enquadramento", icon: Frame, xp: 110 },
+      { title: "E — Ambiente", icon: SunMedium, xp: 120 },
+      { title: "Restrições negativas", icon: Ban, xp: 130 },
+      { title: "Prova final — Dissertativa SAFE", icon: GraduationCap, xp: 200 },
     ],
   },
-];
+]
 
-const TRACK_ORDER: TrackId[] = ["a1", "a2", "a3", "a4"];
+const TRACK_ORDER: TrackId[] = ["a1", "a2", "a3", "a4"]
 
 function useTrackCompletion() {
   return {
@@ -128,27 +129,26 @@ function useTrackCompletion() {
     a2: useModuleProgress("a2"),
     a3: useModuleProgress("a3"),
     a4: useModuleProgress("a4"),
-  };
+  }
 }
 
 export default function LearningLabPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const track = (searchParams.get("track") as TrackId) || "a1";
-  const completions = useTrackCompletion();
-  const { lives } = useLives();
+  const [searchParams, setSearchParams] = useSearchParams()
+  const track = (searchParams.get("track") as TrackId) || "a1"
+  const completions = useTrackCompletion()
+  const { lives, canPlay, msUntilNextLife } = useLives()
 
   const trackUnlocked: Record<TrackId, boolean> = {
     a1: true,
     a2: true,
     a3: true,
     a4: true,
-  };
+  }
 
-  const active = TRACKS.find((t) => t.id === track) ?? TRACKS[0];
-  const completed = completions[active.id];
+  const active = TRACKS.find((t) => t.id === track) ?? TRACKS[0]
+  const completed = completions[active.id]
   const statusFor = (i: number): Status =>
-    i < completed ? "completed" : i === completed ? "current" : "locked";
+    i < completed ? "completed" : i === completed ? "current" : "locked"
 
   return (
     <div className="flex min-h-screen flex-col bg-white pb-24 lg:pb-8">
@@ -167,9 +167,9 @@ export default function LearningLabPage() {
 
         <div role="tablist" className="mt-3 flex gap-2 overflow-x-auto lg:max-w-5xl lg:mx-auto">
           {TRACKS.map((t) => {
-            const unlocked = trackUnlocked[t.id];
-            const isActive = t.id === active.id;
-            const done = completions[t.id] >= t.modules.length;
+            const unlocked = trackUnlocked[t.id]
+            const isActive = t.id === active.id
+            const done = completions[t.id] >= t.modules.length
             return (
               <button
                 key={t.id}
@@ -184,14 +184,14 @@ export default function LearningLabPage() {
                     ? "border-primary bg-primary text-primary-foreground shadow"
                     : unlocked
                       ? "border-stroke-light bg-surface-soft text-foreground-dark hover:bg-card"
-                      : "border-stroke-muted bg-surface-soft text-neutral opacity-60",
+                      : "border-stroke-muted bg-surface-soft text-neutral opacity-60"
                 )}
               >
                 {!unlocked && <Lock className="h-3 w-3" />}
                 {done && unlocked && <Check className="h-3 w-3" />}
                 {t.label}
               </button>
-            );
+            )
           })}
         </div>
       </div>
@@ -199,31 +199,51 @@ export default function LearningLabPage() {
       <div className="relative mx-auto w-full max-w-md lg:max-w-5xl px-6 py-8 lg:px-8">
         <div className="relative flex flex-col items-stretch gap-2 lg:grid lg:grid-cols-2 lg:gap-4 lg:items-start">
           {active.modules.map((m, i) => {
-            const Icon = m.icon;
-            const status = statusFor(i);
-            const isLocked = status === "locked";
-            const isCurrent = status === "current";
-            const isDone = status === "completed";
-            const offsets = ["ml-0", "ml-16", "ml-28", "ml-16", "ml-0", "ml-16", "ml-28"];
-            const offset = offsets[i % offsets.length];
-            const isLast = i === active.modules.length - 1;
+            const Icon = m.icon
+            const status = statusFor(i)
+            const isLocked = status === "locked"
+            const isCurrent = status === "current"
+            const isDone = status === "completed"
+            const offsets = ["ml-0", "ml-16", "ml-28", "ml-16", "ml-0", "ml-16", "ml-28"]
+            const offset = offsets[i % offsets.length]
+            const isLast = i === active.modules.length - 1
+            const blockedByLives = isCurrent && !canPlay
+
+            const handleBlockedClick = (e: React.MouseEvent) => {
+              e.preventDefault()
+              const minutes = Math.ceil(msUntilNextLife() / 60000)
+              sileo.error({
+                title: "Sem vidas no momento",
+                description: `Você recupera uma vida em ${minutes} min. Volte em breve para continuar.`,
+              })
+            }
 
             return (
-              <div key={i} className={cn("relative flex flex-col items-start gap-1 lg:ml-0", offset)}>
+              <div
+                key={i}
+                className={cn("relative flex flex-col items-start gap-1 lg:ml-0", offset)}
+              >
                 <Link
                   to={isLocked ? "/learn" : `/lesson?track=${active.id}&module=${i}`}
+                  onClick={blockedByLives ? handleBlockedClick : undefined}
+                  aria-disabled={blockedByLives}
                   className={cn(
                     "relative flex h-20 w-20 items-center justify-center rounded-full border-4 transition-transform active:scale-95",
-                    isDone && "bg-emerald border-emerald-dark text-white shadow-lg shadow-emerald/30",
-                    isCurrent && "bg-luxury border-amber-500 text-luxury-foreground shadow-lg shadow-luxury/40 animate-pulse will-change-[opacity]",
+                    isDone &&
+                      "bg-emerald border-emerald-dark text-white shadow-lg shadow-emerald/30",
+                    isCurrent &&
+                      "bg-luxury border-amber-500 text-luxury-foreground shadow-lg shadow-luxury/40 animate-pulse will-change-[opacity]",
                     isLocked && "bg-surface-soft border-stroke-light text-neutral",
+                    blockedByLives && "opacity-60 saturate-50"
                   )}
-                  aria-label={m.title}
+                  aria-label={blockedByLives ? `${m.title} — sem vidas disponíveis` : m.title}
                 >
                   {isDone ? (
                     <Check className="h-8 w-8" strokeWidth={3} />
                   ) : isLocked ? (
                     <Lock className="h-6 w-6" />
+                  ) : blockedByLives ? (
+                    <Heart className="h-6 w-6" />
                   ) : (
                     <Icon className="h-8 w-8" strokeWidth={2.2} />
                   )}
@@ -239,10 +259,30 @@ export default function LearningLabPage() {
                     aria-hidden="true"
                     className="ml-9 flex h-10 w-1 flex-col items-center justify-between"
                   >
-                    <span className={cn("h-1.5 w-1.5 rounded-full", isDone ? "bg-emerald" : "bg-stroke-light")} />
-                    <span className={cn("h-1.5 w-1.5 rounded-full", isDone ? "bg-emerald/70" : "bg-stroke-light")} />
-                    <span className={cn("h-1.5 w-1.5 rounded-full", isDone ? "bg-emerald/50" : "bg-stroke-light")} />
-                    <span className={cn("h-1.5 w-1.5 rounded-full", isDone ? "bg-emerald/30" : "bg-stroke-light")} />
+                    <span
+                      className={cn(
+                        "h-1.5 w-1.5 rounded-full",
+                        isDone ? "bg-emerald" : "bg-stroke-light"
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "h-1.5 w-1.5 rounded-full",
+                        isDone ? "bg-emerald/70" : "bg-stroke-light"
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "h-1.5 w-1.5 rounded-full",
+                        isDone ? "bg-emerald/50" : "bg-stroke-light"
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "h-1.5 w-1.5 rounded-full",
+                        isDone ? "bg-emerald/30" : "bg-stroke-light"
+                      )}
+                    />
                   </div>
                 )}
 
@@ -250,7 +290,7 @@ export default function LearningLabPage() {
                   <p
                     className={cn(
                       "text-xs font-bold",
-                      isLocked ? "text-neutral" : "text-foreground-dark",
+                      isLocked ? "text-neutral" : "text-foreground-dark"
                     )}
                   >
                     {m.title}
@@ -258,17 +298,18 @@ export default function LearningLabPage() {
                   <p className="text-[10px] text-foreground-tertiary">+{m.xp} XP</p>
                 </div>
               </div>
-            );
+            )
           })}
 
           {completed >= active.modules.length && (
             <div className="mt-6 rounded-2xl border-2 border-emerald/40 bg-emerald/10 p-4 text-center">
               <p className="flex items-center justify-center gap-1.5 text-sm font-bold text-emerald-dark">
-                Trilha {active.label.replace("Trilha ", "")} concluída! <PartyPopper className="h-4 w-4" />
+                Trilha {active.label.replace("Trilha ", "")} concluída!{" "}
+                <PartyPopper className="h-4 w-4" />
               </p>
               {(() => {
-                const nextId = TRACK_ORDER[TRACK_ORDER.indexOf(active.id) + 1];
-                if (!nextId || !trackUnlocked[nextId]) return null;
+                const nextId = TRACK_ORDER[TRACK_ORDER.indexOf(active.id) + 1]
+                if (!nextId || !trackUnlocked[nextId]) return null
                 return (
                   <button
                     type="button"
@@ -277,7 +318,7 @@ export default function LearningLabPage() {
                   >
                     Continuar na próxima trilha →
                   </button>
-                );
+                )
               })()}
             </div>
           )}
@@ -286,5 +327,5 @@ export default function LearningLabPage() {
 
       <AppBottomNav />
     </div>
-  );
+  )
 }

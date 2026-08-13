@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import { getPrompts, DbPrompt } from "@/lib/db"
 import { PROMPTS, PromptCard } from "@/data/promptsData"
 import { errorLogger } from "@/lib/errorLogging"
+import { useErrorRecoveryContext } from "@/contexts/useErrorRecoveryContext"
 
 const MAX_RETRIES = 3
 const INITIAL_DELAY_MS = 1000
@@ -21,11 +22,12 @@ function mapDbPrompt(p: DbPrompt): PromptCard {
 }
 
 export function usePrompts(category?: string, difficulty?: string) {
-  const fallback = category ? PROMPTS.filter(p => p.category === category) : PROMPTS
+  const fallback = category ? PROMPTS.filter((p) => p.category === category) : PROMPTS
   const [prompts, setPrompts] = useState<PromptCard[]>(fallback)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const errorRecovery = useErrorRecoveryContext()
 
   const fetchPromptsWithRetry = async (attemptNum = 0): Promise<void> => {
     try {
@@ -46,6 +48,9 @@ export function usePrompts(category?: string, difficulty?: string) {
         } else {
           setError(result.error)
           errorLogger.logApiError("/db/getPrompts", 500, result.error)
+          errorRecovery?.addError(result.error, "API_ERROR", [
+            { label: "Tentar novamente", action: fetchPrompts },
+          ])
         }
       }
     } catch (err) {
@@ -59,6 +64,9 @@ export function usePrompts(category?: string, difficulty?: string) {
         const errorMsg = err instanceof Error ? err.message : "Falha ao carregar prompts"
         setError(errorMsg)
         errorLogger.logError(err, "usePrompts.fetchPrompts")
+        errorRecovery?.addError(errorMsg, "API_ERROR", [
+          { label: "Tentar novamente", action: fetchPrompts },
+        ])
       }
     } finally {
       setLoading(false)

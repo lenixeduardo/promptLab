@@ -14,4 +14,3 @@ export function BrandLogo({ className }: BrandLogoProps) {
     </span>
   )
 }
-

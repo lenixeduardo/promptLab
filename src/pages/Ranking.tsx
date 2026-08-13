@@ -12,17 +12,15 @@ import { Crown, Star, Trophy, PartyPopper, Award } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const MOCK_ENTRIES: LeaderboardEntry[] = [
-  { id: "mock-1", full_name: "Ana Lima",       avatar_url: "cat-scientist", xp: 4200 },
-  { id: "mock-2", full_name: "Pedro Silva",    avatar_url: "cat-rocker",    xp: 3800 },
-  { id: "mock-3", full_name: "Julia Mendes",   avatar_url: "cat-void",      xp: 3500 },
-  { id: "mock-4", full_name: "Carlos Rocha",   avatar_url: "cat-ninja",     xp: 2900 },
-  { id: "mock-5", full_name: "Beatriz Costa",  avatar_url: "cat-astronaut", xp: 2200 },
-  { id: "mock-6", full_name: "Lucas Ferreira", avatar_url: "cat-purple",    xp: 1950 },
-  { id: "mock-7", full_name: "Mariana Alves",  avatar_url: "cat-punk",      xp: 1700 },
-  { id: "mock-8", full_name: "Rafael Sousa",   avatar_url: "cat-blue",      xp: 1450 },
+  { id: "mock-1", full_name: "Ana Lima", avatar_url: "cat-scientist", xp: 4200 },
+  { id: "mock-2", full_name: "Pedro Silva", avatar_url: "cat-rocker", xp: 3800 },
+  { id: "mock-3", full_name: "Julia Mendes", avatar_url: "cat-void", xp: 3500 },
+  { id: "mock-4", full_name: "Carlos Rocha", avatar_url: "cat-ninja", xp: 2900 },
+  { id: "mock-5", full_name: "Beatriz Costa", avatar_url: "cat-astronaut", xp: 2200 },
+  { id: "mock-6", full_name: "Lucas Ferreira", avatar_url: "cat-purple", xp: 1950 },
+  { id: "mock-7", full_name: "Mariana Alves", avatar_url: "cat-punk", xp: 1700 },
+  { id: "mock-8", full_name: "Rafael Sousa", avatar_url: "cat-blue", xp: 1450 },
 ]
-
-type Period = "semana" | "mes" | "geral"
 
 interface RankedUser extends LeaderboardEntry {
   position: number
@@ -34,12 +32,10 @@ interface RankedUser extends LeaderboardEntry {
 function getLevelStyle(level: number): React.CSSProperties {
   if (level >= 9)
     return { background: "linear-gradient(135deg, var(--brand-gold), var(--brand-orange))" }
-  if (level >= 7)
-    return { background: "linear-gradient(135deg, var(--brand-purple), #7c3aed)" }
+  if (level >= 7) return { background: "linear-gradient(135deg, var(--brand-purple), #7c3aed)" }
   if (level >= 5)
     return { background: "linear-gradient(135deg, var(--emerald), var(--emerald-dark))" }
-  if (level >= 3)
-    return { background: "linear-gradient(135deg, var(--brand-blue), #2563eb)" }
+  if (level >= 3) return { background: "linear-gradient(135deg, var(--brand-blue), #2563eb)" }
   return { background: "linear-gradient(135deg, #94a3b8, #64748b)" }
 }
 
@@ -49,7 +45,7 @@ function LevelBadge({ level, size = "sm" }: { level: number; size?: "sm" | "md" 
     <div
       className={cn(
         "flex shrink-0 items-center justify-center rounded-full font-extrabold text-white shadow",
-        dim,
+        dim
       )}
       style={getLevelStyle(level)}
       aria-label={`Nível ${level}`}
@@ -102,7 +98,7 @@ function PodiumSpot({ user, rank }: { user: RankedUser | undefined; rank: 1 | 2 
     <div
       className={cn(
         "animate-podium-rise flex flex-1 flex-col items-center gap-1",
-        isFirst ? "order-2" : rank === 2 ? "order-1" : "order-3",
+        isFirst ? "order-2" : rank === 2 ? "order-1" : "order-3"
       )}
       style={{ animationDelay: `${PODIUM_DELAYS[rank]}s` }}
     >
@@ -110,7 +106,11 @@ function PodiumSpot({ user, rank }: { user: RankedUser | undefined; rank: 1 | 2 
       {isFirst ? (
         <Crown className="h-5 w-5 text-yellow-400 animate-crown-float" strokeWidth={2} />
       ) : (
-        <Award className={cn("h-5 w-5 animate-bounce-slow", medalColors[rank])} strokeWidth={2} style={{ animationDelay: `${rank * 0.15}s` }} />
+        <Award
+          className={cn("h-5 w-5 animate-bounce-slow", medalColors[rank])}
+          strokeWidth={2}
+          style={{ animationDelay: `${rank * 0.15}s` }}
+        />
       )}
 
       {/* Avatar */}
@@ -121,7 +121,7 @@ function PodiumSpot({ user, rank }: { user: RankedUser | undefined; rank: 1 | 2 
             avatarSizes[rank],
             avatarRings[rank],
             isFirst && "ring-4 ring-yellow-300/30",
-            user.isCurrentUser && "ring-2 ring-emerald ring-offset-2",
+            user.isCurrentUser && "ring-2 ring-emerald ring-offset-2"
           )}
         >
           <img
@@ -152,22 +152,21 @@ function PodiumSpot({ user, rank }: { user: RankedUser | undefined; rank: 1 | 2 
       <p className="text-[9px] text-foreground-tertiary">{user.levelTitle}</p>
 
       {/* Pedestal */}
-      <div
-        className={cn(
-          "w-full rounded-t-2xl",
-          pedestalHeights[rank],
-          pedestalColors[rank],
-        )}
-      />
+      <div className={cn("w-full rounded-t-2xl", pedestalHeights[rank], pedestalColors[rank])} />
     </div>
   )
 }
+
+const PAGE_SIZE = 20
 
 export default function Ranking() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [rankedUsers, setRankedUsers] = useState<RankedUser[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [fetchLimit, setFetchLimit] = useState(PAGE_SIZE)
+  const [hasMore, setHasMore] = useState(false)
   const [userAvatarImage, setUserAvatarImage] = useState("/assets/avatar-cat.png")
 
   useEffect(() => {
@@ -180,17 +179,16 @@ export default function Ranking() {
       }
     })
 
-    async function buildRanking() {
+    async function buildRanking(limit: number, isInitial: boolean) {
       const currentXP = getLocalXP(user!.id)
       const currentGems = getLocalGems(user!.id)
-      const currentName =
-        user!.user_metadata?.full_name ?? user!.email?.split("@")[0] ?? "Você"
+      const currentName = user!.user_metadata?.full_name ?? user!.email?.split("@")[0] ?? "Você"
 
-      await updateUserXP(user!.id, currentXP, currentGems)
+      if (isInitial) await updateUserXP(user!.id, currentXP, currentGems)
 
-      const { data } = await getLeaderboard(20)
-      const base: LeaderboardEntry[] =
-        data && data.length > 0 ? data : [...MOCK_ENTRIES]
+      const { data } = await getLeaderboard(limit)
+      const base: LeaderboardEntry[] = data && data.length > 0 ? data : [...MOCK_ENTRIES]
+      setHasMore(data !== null && data.length === limit)
 
       const others = base.filter((e) => e.id !== user!.id)
 
@@ -215,21 +213,32 @@ export default function Ranking() {
       })
 
       setRankedUsers(ranked)
-      setLoading(false)
     }
 
-    buildRanking().catch(() => {
-      setRankedUsers(MOCK_ENTRIES.map((entry, i) => ({
-        ...entry,
-        position: i + 1,
-        isCurrentUser: false,
-        level: getLevel(entry.xp),
-        levelTitle: getLevelTitle(getLevel(entry.xp)),
-      })))
-      setLoading(false)
-    })
+    buildRanking(fetchLimit, fetchLimit === PAGE_SIZE)
+      .catch(() => {
+        setRankedUsers(
+          MOCK_ENTRIES.map((entry, i) => ({
+            ...entry,
+            position: i + 1,
+            isCurrentUser: false,
+            level: getLevel(entry.xp),
+            levelTitle: getLevelTitle(getLevel(entry.xp)),
+          }))
+        )
+      })
+      .finally(() => {
+        setLoading(false)
+        setLoadingMore(false)
+      })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id])
+  }, [user?.id, fetchLimit])
+
+  const handleLoadMore = () => {
+    if (loadingMore) return
+    setLoadingMore(true)
+    setFetchLimit((n) => n + PAGE_SIZE)
+  }
 
   const top3 = [rankedUsers[0], rankedUsers[1], rankedUsers[2]]
   const rest = rankedUsers.slice(3)
@@ -237,20 +246,11 @@ export default function Ranking() {
   const { currentXP: progressXP, targetXP } = currentUser
     ? getLevelProgress(currentUser.xp)
     : { currentXP: 0, targetXP: 100 }
-  const progressPct = currentUser
-    ? Math.min(100, Math.round((progressXP / targetXP) * 100))
-    : 0
-
-  const PERIOD_LABELS: Record<Period, string> = {
-    semana: "Semana",
-    mes: "Mês",
-    geral: "Geral",
-  }
+  const progressPct = currentUser ? Math.min(100, Math.round((progressXP / targetXP) * 100)) : 0
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-white">
       <div className="mx-auto flex w-full max-w-[420px] lg:max-w-2xl flex-col px-5 pb-24 lg:pb-8 pt-8">
-
         {/* Header */}
         <div className="mb-5 flex items-center justify-between">
           <div>
@@ -312,7 +312,10 @@ export default function Ranking() {
                 {currentUser.position === 1 ? (
                   <Crown className="h-5 w-5 shrink-0 text-yellow-400" strokeWidth={2} />
                 ) : (
-                  <Star className="h-5 w-5 shrink-0 text-yellow-400 fill-yellow-400" strokeWidth={2} />
+                  <Star
+                    className="h-5 w-5 shrink-0 text-yellow-400 fill-yellow-400"
+                    strokeWidth={2}
+                  />
                 )}
               </div>
             )}
@@ -383,7 +386,7 @@ export default function Ranking() {
                       "animate-rank-entry flex items-center gap-3 rounded-2xl border px-4 py-3 transition-all",
                       entry.isCurrentUser
                         ? "border-emerald/40 bg-surface-success shadow-sm shadow-emerald/10"
-                        : "border-stroke-muted bg-white shadow-sm",
+                        : "border-stroke-muted bg-white shadow-sm"
                     )}
                     style={{ animationDelay: `${0.3 + idx * 0.07}s` }}
                   >
@@ -391,7 +394,7 @@ export default function Ranking() {
                     <span
                       className={cn(
                         "w-6 shrink-0 text-center text-sm font-black",
-                        entry.isCurrentUser ? "text-emerald" : "text-foreground-tertiary",
+                        entry.isCurrentUser ? "text-emerald" : "text-foreground-tertiary"
                       )}
                     >
                       {entry.position}
@@ -402,7 +405,7 @@ export default function Ranking() {
                       <div
                         className={cn(
                           "h-full w-full overflow-hidden rounded-full border-2",
-                          entry.isCurrentUser ? "border-emerald" : "border-stroke-light",
+                          entry.isCurrentUser ? "border-emerald" : "border-stroke-light"
                         )}
                       >
                         <img
@@ -422,7 +425,7 @@ export default function Ranking() {
                         <p
                           className={cn(
                             "text-sm font-bold",
-                            entry.isCurrentUser ? "text-primary-dark" : "text-foreground-dark",
+                            entry.isCurrentUser ? "text-primary-dark" : "text-foreground-dark"
                           )}
                         >
                           {entry.full_name ?? "Usuário"}
@@ -451,10 +454,14 @@ export default function Ranking() {
                   </div>
                 ))}
 
-                {rankedUsers.length >= 20 && (
-                  <p className="mt-2 text-center text-xs text-foreground-tertiary py-2">
-                    Mostrando top 20 · mais posições em breve
-                  </p>
+                {hasMore && (
+                  <button
+                    onClick={handleLoadMore}
+                    disabled={loadingMore}
+                    className="mx-auto mt-2 rounded-full border border-stroke-light px-5 py-2 text-sm font-semibold text-primary-dark transition-colors hover:bg-surface-soft disabled:opacity-50"
+                  >
+                    {loadingMore ? "Carregando..." : "Carregar mais"}
+                  </button>
                 )}
               </div>
             )}

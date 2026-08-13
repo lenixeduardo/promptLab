@@ -1,0 +1,85 @@
+# Trade-offs e Próximos Passos
+
+Documento único consolidando as decisões técnicas "por que X e não Y" (antes espalhadas entre README.md e ROADMAP.md) e os próximos passos priorizados. Objetivo: qualquer avaliador entende as escolhas de arquitetura e o que falta em menos de 2 minutos.
+
+## Decisões de Produto e Arquitetura
+
+### Supabase em vez de Firebase
+
+SQL + RLS nativo permite regras de segurança declarativas e queries relacionais complexas (necessárias para leaderboard, analytics futuro). Firebase exigiria mais lógica de autorização no client para as mesmas garantias.
+
+### React SPA + Vite em vez de Next.js
+
+O produto não é SEO-crítico (é um app autenticado, não um blog/marketing site). SSR traria complexidade de infraestrutura sem benefício real. Vite oferece HMR instantâneo e DX superior para uma SPA pura.
+
+### Capacitor em vez de React Native
+
+O app web já existe e está validado com usuários. Capacitor reutiliza 100% do código React para gerar o APK Android sem bifurcar a codebase. React Native exigiria reescrever a UI — custo alto antes de validar tração mobile. Trade-off aceito: performance nativa um degrau abaixo de RN puro.
+
+### Conteúdo em `src/data` em vez de CMS
+
+Acelera o MVP (sem infraestrutura de CMS/admin), mas cria acoplamento entre conteúdo e deploy. Migração para tabelas do Supabase está planejada na v0.4, quando houver volume de conteúdo que justifique o custo de infraestrutura (ver ROADMAP.md).
+
+### Moeda dupla: XP + Gems
+
+XP representa progresso não-monetizável (não pode ser comprado), preservando a integridade do ranking/leaderboard. Gems são a moeda da loja, ganháveis por conquistas e missões, e futuramente compráveis via IAP sem distorcer o ranking de XP.
+
+### Campos premium no banco desde a v0.1
+
+Evita uma migração de schema disruptiva quando o plano pago for implementado de fato (Stripe). O campo já existe e já é protegido por RLS, mesmo com o fluxo de cobrança ainda não conectado.
+
+### PostHog + Google Ads/GA4 em vez de só GA4
+
+PostHog cobre analytics de produto granular (funis, eventos customizados por fluxo de aprendizado); GA4/Ads cobre atribuição de conversão de tráfego pago. São ferramentas com propósitos diferentes, não redundantes.
+
+### `src/lib/icons.ts` centralizando imports do lucide-react
+
+Evita importar a biblioteca inteira (~700kB) — cada ícone é importado individualmente e re-exportado, preservando tree-shaking real no build do Vite.
+
+### Streak e XP em localStorage com sync para Supabase
+
+Garante responsividade mesmo offline (o usuário não espera round-trip de rede para ver o próprio progresso). Dados sensíveis a fraude (valor final de XP/gems, desbloqueio de conquistas) são sempre revalidados no servidor via funções `SECURITY DEFINER` com limites de delta — o client nunca escreve o valor final diretamente (ver migrations `20260704_014` e `20260812_020`).
+
+### Rate limit de autenticação: gerenciado pelo Supabase GoTrue, não implementado no código do projeto
+
+O cooldown de 3s em `Login.tsx` é feedback de UX, não proteção real contra brute-force — é contornável chamando a API diretamente. A proteção real contra tentativas excessivas de login vem do rate limiting nativo do Supabase Auth (GoTrue), fora do código deste repositório. Decisão consciente: implementar um proxy de rate-limit próprio (Edge Function + tabela de tentativas por IP/e-mail) seria over-engineering para o estágio atual do produto — revisitar se o produto sair do beta fechado.
+
+### MVP (v0.1) redefinido para 5 funcionalidades, produto atual descrito à parte
+
+`PRODUCT.md` e `README.md` descreviam só o estado atual do produto (v0.3, 11+ funcionalidades) sem nunca isolar o que era, de fato, o MVP que validou a hipótese central. Isso foi corrigido: `PRODUCT.md` agora tem uma seção "MVP (v0.1) — Escopo Real" com as 5 funcionalidades centrais (auth, trilhas, vidas, skills, perfil/progresso), e o restante é explicitamente rotulado como construído depois, incrementalmente, sobre esse core validado.
+
+### Avatar: dois catálogos paralelos e desincronizados (achado, não corrigido)
+
+Existem hoje **dois sistemas de avatar independentes**: `AvatarScreen.tsx`/`AvatarProvider.tsx` (11 opções em `AVATAR_OPTIONS`, seleção salva só em `localStorage`, nunca chama `updateUserAvatar`) e `Store.tsx`/`Inventory.tsx` (17 opções em `AVATARS`, compra via `addAvatar`, persiste em `users.avatar_url` via `updateUserAvatar`). Os catálogos usam IDs e imagens diferentes e não convergem — dependendo de qual fluxo o usuário usa, o avatar escolhido pode não ser o mesmo em telas diferentes, e a persistência no servidor é inconsistente (um caminho salva, o outro não). **Decisão consciente de não corrigir agora**: unificar os dois sistemas é um refactor real (decidir qual catálogo é a fonte da verdade, migrar usuários com avatar já selecionado no fluxo que não persiste, tocar RLS/schema se necessário) — risco desproporcional para consertar numa sessão de auditoria, dado que "avatar" não é um fluxo crítico (auth, pagamento, progresso). Rastreado como parte da issue [#151](https://github.com/lenixeduardo/promptLabz/issues/151).
+
+### Histórico de lições: não existe como dado, não é uma correção pontual
+
+A issue [#150](https://github.com/lenixeduardo/promptLabz/issues/150) menciona "paginação no histórico de lições" — investigando o código, **não existe hoje nenhuma lista de lições individuais concluídas** para paginar. O que existe são só contadores agregados (`totalLessonsCompleted` em `Achievements.tsx`/`Profile.tsx`, um inteiro por trilha em `moduleProgress.ts`). Construir isso do zero exigiria um novo modelo de dado (tabela ou array por lição com data de conclusão) e uma tela nova — feature genuína, não um ajuste de paginação em uma lista que já existe. Documentando para não ser confundido com um "quick win" nas próximas rodadas de auditoria.
+
+## Próximos Passos (priorizados)
+
+**Curto prazo (v0.3, em andamento)**
+
+- Abrir PR da branch de correções para `main` e deixar o CI rodar de fato (o commit com as correções desta auditoria só existe na branch de trabalho até isso acontecer — README/CHANGELOG/TRADEOFFS.md só ficam visíveis para quem olha `main` depois do merge)
+- Paginação real (`.range()`) implementada em `getReviews`/`getNewsArticles`/`getNotifications`/`getLeaderboard`, com UI de "carregar mais" em `News.tsx`/`Notifications.tsx`/`Ranking.tsx`/`Community.tsx`. Falta só o histórico de lições — rastreado na issue [#150](https://github.com/lenixeduardo/promptLabz/issues/150)
+- Upload real implementado para o print de comprovação de lição (`Lesson.tsx` → bucket privado `lesson-proofs` no Supabase Storage, RLS por `auth.uid()`, migration `20260813_021`). Falta ainda o avatar do usuário e o "Salvar Resultado" do laboratório — rastreado na issue [#151](https://github.com/lenixeduardo/promptLabz/issues/151)
+- `getReviews` tinha paginação implementada mas nenhum consumidor real — corrigido: `Community.tsx` agora mostra uma seção "O que dizem sobre o PromptLabz" com reviews reais paginadas
+- `supabase.integration.test.ts` reescrito para autenticar um usuário de teste real antes de gravar (hoje ele grava direto com a anon key sem sessão — rodar contra o projeto real quebraria por causa das políticas de RLS que exigem `auth.uid() = user_id`; a correção correta é subir um Supabase local efêmero no CI via `supabase start` + migrations, não usar a anon key de produção sem autenticação)
+- Seeds/dados de demonstração para loja, missões e ranking
+- CI: `pnpm smoke:supabase` e `pnpm test:e2e` foram adicionados ao workflow como passos não-bloqueantes (`continue-on-error: true`) para começar a gerar sinal real sem arriscar quebrar o pipeline por instabilidade de ambiente; promovê-los a bloqueantes depois de alguns ciclos verdes
+
+**Médio prazo (v0.4)**
+
+- Migrar conteúdo de `src/data` para tabelas do Supabase com seeds
+- Unificar os dois catálogos de avatar (ver achado acima)
+- Construir histórico de lições (dado + tela) do zero (ver achado acima)
+- TypeScript strict mode
+- Cache via Service Worker (PWA) para skills e trilhas
+
+**Longo prazo (v1.0)**
+
+- Stripe completo (checkout, webhook, portal de assinante)
+- Modo offline real (PWA)
+- API pública para integrações externas
+
+Para o detalhamento completo, estimativas de esforço (S/M/L/XL) e status por item, veja [ROADMAP.md](./ROADMAP.md) e [CHANGELOG.md](./CHANGELOG.md).

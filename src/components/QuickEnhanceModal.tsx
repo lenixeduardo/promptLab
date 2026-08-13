@@ -1,16 +1,16 @@
-import { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Zap, Copy, Check, ExternalLink, RotateCcw, X } from 'lucide-react'
-import { Drawer as DrawerPrimitive } from 'vaul'
-import { enhancePrompt, type EnhancementResult } from '@/lib/promptEnhancer'
-import { useQuickEnhanceParam } from '@/hooks/useQuickEnhanceParam'
-import { cn } from '@/lib/utils'
+import { useState, useRef, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { Zap, Copy, Check, ExternalLink, RotateCcw, X } from "lucide-react"
+import { Drawer as DrawerPrimitive } from "vaul"
+import { enhancePrompt, type EnhancementResult } from "@/lib/promptEnhancer"
+import { useQuickEnhanceParam } from "@/hooks/useQuickEnhanceParam"
+import { cn } from "@/lib/utils"
 
 export function QuickEnhanceModal() {
   const { isOpen, onClose } = useQuickEnhanceParam()
   const navigate = useNavigate()
 
-  const [promptText, setPromptText] = useState('')
+  const [promptText, setPromptText] = useState("")
   const [isEnhancing, setIsEnhancing] = useState(false)
   const [result, setResult] = useState<EnhancementResult | null>(null)
   const [copied, setCopied] = useState(false)
@@ -19,7 +19,7 @@ export function QuickEnhanceModal() {
 
   useEffect(() => {
     if (isOpen) {
-      setPromptText('')
+      setPromptText("")
       setResult(null)
       setCopied(false)
       timerRef.current = setTimeout(() => textareaRef.current?.focus(), 350)
@@ -33,7 +33,7 @@ export function QuickEnhanceModal() {
     if (!promptText.trim() || isEnhancing) return
     setIsEnhancing(true)
     timerRef.current = setTimeout(() => {
-      setResult(enhancePrompt(promptText, 'general'))
+      setResult(enhancePrompt(promptText, "general"))
       setIsEnhancing(false)
     }, 500)
   }
@@ -51,21 +51,24 @@ export function QuickEnhanceModal() {
 
   function handleViewFull() {
     onClose()
-    navigate('/prompt-enhancer', { state: { initialPrompt: promptText } })
+    navigate("/prompt-enhancer", { state: { initialPrompt: promptText } })
   }
 
   function handleClose() {
     onClose()
-    setPromptText('')
+    setPromptText("")
     setResult(null)
   }
 
   return (
-    <DrawerPrimitive.Root open={isOpen} onOpenChange={(open) => !open && handleClose()} shouldScaleBackground>
+    <DrawerPrimitive.Root
+      open={isOpen}
+      onOpenChange={(open) => !open && handleClose()}
+      shouldScaleBackground
+    >
       <DrawerPrimitive.Portal>
         <DrawerPrimitive.Overlay className="fixed inset-0 z-50 bg-black/60" />
         <DrawerPrimitive.Content className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-3xl bg-white dark:bg-[#1a1f1a] max-h-[92dvh] shadow-2xl outline-none">
-
           {/* Handle bar — green pill */}
           <div className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-primary shrink-0" />
 
@@ -93,7 +96,6 @@ export function QuickEnhanceModal() {
 
           {/* Scrollable body */}
           <div className="flex-1 overflow-y-auto px-5 pt-3 pb-2 space-y-3">
-
             {/* Textarea + counter */}
             <div>
               <textarea
@@ -101,16 +103,16 @@ export function QuickEnhanceModal() {
                 value={promptText}
                 onChange={(e) => setPromptText(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleEnhance()
+                  if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleEnhance()
                 }}
                 placeholder="Cole ou escreva seu prompt aqui..."
                 maxLength={1000}
                 rows={result ? 4 : 6}
                 className={cn(
-                  'w-full resize-none rounded-2xl border px-4 py-3 text-[14px] text-foreground leading-relaxed',
-                  'placeholder:text-muted-foreground bg-[#f9fff9] dark:bg-[#111a11]',
-                  'border-[#A3E4A1] dark:border-green-900',
-                  'focus:outline-none focus:ring-2 focus:ring-primary/40 transition-shadow'
+                  "w-full resize-none rounded-2xl border px-4 py-3 text-[14px] text-foreground leading-relaxed",
+                  "placeholder:text-muted-foreground bg-[#f9fff9] dark:bg-[#111a11]",
+                  "border-[#A3E4A1] dark:border-green-900",
+                  "focus:outline-none focus:ring-2 focus:ring-primary/40 transition-shadow"
                 )}
               />
               <p className="text-right text-[11px] text-muted-foreground mt-1 pr-1">
@@ -151,15 +153,14 @@ export function QuickEnhanceModal() {
 
           {/* Footer — sticky action area */}
           <div className="shrink-0 px-5 pt-2 pb-[calc(env(safe-area-inset-bottom,0px)+12px)] space-y-2">
-
             {!result ? (
               <button
                 onClick={handleEnhance}
                 disabled={!promptText.trim() || isEnhancing}
                 className={cn(
-                  'flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-[15px] font-extrabold transition-all',
-                  'bg-primary text-white hover:opacity-90 active:scale-[.98]',
-                  'disabled:opacity-40 disabled:cursor-not-allowed'
+                  "flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-[15px] font-extrabold transition-all",
+                  "bg-primary text-white hover:opacity-90 active:scale-[.98]",
+                  "disabled:opacity-40 disabled:cursor-not-allowed"
                 )}
               >
                 {isEnhancing ? (
@@ -180,14 +181,12 @@ export function QuickEnhanceModal() {
                   <button
                     onClick={handleCopy}
                     className={cn(
-                      'flex flex-1 items-center justify-center gap-2 rounded-2xl py-3.5 text-[14px] font-extrabold transition-all active:scale-[.98]',
-                      copied
-                        ? 'bg-green-500 text-white'
-                        : 'bg-primary text-white hover:opacity-90'
+                      "flex flex-1 items-center justify-center gap-2 rounded-2xl py-3.5 text-[14px] font-extrabold transition-all active:scale-[.98]",
+                      copied ? "bg-green-500 text-white" : "bg-primary text-white hover:opacity-90"
                     )}
                   >
                     {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                    {copied ? 'Copiado!' : 'Copiar'}
+                    {copied ? "Copiado!" : "Copiar"}
                   </button>
                   <button
                     onClick={handleViewFull}
@@ -198,7 +197,10 @@ export function QuickEnhanceModal() {
                   </button>
                 </div>
                 <button
-                  onClick={() => { setResult(null); setPromptText('') }}
+                  onClick={() => {
+                    setResult(null)
+                    setPromptText("")
+                  }}
                   className="flex w-full items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
@@ -207,7 +209,6 @@ export function QuickEnhanceModal() {
               </>
             )}
           </div>
-
         </DrawerPrimitive.Content>
       </DrawerPrimitive.Portal>
     </DrawerPrimitive.Root>

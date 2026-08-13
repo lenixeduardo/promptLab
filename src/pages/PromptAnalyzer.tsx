@@ -95,20 +95,22 @@ function extractUserMessages(content: string): string[] {
 function analyzeMessage(text: string): MessageAnalysis {
   const trimmed = text.trim()
   const wordCount = trimmed.split(/\s+/).filter(Boolean).length
-  const hasContext =
-    /contexto|context|você é|you are|atue como|act as|especialista|expert/i.test(trimmed)
+  const hasContext = /contexto|context|você é|you are|atue como|act as|especialista|expert/i.test(
+    trimmed
+  )
   const hasExamples = /exemplo|example|por exemplo|e\.g\.|such as/i.test(trimmed)
   const hasGoal =
     /quero|preciso|gere|crie|escreva|want|need|generate|create|write|faça|elabore|liste|explique|analise/i.test(
-      trimmed,
+      trimmed
     )
-  const hasFormat =
-    /formato|format|lista|list|tabela|table|json|markdown|bullet|parágrafo/i.test(trimmed)
+  const hasFormat = /formato|format|lista|list|tabela|table|json|markdown|bullet|parágrafo/i.test(
+    trimmed
+  )
 
   const clarity = Math.min(100, Math.round((wordCount / 30) * 50 + (hasGoal ? 50 : 0)))
   const specificity = Math.min(
     100,
-    Math.round((wordCount / 50) * 60 + (hasExamples ? 25 : 0) + (hasFormat ? 15 : 0)),
+    Math.round((wordCount / 50) * 60 + (hasExamples ? 25 : 0) + (hasFormat ? 15 : 0))
   )
   const context = Math.min(100, Math.round((hasContext ? 70 : 0) + (wordCount > 20 ? 30 : 0)))
   const score = Math.round(((clarity + specificity + context) / 3 / 10) * 10) / 10
@@ -218,7 +220,7 @@ function ScoreBadge({ score }: { score: number }) {
     <span
       className={cn(
         "inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-extrabold",
-        cls,
+        cls
       )}
     >
       {score.toFixed(1)}/10
@@ -236,7 +238,7 @@ function ExScoreBadge({ score }: { score: number }) {
     <span
       className={cn(
         "inline-flex shrink-0 items-center rounded-full border px-1.5 py-0.5 text-[10px] font-extrabold",
-        cls,
+        cls
       )}
     >
       {score}
@@ -342,16 +344,8 @@ export default function PromptAnalyzerPage() {
     }
   }
 
-  const overallColor =
-    (result?.overallScore ?? 0) >= 7
-      ? "text-emerald border-emerald"
-      : (result?.overallScore ?? 0) >= 4
-        ? "text-amber-500 border-amber-400"
-        : "text-red-500 border-red-400"
-
   return (
     <div className="flex min-h-screen flex-col bg-white pb-28 lg:pb-8">
-
       {/* ── Header ── */}
       <div className="sticky top-0 z-20 flex items-center gap-3 border-b border-stroke-muted bg-card px-4 py-3">
         <Link
@@ -379,7 +373,6 @@ export default function PromptAnalyzerPage() {
       </div>
 
       <div className="mx-auto w-full max-w-lg px-4 py-4 space-y-4">
-
         {/* ══════════════════════════════════════════
             UPLOAD STATE
         ══════════════════════════════════════════ */}
@@ -389,7 +382,7 @@ export default function PromptAnalyzerPage() {
             <div
               className={cn(
                 "rounded-2xl border-2 bg-card overflow-hidden transition-colors",
-                file ? "border-emerald/40" : "border-stroke-light",
+                file ? "border-emerald/40" : "border-stroke-light"
               )}
               onDrop={handleDrop}
               onDragOver={(e) => e.preventDefault()}
@@ -477,9 +470,17 @@ export default function PromptAnalyzerPage() {
               <div className="grid grid-cols-4 gap-2">
                 {(
                   [
-                    { n: 1, label: "Envie seu arquivo com a IA", icon: <FileUp className="h-4 w-4" /> },
+                    {
+                      n: 1,
+                      label: "Envie seu arquivo com a IA",
+                      icon: <FileUp className="h-4 w-4" />,
+                    },
                     { n: 2, label: "Analisamos tudo", icon: <BarChart2 className="h-4 w-4" /> },
-                    { n: 3, label: "Você recebe o feedback", icon: <MessageCircle className="h-4 w-4" /> },
+                    {
+                      n: 3,
+                      label: "Você recebe o feedback",
+                      icon: <MessageCircle className="h-4 w-4" />,
+                    },
                     { n: 4, label: "Nota final", icon: <Trophy className="h-4 w-4" /> },
                   ] as const
                 ).map((item) => (
@@ -513,7 +514,6 @@ export default function PromptAnalyzerPage() {
               <div className="space-y-2">
                 {EXAMPLE_TURNS.map((turn, i) => (
                   <div key={i} className="grid grid-cols-[2fr_3fr] gap-2">
-
                     {/* Coluna esquerda — prompt do usuário */}
                     <div className="rounded-xl border-2 border-stroke-light bg-card p-2.5">
                       <div className="flex items-center justify-between gap-1 mb-1.5">
@@ -547,7 +547,9 @@ export default function PromptAnalyzerPage() {
                           </p>
                           <div className="flex items-center gap-1 mb-1">
                             <CheckCircle2 className="h-3 w-3 shrink-0 text-emerald" />
-                            <p className="text-[10px] font-bold text-emerald">{turn.solutionLabel}</p>
+                            <p className="text-[10px] font-bold text-emerald">
+                              {turn.solutionLabel}
+                            </p>
                           </div>
                           <p className="text-[9px] text-foreground-secondary leading-snug">
                             {turn.solution}
@@ -612,7 +614,7 @@ export default function PromptAnalyzerPage() {
                             <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald" />
                             <span className="text-[11px] text-foreground-secondary">{item}</span>
                           </div>
-                        ),
+                        )
                       )}
                     </div>
                   </div>
@@ -763,7 +765,7 @@ export default function PromptAnalyzerPage() {
                         ? "text-emerald"
                         : result.overallScore >= 4
                           ? "text-amber-500"
-                          : "text-red-500",
+                          : "text-red-500"
                     )}
                   >
                     {result.overallScore >= 7
@@ -797,7 +799,7 @@ export default function PromptAnalyzerPage() {
                       ? "border-emerald"
                       : result.overallScore >= 4
                         ? "border-amber-400"
-                        : "border-red-400",
+                        : "border-red-400"
                   )}
                 >
                   <span
@@ -807,7 +809,7 @@ export default function PromptAnalyzerPage() {
                         ? "text-emerald"
                         : result.overallScore >= 4
                           ? "text-amber-500"
-                          : "text-red-500",
+                          : "text-red-500"
                     )}
                   >
                     {Math.round(result.overallScore * 10)}%
@@ -839,7 +841,7 @@ export default function PromptAnalyzerPage() {
                         "flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-[11px] font-bold text-white transition-all active:scale-95",
                         aiStatus === "loading"
                           ? "bg-emerald/60 cursor-wait"
-                          : "bg-emerald hover:bg-emerald-dark",
+                          : "bg-emerald hover:bg-emerald-dark"
                       )}
                     >
                       {aiStatus === "loading" ? (

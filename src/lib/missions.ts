@@ -1,5 +1,12 @@
 import { scopedKey, getUserId } from "@/lib/userScope"
-import { getLocalGems, saveLocalGems, GEMS_UPDATE_EVENT, getLocalXP, saveLocalXP, XP_UPDATE_EVENT } from "@/lib/xp"
+import {
+  getLocalGems,
+  saveLocalGems,
+  GEMS_UPDATE_EVENT,
+  getLocalXP,
+  saveLocalXP,
+  XP_UPDATE_EVENT,
+} from "@/lib/xp"
 import { BookOpen, Flame, Heart, Target, Zap } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
@@ -234,7 +241,7 @@ export function tryCompleteSpecialQuest(actionId: string): void {
   try {
     localStorage.setItem(
       scopedKey(SPECIAL_QUEST_STORAGE_BASE),
-      JSON.stringify({ lastCompletedDate: todayKey(), lastCompletedQuestId: quest.id }),
+      JSON.stringify({ lastCompletedDate: todayKey(), lastCompletedQuestId: quest.id })
     )
     const uid = getUserId()
     if (uid) {

@@ -6,11 +6,7 @@ import { PillTabs } from "@/components/PillTabs"
 import { FavoritesEmptyState } from "@/components/favorites/FavoritesEmptyState"
 import { AppBottomNav } from "@/components/AppBottomNav"
 import { FavoriteSuggestionItem } from "@/components/favorites/FavoriteSuggestionItem"
-import {
-  FAVORITES_TABS,
-  FAVORITES_SUGGESTIONS,
-  type FavoriteTabKey,
-} from "@/data/favoritesData"
+import { FAVORITES_TABS, FAVORITES_SUGGESTIONS, type FavoriteTabKey } from "@/data/favoritesData"
 import { sileo } from "sileo"
 
 export default function Favorites() {
@@ -18,7 +14,10 @@ export default function Favorites() {
   const [activeTab, setActiveTab] = useState<FavoriteTabKey>("prompts")
 
   const handleMenuClick = () => {
-    sileo.info({ title: "Menu de favoritos", description: "Em breve você poderá gerenciar seus favoritos aqui." })
+    sileo.info({
+      title: "Menu de favoritos",
+      description: "Em breve você poderá gerenciar seus favoritos aqui.",
+    })
   }
 
   return (
@@ -61,10 +60,7 @@ export default function Favorites() {
           </h2>
           <div className="flex flex-col gap-2">
             {FAVORITES_SUGGESTIONS.map((suggestion) => (
-              <FavoriteSuggestionItem
-                key={suggestion.id}
-                suggestion={suggestion}
-              />
+              <FavoriteSuggestionItem key={suggestion.id} suggestion={suggestion} />
             ))}
           </div>
         </section>

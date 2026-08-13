@@ -1,4 +1,4 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import {
   ArrowLeft,
   Heart,
@@ -8,83 +8,96 @@ import {
   Camera,
   Upload,
   ImageIcon,
-} from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { advanceModule, type TrackId } from "@/lib/moduleProgress";
-import { getActivities, getProofTask, TRACK_TOTALS, isMatch, isOrder, isEssay, isContentSlide } from "@/lib/lessonContent";
-import type { LessonActivity } from "@/lib/lessonContent";
-import { ActivityRenderer } from "@/components/activities/ActivityRenderer";
-import { scopedKey } from "@/lib/userScope";
-import { completeMission } from "@/lib/missions";
-import { useAuth } from "@/hooks/useAuth";
-import { useLives } from "@/contexts/useLives";
-import { useAchievements } from "@/hooks/useAchievements";
-import { awardXP, saveLocalGems, getLocalGems, GEMS_UPDATE_EVENT } from "@/lib/xp";
-import { playCorrectSound, playLessonCompleteSound } from "@/lib/sound";
-import { TrailCompleteCelebration } from "@/components/TrailCompleteCelebration";
+} from "lucide-react"
+import { useEffect, useMemo, useRef, useState } from "react"
+import { sileo } from "sileo"
+import { advanceModule, type TrackId } from "@/lib/moduleProgress"
+import { uploadLessonProof } from "@/lib/db"
+import {
+  getActivities,
+  getProofTask,
+  TRACK_TOTALS,
+  isMatch,
+  isOrder,
+  isEssay,
+  isContentSlide,
+} from "@/lib/lessonContent"
+import type { LessonActivity, Question } from "@/lib/lessonContent"
+import { ActivityRenderer } from "@/components/activities/ActivityRenderer"
+import { scopedKey } from "@/lib/userScope"
+import { completeMission } from "@/lib/missions"
+import { useAuth } from "@/hooks/useAuth"
+import { useLives } from "@/contexts/useLives"
+import { useAchievements } from "@/hooks/useAchievements"
+import { awardXP, saveLocalGems, getLocalGems, GEMS_UPDATE_EVENT } from "@/lib/xp"
+import { playCorrectSound, playLessonCompleteSound } from "@/lib/sound"
+import { TrailCompleteCelebration } from "@/components/TrailCompleteCelebration"
 
 const proofKey = (track: TrackId, module: number) =>
-  scopedKey(`promptlabz:proof:${track}:${module}`);
+  scopedKey(`promptlabz:proof:${track}:${module}`)
 
 function readProof(track: TrackId, module: number): string | null {
-  if (typeof window === "undefined") return null;
+  if (typeof window === "undefined") return null
   try {
-    return localStorage.getItem(proofKey(track, module));
+    return localStorage.getItem(proofKey(track, module))
   } catch {
-    return null;
+    return null
   }
 }
 
 export default function LessonPage() {
-  const [searchParams] = useSearchParams();
-  const track = (searchParams.get("track") as TrackId) || "a1";
-  const module = parseInt(searchParams.get("module") || "0", 10);
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams()
+  const track = (searchParams.get("track") as TrackId) || "a1"
+  const module = parseInt(searchParams.get("module") || "0", 10)
+  const navigate = useNavigate()
 
-  const { user } = useAuth();
-  const { lives, consumeLife, awardPerfectBonus } = useLives();
-  const { checkLessonComplete } = useAchievements();
-  const [trailCelebration, setTrailCelebration] = useState<{ trackLabel: string } | null>(null);
-  const pendingLevelUpRef = useRef<{ newLevel: number; prevLevel: number } | null>(null);
+  const { user } = useAuth()
+  const { lives, consumeLife, awardPerfectBonus } = useLives()
+  const { checkLessonComplete } = useAchievements()
+  const [trailCelebration, setTrailCelebration] = useState<{ trackLabel: string } | null>(null)
+  const pendingLevelUpRef = useRef<{ newLevel: number; prevLevel: number } | null>(null)
 
-  const ACTIVITIES = useMemo(() => getActivities(track, module), [track, module]);
-  const proofTask = useMemo(() => getProofTask(track, module), [track, module]);
-  const [step, setStep] = useState(0);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [matchOrderAnswers, setMatchOrderAnswers] = useState<Record<string, Record<string, string>>>({});
-  const [proofDataUrl, setProofDataUrl] = useState<string | null>(() => readProof(track, module));
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const rewardGrantedRef = useRef(false);
-  const completionSoundPlayedRef = useRef(false);
-  const scoreRef = useRef(0);
+  const ACTIVITIES = useMemo(() => getActivities(track, module), [track, module])
+  const proofTask = useMemo(() => getProofTask(track, module), [track, module])
+  const [step, setStep] = useState(0)
+  const [selected, setSelected] = useState<string | null>(null)
+  const [answers, setAnswers] = useState<Record<string, string>>({})
+  const [matchOrderAnswers, setMatchOrderAnswers] = useState<
+    Record<string, Record<string, string>>
+  >({})
+  const [proofDataUrl, setProofDataUrl] = useState<string | null>(() => readProof(track, module))
+  const [proofUploading, setProofUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const rewardGrantedRef = useRef(false)
+  const completionSoundPlayedRef = useRef(false)
+  const scoreRef = useRef(0)
 
   useEffect(() => {
-    setProofDataUrl(readProof(track, module));
-  }, [track, module]);
+    setProofDataUrl(readProof(track, module))
+  }, [track, module])
 
   // React Router keeps the same component instance when only the query
   // string changes (e.g. clicking "Próxima aula"), so quiz progress from
   // the previous lesson must be reset explicitly when track/module changes.
   useEffect(() => {
-    setStep(0);
-    setSelected(null);
-    setAnswers({});
-    setMatchOrderAnswers({});
-    rewardGrantedRef.current = false;
-    completionSoundPlayedRef.current = false;
-    scoreRef.current = 0;
-  }, [track, module]);
+    setStep(0)
+    setSelected(null)
+    setAnswers({})
+    setMatchOrderAnswers({})
+    rewardGrantedRef.current = false
+    completionSoundPlayedRef.current = false
+    scoreRef.current = 0
+  }, [track, module])
 
-  const finished = step >= ACTIVITIES.length;
-  const currentActivity = ACTIVITIES[step] as LessonActivity | undefined;
-  const isCurrentSlide = currentActivity ? isContentSlide(currentActivity) : false;
-  const answered = isCurrentSlide || selected !== null || !!matchOrderAnswers[step];
-  const isCurrentEssay = currentActivity ? isEssay(currentActivity) : false;
-  const isLast = step === ACTIVITIES.length - 1;
+  const finished = step >= ACTIVITIES.length
+  const currentActivity = ACTIVITIES[step] as LessonActivity | undefined
+  const isCurrentSlide = currentActivity ? isContentSlide(currentActivity) : false
+  const answered = isCurrentSlide || selected !== null || !!matchOrderAnswers[step]
+  const isCurrentEssay = currentActivity ? isEssay(currentActivity) : false
+  const isLast = step === ACTIVITIES.length - 1
 
   // Slides não contam para score — só as atividades reais
-  const scorableActivities = ACTIVITIES.filter((a) => !isContentSlide(a));
+  const scorableActivities = ACTIVITIES.filter((a) => !isContentSlide(a))
 
   // Score: essays sempre contam 1 se respondidas; match/order por pares; MC/fill-blank por correct
   const score = ACTIVITIES.reduce((acc, activity, i) => {
@@ -111,18 +124,20 @@ export default function LessonPage() {
     }
     const answer = answers[activity.id]
     if (!answer) return acc
-    return acc + (answer === (activity as any).correct ? 1 : 0)
+    return acc + (answer === (activity as Question).correct ? 1 : 0)
   }, 0)
 
   // Keep scoreRef in sync so the lessonComplete effect reads the latest value
-  useEffect(() => { scoreRef.current = score }, [score]);
+  useEffect(() => {
+    scoreRef.current = score
+  }, [score])
 
   function pick(id: string) {
     if (answered || !currentActivity) return
     setSelected(id)
     setAnswers((prev) => ({ ...prev, [currentActivity.id]: id }))
     // Consume a life when the user picks a wrong answer on MC/fill-blank
-    const correct = (currentActivity as any).correct as string | undefined
+    const correct = (currentActivity as Question).correct as string | undefined
     if (correct && id !== correct) {
       consumeLife()
     } else if (correct) {
@@ -145,7 +160,9 @@ export default function LessonPage() {
     setMatchOrderAnswers((prev) => ({ ...prev, [step]: pairs }))
     setSelected("__order_done__")
     if (isOrder(currentActivity)) {
-      const allCorrect = Object.entries(currentActivity.correctPairs).every(([k, v]) => pairs[k] === v)
+      const allCorrect = Object.entries(currentActivity.correctPairs).every(
+        ([k, v]) => pairs[k] === v
+      )
       if (allCorrect) playCorrectSound()
     }
   }
@@ -157,89 +174,107 @@ export default function LessonPage() {
   }
 
   function next() {
-    setSelected(null);
-    setStep((s) => s + 1);
+    setSelected(null)
+    setStep((s) => s + 1)
   }
 
   function handleFile(file: File) {
-    if (!file.type.startsWith("image/")) return;
-    const reader = new FileReader();
+    if (!file.type.startsWith("image/")) return
+    const reader = new FileReader()
     reader.onload = () => {
-      const dataUrl = String(reader.result ?? "");
-      if (!dataUrl) return;
+      const dataUrl = String(reader.result ?? "")
+      if (!dataUrl) return
       try {
-        localStorage.setItem(proofKey(track, module), dataUrl);
+        localStorage.setItem(proofKey(track, module), dataUrl)
       } catch {
         // quota full: keep in memory only
       }
-      setProofDataUrl(dataUrl);
-    };
-    reader.readAsDataURL(file);
+      setProofDataUrl(dataUrl)
+    }
+    reader.readAsDataURL(file)
+
+    // Offline-first: the localStorage copy above is what the UI reads from
+    // immediately. This upload persists the actual file server-side so it
+    // survives a device/browser switch — best-effort, doesn't block the UI.
+    if (user?.id) {
+      setProofUploading(true)
+      const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg"
+      uploadLessonProof(user.id, `${track}-${module}.${ext}`, file)
+        .then(({ error }) => {
+          if (error) {
+            sileo.error({
+              title: "Não foi possível salvar a comprovação no servidor",
+              description: "Ela continua salva neste dispositivo.",
+            })
+          }
+        })
+        .finally(() => setProofUploading(false))
+    }
   }
 
   function clearProof() {
     try {
-      localStorage.removeItem(proofKey(track, module));
+      localStorage.removeItem(proofKey(track, module))
     } catch {
       // ignore
     }
-    setProofDataUrl(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
+    setProofDataUrl(null)
+    if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
-  const progress = Math.round(((step + (answered ? 1 : 0)) / ACTIVITIES.length) * 100);
+  const progress = Math.round(((step + (answered ? 1 : 0)) / ACTIVITIES.length) * 100)
 
-  const perfect = finished && score === scorableActivities.length;
-  const needsProof = !!proofTask;
-  const proofDone = !!proofDataUrl;
-  const lessonComplete = perfect && (!needsProof || proofDone);
-  const isLastLesson = module === TRACK_TOTALS[track] - 1;
-  const showsCompletionScreen = finished && (!needsProof || proofDone);
-
-  useEffect(() => {
-    if (!showsCompletionScreen || completionSoundPlayedRef.current) return;
-    completionSoundPlayedRef.current = true;
-    playLessonCompleteSound();
-  }, [showsCompletionScreen]);
+  const perfect = finished && score === scorableActivities.length
+  const needsProof = !!proofTask
+  const proofDone = !!proofDataUrl
+  const lessonComplete = perfect && (!needsProof || proofDone)
+  const isLastLesson = module === TRACK_TOTALS[track] - 1
+  const showsCompletionScreen = finished && (!needsProof || proofDone)
 
   useEffect(() => {
-    if (!lessonComplete || rewardGrantedRef.current) return;
-    rewardGrantedRef.current = true;
-    advanceModule(TRACK_TOTALS[track], track);
-    completeMission("lesson");
+    if (!showsCompletionScreen || completionSoundPlayedRef.current) return
+    completionSoundPlayedRef.current = true
+    playLessonCompleteSound()
+  }, [showsCompletionScreen])
+
+  useEffect(() => {
+    if (!lessonComplete || rewardGrantedRef.current) return
+    rewardGrantedRef.current = true
+    advanceModule(TRACK_TOTALS[track], track)
+    completeMission("lesson")
     // Save XP and gems earned in this lesson
-    let leveledUp: { newLevel: number; prevLevel: number } | null = null;
+    let leveledUp: { newLevel: number; prevLevel: number } | null = null
     if (user?.id) {
-      const earned = scoreRef.current;
-      const xpGain = earned * 25;
-      const gemGain = earned * 3;
-      const xpResult = awardXP(user.id, xpGain);
+      const earned = scoreRef.current
+      const xpGain = earned * 25
+      const gemGain = earned * 3
+      const xpResult = awardXP(user.id, xpGain)
       if (xpResult.leveledUp) {
-        leveledUp = { newLevel: xpResult.newLevel, prevLevel: xpResult.prevLevel };
+        leveledUp = { newLevel: xpResult.newLevel, prevLevel: xpResult.prevLevel }
       }
-      saveLocalGems(user.id, getLocalGems(user.id) + gemGain);
-      window.dispatchEvent(new Event(GEMS_UPDATE_EVENT));
+      saveLocalGems(user.id, getLocalGems(user.id) + gemGain)
+      window.dispatchEvent(new Event(GEMS_UPDATE_EVENT))
     }
     // Check achievements (lessonComplete implies perfect == true)
-    checkLessonComplete(true);
+    checkLessonComplete(true)
     // Award a bonus life for perfect completion
-    awardPerfectBonus();
+    awardPerfectBonus()
 
     // Finishing the last lesson of a track completes the whole trail —
     // celebrate that first, then hand off to the level-up screen if the
     // same lesson also crossed a level threshold.
     if (isLastLesson) {
-      pendingLevelUpRef.current = leveledUp;
-      setTrailCelebration({ trackLabel: track.toUpperCase() });
+      pendingLevelUpRef.current = leveledUp
+      setTrailCelebration({ trackLabel: track.toUpperCase() })
     } else if (leveledUp) {
-      const t = setTimeout(() => navigate("/level-up", { state: leveledUp }), 1200);
-      return () => clearTimeout(t);
+      const t = setTimeout(() => navigate("/level-up", { state: leveledUp }), 1200)
+      return () => clearTimeout(t)
     }
-  }, [lessonComplete, track]);
+  }, [lessonComplete, track])
 
   if (finished && needsProof && !proofDone) {
     return (
-      <div className="flex min-h-screen flex-col bg-white">
+      <div className="flex min-h-screen flex-col bg-white lg:mx-auto lg:max-w-2xl">
         <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-stroke-muted bg-card px-4 py-3">
           <Link to="/learn" className="rounded-full p-1.5 text-forest hover:bg-surface-success">
             <ArrowLeft className="h-5 w-5" />
@@ -274,8 +309,12 @@ export default function LessonPage() {
             className="mt-6 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-stroke-light bg-card px-4 py-10 text-center transition-colors hover:border-emerald hover:bg-surface-success/40"
           >
             <Upload className="h-8 w-8 text-emerald" />
-            <p className="text-sm font-bold text-foreground-dark">Toque para enviar um print</p>
-            <p className="text-[11px] text-foreground-tertiary">PNG ou JPG · da galeria ou câmera</p>
+            <p className="text-sm font-bold text-foreground-dark">
+              {proofUploading ? "Enviando..." : "Toque para enviar um print"}
+            </p>
+            <p className="text-[11px] text-foreground-tertiary">
+              PNG ou JPG · da galeria ou câmera
+            </p>
           </label>
           <input
             id="proof-file"
@@ -284,35 +323,36 @@ export default function LessonPage() {
             accept="image/*"
             capture="environment"
             className="hidden"
+            disabled={proofUploading}
             onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) handleFile(f);
+              const f = e.target.files?.[0]
+              if (f) handleFile(f)
             }}
           />
 
           <div className="mt-4 flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2 text-[11px] text-amber-800">
             <ImageIcon className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>
-              O print fica salvo só no seu dispositivo. Ele serve para você validar sua prática —
-              o módulo só é concluído após o envio.
+              O print fica salvo neste dispositivo e sincronizado com sua conta. Ele serve para você
+              validar sua prática — o módulo só é concluído após o envio.
             </span>
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   if (finished) {
     return (
-      <div className="flex min-h-screen flex-col bg-white">
+      <div className="flex min-h-screen flex-col bg-white lg:mx-auto lg:max-w-2xl">
         <TrailCompleteCelebration
           active={!!trailCelebration}
           trackLabel={trailCelebration?.trackLabel ?? track.toUpperCase()}
           onClose={() => {
-            setTrailCelebration(null);
-            const pending = pendingLevelUpRef.current;
-            pendingLevelUpRef.current = null;
-            if (pending) navigate("/level-up", { state: pending });
+            setTrailCelebration(null)
+            const pending = pendingLevelUpRef.current
+            pendingLevelUpRef.current = null
+            if (pending) navigate("/level-up", { state: pending })
           }}
         />
         <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-stroke-muted bg-card px-4 py-3">
@@ -370,8 +410,8 @@ export default function LessonPage() {
           </div>
 
           <div className="mt-6 flex w-full max-w-xs flex-col gap-3">
-            {perfect && (
-              isLastLesson ? (
+            {perfect &&
+              (isLastLesson ? (
                 <Link
                   to="/module-exam"
                   className="flex w-full items-center justify-center gap-2 rounded-2xl bg-luxury py-4 text-sm font-extrabold uppercase tracking-wide text-luxury-foreground shadow-lg shadow-luxury/30 transition-transform active:scale-[0.98]"
@@ -387,8 +427,7 @@ export default function LessonPage() {
                   Próxima aula
                   <ArrowRight className="h-4 w-4" />
                 </Link>
-              )
-            )}
+              ))}
             <Link
               to="/learn"
               className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-emerald bg-card py-3 text-sm font-bold text-emerald hover:bg-surface-success"
@@ -397,9 +436,9 @@ export default function LessonPage() {
             </Link>
             <button
               onClick={() => {
-                setStep(0);
-                setSelected(null);
-                setAnswers({});
+                setStep(0)
+                setSelected(null)
+                setAnswers({})
               }}
               className="rounded-2xl border-2 border-stroke-light bg-card py-3 text-sm font-bold text-foreground-dark transition-colors hover:bg-surface-soft"
             >
@@ -408,11 +447,11 @@ export default function LessonPage() {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-white lg:mx-auto lg:max-w-2xl">
       <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-stroke-muted bg-card px-4 py-3">
         <Link to="/learn" className="rounded-full p-1.5 text-forest hover:bg-surface-success">
           <ArrowLeft className="h-5 w-5" />
@@ -455,13 +494,13 @@ export default function LessonPage() {
               {isCurrentEssay
                 ? "Escreva sua resposta para continuar"
                 : isMatch(currentActivity!) || isOrder(currentActivity!)
-                ? "Conecte todos os itens para continuar"
-                : "Selecione uma opção"}
+                  ? "Conecte todos os itens para continuar"
+                  : "Selecione uma opção"}
               <Send className="h-4 w-4" />
             </div>
           )}
         </div>
       </div>
     </div>
-  );
+  )
 }

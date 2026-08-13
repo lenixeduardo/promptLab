@@ -1,0 +1,32 @@
+dist
+android
+node_modules
+pnpm-lock.yaml
+package-lock.json
+coverage
+
+# Vendored/installed skills, agent config, scratch output — not project source
+.claude
+.cortex
+.superpowers
+.agents
+skills
+skills-lock.json
+routines
+graphify-out
+docs
+.github
+
+# Root-level narrative docs — content authored deliberately, reformatting is
+# noise unrelated to code style; format explicitly when editing one.
+/*.md
+!/README.md
+!/CHANGELOG.md
+!/TRADEOFFS.md
+
+# Standalone one-off demo/scratch HTML kept for reference, not served by the app
+/home-validation.html
+/homepage-with-inter.html
+
+# Nested doc, not root-level narrative docs but same reasoning
+public/assets/mascot-icons/README.md

@@ -1,18 +1,11 @@
 import { useMemo, useCallback, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import * as Icons from "@/lib/icons"
-import {
-  TRENDING_SKILLS,
-  type TrendingSkill,
-  type SkillCategory,
-} from "@/data/trendingSkillsData"
+import { TRENDING_SKILLS, type TrendingSkill, type SkillCategory } from "@/data/trendingSkillsData"
 import { useFavorites } from "@/hooks/useFavorites"
 import { useAchievements } from "@/hooks/useAchievements"
 import { trackSkillFavorited } from "@/lib/analytics"
-import {
-  SKILL_CATEGORIES,
-  SkillsGridView,
-} from "@/components/skills/shared"
+import { SKILL_CATEGORIES, SkillsGridView } from "@/components/skills/shared"
 
 export default function SkillsSection() {
   const navigate = useNavigate()
@@ -42,21 +35,30 @@ export default function SkillsSection() {
     )
   }, [searchQuery, filteredByCat])
 
-  const handleToggleFav = useCallback((skillName: string) => {
-    const wasFav = isFavorite(skillName)
-    toggleFavorite(skillName)
-    if (!wasFav) {
-      trackSkillFavorited(skillName)
-      const newAchs = achievements.checkFavorites(favorites.length + 1)
-      if (newAchs.length > 0 && import.meta.env.DEV) {
-        console.log("[DEV] Novas conquistas desbloqueadas:", newAchs.map((a) => a.title))
+  const handleToggleFav = useCallback(
+    (skillName: string) => {
+      const wasFav = isFavorite(skillName)
+      toggleFavorite(skillName)
+      if (!wasFav) {
+        trackSkillFavorited(skillName)
+        const newAchs = achievements.checkFavorites(favorites.length + 1)
+        if (newAchs.length > 0 && import.meta.env.DEV) {
+          console.log(
+            "[DEV] Novas conquistas desbloqueadas:",
+            newAchs.map((a) => a.title)
+          )
+        }
       }
-    }
-  }, [isFavorite, toggleFavorite, achievements, favorites.length])
+    },
+    [isFavorite, toggleFavorite, achievements, favorites.length]
+  )
 
-  const goToDetail = useCallback((skill: TrendingSkill) => {
-    navigate(`/skill/${encodeURIComponent(skill.name)}`, { state: { skill } })
-  }, [navigate])
+  const goToDetail = useCallback(
+    (skill: TrendingSkill) => {
+      navigate(`/skill/${encodeURIComponent(skill.name)}`, { state: { skill } })
+    },
+    [navigate]
+  )
 
   return (
     <div className="px-4 pt-8 pb-24">
@@ -85,7 +87,10 @@ export default function SkillsSection() {
             className="flex-1 bg-transparent text-sm text-foregroundDark placeholder:text-foregroundPlaceholder focus:outline-none"
           />
           {searchQuery && (
-            <button onClick={() => setSearchQuery("")} className="rounded-full p-1 text-foregroundMuted hover:bg-pageBgLight">
+            <button
+              onClick={() => setSearchQuery("")}
+              className="rounded-full p-1 text-foregroundMuted hover:bg-pageBgLight"
+            >
               <Icons.X className="h-4 w-4" />
             </button>
           )}

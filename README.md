@@ -1,7 +1,9 @@
 # PromptLabz
 
 **Plataforma de aprendizado de prompt engineering para estudantes e criadores que querem dominar IA sem depender de aulas soltas ou progresso manual.**
-→
+
+> **MVP (v0.1) em 5 funcionalidades:** autenticação · trilhas com lições interativas · sistema de vidas · central de skills · perfil/progresso. Esse core validou a hipótese do produto; tudo mais abaixo foi construído depois, incrementalmente, em v0.2/v0.3. Escopo exato em [PRODUCT.md](./PRODUCT.md#mvp-v01--escopo-real).
+
 ---
 
 ## O que é
@@ -12,7 +14,13 @@ PromptLabz ajuda estudantes em transição de carreira, criadores de conteúdo e
 
 ## Funcionalidades
 
+Estado atual do produto (v0.3) — MVP + tudo que foi entregue depois, incrementalmente. Ver [ROADMAP.md](./ROADMAP.md) para o que foi entregue em cada versão.
+
+<details>
+<summary><strong>Ver todas as funcionalidades entregues (clique para expandir)</strong></summary>
+
 ### Aprendizado e Trilhas
+
 - **Autenticação completa** — email/senha, Google OAuth, Apple OAuth, reset de senha via email personalizado com mascote
 - **Trilhas de Aprendizado** — módulos sequenciais com lições interativas, feedback imediato e progresso persistido
 - **Módulo de Exame** — avaliação ao término de módulos para validar aprendizado
@@ -21,6 +29,7 @@ PromptLabz ajuda estudantes em transição de carreira, criadores de conteúdo e
 - **Onboarding** — fluxo de boas-vindas para novos usuários
 
 ### Ferramentas de Prompt
+
 - **PromptLab** — editor interativo com avaliação em tempo real (clareza, especificidade, score)
 - **PromptAnalyzer** — análise de conversas/mensagens com métricas de qualidade e sugestões
 - **PromptEnhancer** — melhoria automática de prompts com sugestões contextuais
@@ -30,6 +39,7 @@ PromptLabz ajuda estudantes em transição de carreira, criadores de conteúdo e
 - **Biblioteca de Prompts** — explorar, filtrar e usar prompts prontos por categoria
 
 ### Gamificação
+
 - **Sistema de Vidas** — 5 vidas que se regeneram com o tempo; perde ao errar, incentiva foco
 - **XP e Níveis** — ganhe XP completando lições; suba de nível a cada 500 XP
 - **Gemas** — moeda in-game ganha por conquistas e missões; gasta na Loja
@@ -42,12 +52,14 @@ PromptLabz ajuda estudantes em transição de carreira, criadores de conteúdo e
 - **Ranking** — pódio com top 3 e lista completa de usuários por XP
 
 ### Conteúdo e Comunidade
+
 - **Feed de Notícias** — notícias diárias de tecnologia via GitHub Actions (cron 07:00 UTC)
 - **Comunidade** — tela de comunidade e interação social
 - **Roadmap** — página com o roadmap público do produto
 - **Quiz Rápido** — quizzes de conhecimento com tela de resultado
 
 ### Perfil e Configurações
+
 - **Perfil com Avatar** — customização de avatar, nome e acompanhamento de progresso por categoria
 - **Configurações** — preferências do usuário e conta
 - **Tema claro/escuro** — suporte completo a dark mode com `ThemeContext` e `ThemeToggle`
@@ -58,28 +70,31 @@ PromptLabz ajuda estudantes em transição de carreira, criadores de conteúdo e
 - **Termos e Privacidade** — páginas legais
 
 ### Infraestrutura
+
 - **Progresso offline-first** — salvo imediatamente em `localStorage`, sincronizado com Supabase ao reconectar
 - **Bottom Navigation Bar** (`AppBottomNav`): navegação inferior fixa com ícones (Início, Trilha, Laboratório, Desafios, Notícias, Perfil)
 - **Analytics** — PostHog para eventos de produto + Google Ads/GA4 para conversões
 - **Error tracking** — Sentry integrado com painel de auditoria interno (`ErrorTrackingDashboard`)
 - **Android** — app nativo via Capacitor (builds debug e release com Gradle)
 
+</details>
+
 ---
 
 ## Stack
 
-| Tecnologia | Por quê |
-|------------|---------|
-| React 18 + Vite | SPA rápida; Vite oferece HMR instantâneo e build otimizado |
-| TypeScript | Contratos claros entre componentes, hooks e camada de dados |
-| Tailwind CSS | Estilo utilitário sem CSS separado; consistência visual fácil |
-| Supabase | Auth + Postgres + RLS gerenciado — sem servidor próprio |
-| Resend | Emails transacionais com template HTML próprio (mascote da marca) |
-| Capacitor | Empacotamento do SPA como app Android nativo sem reescrever código |
-| PostHog | Analytics de produto com eventos customizados por fluxo |
-| Sentry | Error tracking e monitoramento em produção |
-| Vitest + Testing Library | Testes unitários e de UI rápidos, compatível com Vite |
-| GitHub Actions | CI com typecheck → lint → test → build em todo PR; cron de notícias |
+| Tecnologia               | Por quê                                                             |
+| ------------------------ | ------------------------------------------------------------------- |
+| React 18 + Vite          | SPA rápida; Vite oferece HMR instantâneo e build otimizado          |
+| TypeScript               | Contratos claros entre componentes, hooks e camada de dados         |
+| Tailwind CSS             | Estilo utilitário sem CSS separado; consistência visual fácil       |
+| Supabase                 | Auth + Postgres + RLS gerenciado — sem servidor próprio             |
+| Resend                   | Emails transacionais com template HTML próprio (mascote da marca)   |
+| Capacitor                | Empacotamento do SPA como app Android nativo sem reescrever código  |
+| PostHog                  | Analytics de produto com eventos customizados por fluxo             |
+| Sentry                   | Error tracking e monitoramento em produção                          |
+| Vitest + Testing Library | Testes unitários e de UI rápidos, compatível com Vite               |
+| GitHub Actions           | CI com typecheck → lint → test → build em todo PR; cron de notícias |
 
 ---
 
@@ -98,6 +113,7 @@ Browser (React SPA)          Android (Capacitor)
 ```
 
 **Padrões principais:**
+
 - **Offline-first**: progresso salvo em `localStorage` antes de sincronizar com o banco
 - **Lazy loading**: todas as páginas carregadas sob demanda com `React.lazy()`
 - **Context API**: 4 contextos (Auth, Lives, Achievements, Theme) com escopo bem definido
@@ -110,6 +126,7 @@ Browser (React SPA)          Android (Capacitor)
 ## Como Rodar Localmente
 
 ### Pré-requisitos
+
 - Node.js 22+
 - pnpm 9+
 
@@ -117,8 +134,8 @@ Browser (React SPA)          Android (Capacitor)
 
 ```bash
 # 1. Clone e instale
-git clone https://github.com/lenixeduardo/promptLab.git
-cd promptLab
+git clone https://github.com/lenixeduardo/promptLabz.git
+cd promptLabz
 pnpm install
 
 # 2. Configure as variáveis de ambiente
@@ -164,13 +181,14 @@ pnpm android:build:release  # APK de release
 
 ```bash
 pnpm typecheck        # TypeScript sem erros
-pnpm lint             # ESLint sem warnings
-pnpm test             # Vitest (248 testes — unit + integração + UI)
-pnpm test:e2e         # Playwright E2E
+pnpm lint             # ESLint (0 erros; warnings de qualidade visíveis, não bloqueiam)
+pnpm format:check     # Prettier — formatação consistente
+pnpm test             # Vitest (302 testes — unit + integração + UI)
+pnpm test:e2e         # Playwright E2E (6 specs de fluxos críticos)
 pnpm build            # Build de produção
 ```
 
-**Cobertura atual:** hooks, components, pages, contexts — 32 arquivos de teste.
+**Cobertura atual:** hooks, components, pages, contexts — 36 arquivos de teste Vitest + 6 specs Playwright.
 
 ---
 
@@ -178,13 +196,17 @@ pnpm build            # Build de produção
 
 > Acesse em: **[promptlabz.vercel.app](https://promptlabz.vercel.app)**
 
-| | |
-|---|---|
-| **Home** — Progresso, streak, trilha e acesso rápido | **Trilha de Aprendizado** — Módulos sequenciais com lições interativas |
-| **Ranking** — Pódio com top 3 e lista de usuários | **Skills** — 80+ skills com busca, filtros e favoritos |
-| **PromptLab** — Editor com avaliação em tempo real | **PromptAnalyzer** — Análise de prompts com métricas de clareza |
-| **Loja** — Avatares e power-ups comprados com gemas | **Perfil** — Avatar, XP, gemas, conquistas e certificados |
-| **Dark mode** — Tema claro/escuro em todo o app | **Notícias** — Feed diário de tecnologia atualizado via cron |
+| Home                                                            | Atividade interativa                                         |
+| --------------------------------------------------------------- | ------------------------------------------------------------ |
+| ![Home — progresso, streak e trilha](./homepage-screenshot.png) | ![Atividade de lição em andamento](./activity-demo-full.png) |
+
+| Preencher lacuna (respondido)                                      | Ordenar etapas                                  |
+| ------------------------------------------------------------------ | ----------------------------------------------- |
+| ![Fill-in-the-blank respondido](./activity-fillblank-answered.png) | ![Atividade de ordenação](./activity-order.png) |
+
+| Combinar pares                                       | Home (mobile)                                                |
+| ---------------------------------------------------- | ------------------------------------------------------------ |
+| ![Atividade de combinar pares](./activity-match.png) | ![Home em viewport mobile](./homepage-mobile-screenshot.png) |
 
 ---
 
@@ -193,6 +215,7 @@ pnpm build            # Build de produção
 Veja o guia completo em [DEPLOYMENT.md](./DEPLOYMENT.md).
 
 **Resumo:**
+
 1. Configure projeto no Supabase e rode as migrations (`supabase db push`)
 2. Configure Google/Apple OAuth no painel do Supabase
 3. Deploy das Edge Functions (`send-auth-email`, `daily-tech-news`, `stripe-checkout`) com Resend e segredos configurados
@@ -221,6 +244,8 @@ android/           # Projeto Capacitor Android (gerado — não editar manualmen
 
 ## Decisões Técnicas
 
+> Versão resumida abaixo. Lista completa + próximos passos priorizados em [TRADEOFFS.md](./TRADEOFFS.md).
+
 - **Supabase** em vez de Firebase: SQL + RLS nativo permite segurança declarativa e queries complexas para analytics futuro
 - **Conteúdo em `src/data`** em vez de CMS: acelera o MVP — migração para DB planejada na v0.3
 - **React SPA** em vez de Next.js: produto não é SEO-crítico; SSR traria complexidade sem benefício real
@@ -238,21 +263,39 @@ android/           # Projeto Capacitor Android (gerado — não editar manualmen
 > **Acesse em:** [promptlabz.vercel.app](https://promptlabz.vercel.app)
 >
 > **Ou rode localmente:**
-> 1. Clone o repositório: `git clone https://github.com/lenixeduardo/promptLab.git`
+>
+> 1. Clone o repositório: `git clone https://github.com/lenixeduardo/promptLabz.git`
 > 2. Instale as dependências: `pnpm install`
 > 3. Inicie o servidor: `pnpm dev`
 > 4. Acesse `http://localhost:5173` — o app funciona **sem credenciais Supabase** (modo degradado com dados locais)
 
 ---
 
+## Credenciais Demo
+
+Para testar o fluxo completo (login, progresso, XP, streak, conquistas) sem jogar do zero, popule o banco local/dev com 5 usuários de teste já com histórico:
+
+```bash
+SUPABASE_SERVICE_ROLE_KEY=... VITE_SUPABASE_URL=... node scripts/seed-test-users.mjs
+```
+
+| Usuário                    | E-mail                        | Senha                  | Perfil                                                              |
+| -------------------------- | ----------------------------- | ---------------------- | ------------------------------------------------------------------- |
+| Ana                        | `teste.ana@promptlabz.dev`    | `TestePromptLabz2026!` | Iniciante, poucos módulos concluídos                                |
+| Bruno, Carla, Diego, Elisa | `teste.{nome}@promptlabz.dev` | `TestePromptLabz2026!` | Progresso crescente por persona (ver `scripts/seed-test-users.mjs`) |
+
+> Requer a service role key do projeto Supabase (nunca rode contra produção sem certeza — cria contas reais).
+
+---
+
 ## Roadmap
 
-| Versão | Foco | Status |
-|--------|------|--------|
-| **v0.1** | MVP: auth, trilhas, skills, gamificação | ✅ Publicado |
-| **v0.2** | Notificações in-app, Favoritos, Premium UI, Ranking, streak, ferramentas de prompt, Android, dark mode | ✅ Concluído |
-| **v0.3** | Stripe real, Sentry, testes E2E, comunidade, PostHog analytics | 🔨 Em desenvolvimento |
-| **v1.0** | Premium real, certificados públicos, PWA offline, Prompt Wars ao vivo | 🔮 Futuro |
+| Versão   | Foco                                                                                                   | Status                |
+| -------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
+| **v0.1** | MVP: auth, trilhas, skills, gamificação                                                                | ✅ Publicado          |
+| **v0.2** | Notificações in-app, Favoritos, Premium UI, Ranking, streak, ferramentas de prompt, Android, dark mode | ✅ Concluído          |
+| **v0.3** | Stripe real, Sentry, testes E2E, comunidade, PostHog analytics                                         | 🔨 Em desenvolvimento |
+| **v1.0** | Premium real, certificados públicos, PWA offline, Prompt Wars ao vivo                                  | 🔮 Futuro             |
 
 → Detalhes e estimativas em [ROADMAP.md](./ROADMAP.md)
 
@@ -260,12 +303,14 @@ android/           # Projeto Capacitor Android (gerado — não editar manualmen
 
 ## Documentação
 
-| Arquivo | Descrição |
-|---------|-----------|
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | Design do sistema, fluxo de dados, banco, decisões |
-| [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) | Tokens de design, paleta, tipografia, componentes, animações |
-| [PRODUCT.md](./PRODUCT.md) | Requisitos, regras de negócio, casos de borda |
-| [PERSONAS.md](./PERSONAS.md) | Perfis dos usuários-alvo |
-| [ROADMAP.md](./ROADMAP.md) | Versões, features planejadas, trade-offs |
-| [DEPLOYMENT.md](./DEPLOYMENT.md) | Guia de deploy Vercel + Supabase + variáveis de ambiente |
-| [CONTRIBUTING.md](./CONTRIBUTING.md) | Como contribuir, convenções, testes |
+| Arquivo                                | Descrição                                                             |
+| -------------------------------------- | --------------------------------------------------------------------- |
+| [ARCHITECTURE.md](./ARCHITECTURE.md)   | Design do sistema, fluxo de dados, banco, decisões                    |
+| [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) | Tokens de design, paleta, tipografia, componentes, animações          |
+| [PRODUCT.md](./PRODUCT.md)             | Requisitos, regras de negócio, casos de borda                         |
+| [PERSONAS.md](./PERSONAS.md)           | Perfis dos usuários-alvo                                              |
+| [ROADMAP.md](./ROADMAP.md)             | Versões, features planejadas, estimativas de esforço                  |
+| [CHANGELOG.md](./CHANGELOG.md)         | Histórico de mudanças por versão (v0.1, v0.2, v0.3...)                |
+| [TRADEOFFS.md](./TRADEOFFS.md)         | Decisões técnicas ("por que X e não Y") e próximos passos priorizados |
+| [DEPLOYMENT.md](./DEPLOYMENT.md)       | Guia de deploy Vercel + Supabase + variáveis de ambiente              |
+| [CONTRIBUTING.md](./CONTRIBUTING.md)   | Como contribuir, convenções, testes                                   |

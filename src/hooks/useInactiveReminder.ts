@@ -8,10 +8,10 @@ import { insertNotification } from "@/lib/db"
 import { supabase } from "@/lib/supabase"
 
 // ── Storage keys ──────────────────────────────────────────────────────────
-const LAST_ACTIVITY_KEY = "promptlabz:lastActivity"       // ISO timestamp
-const REMINDER_ENABLED_KEY = "promptlabz:reminderEnabled"  // "true" | "false"
-const LAST_NOTIFIED_KEY = "promptlabz:lastNotifiedDay"     // "YYYY-MM-DD"
-const HAS_ACCOUNT_KEY = "promptlabz:hasAccount"           // "true" | undefined
+const LAST_ACTIVITY_KEY = "promptlabz:lastActivity" // ISO timestamp
+const REMINDER_ENABLED_KEY = "promptlabz:reminderEnabled" // "true" | "false"
+const LAST_NOTIFIED_KEY = "promptlabz:lastNotifiedDay" // "YYYY-MM-DD"
+const HAS_ACCOUNT_KEY = "promptlabz:hasAccount" // "true" | undefined
 
 // ── Motivational messages ─────────────────────────────────────────────────
 const DAILY_MISSIONS_MESSAGES = [
@@ -60,10 +60,10 @@ function todayKey(): string {
 // ── Check & show notification ─────────────────────────────────────────────
 function checkAndNotify() {
   if (typeof window === "undefined") return
-  if (!("Notification" in window)) return  // browser doesn't support it
-  if (!isReminderEnabled()) return          // user disabled reminders
+  if (!("Notification" in window)) return // browser doesn't support it
+  if (!isReminderEnabled()) return // user disabled reminders
   if (Notification.permission === "denied") return
-  if (!hasAccount()) return                 // only for users with an account
+  if (!hasAccount()) return // only for users with an account
 
   try {
     const lastActivity = localStorage.getItem(LAST_ACTIVITY_KEY)
@@ -108,9 +108,7 @@ function showNotification() {
   // Decide which message to show (50/50 between daily missions and module)
   const useMissionMessage = Math.random() < 0.5
   const title = useMissionMessage ? "🎯 Missões do dia!" : "📚 Hora de aprender!"
-  const body = useMissionMessage
-    ? pickRandom(DAILY_MISSIONS_MESSAGES)
-    : pickRandom(MODULE_MESSAGES)
+  const body = useMissionMessage ? pickRandom(DAILY_MISSIONS_MESSAGES) : pickRandom(MODULE_MESSAGES)
   const url = useMissionMessage ? "/daily-missions" : "/home"
 
   try {
@@ -201,8 +199,8 @@ export function getReminderEnabled(): boolean {
 
 // ── Runner: check then record (preserves ordering) ─────────────────────────
 function runCheck() {
-  checkAndNotify()  // must run BEFORE recordActivity so the 12h check reads the old timestamp
-  recordActivity()  // updates timestamp so future checks work correctly
+  checkAndNotify() // must run BEFORE recordActivity so the 12h check reads the old timestamp
+  recordActivity() // updates timestamp so future checks work correctly
 }
 
 // ── Hook — call once at app root ──────────────────────────────────────────

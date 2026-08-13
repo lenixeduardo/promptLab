@@ -1,15 +1,9 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { supabase } from "@/lib/supabase";
-import { getErrorMessage } from "@/lib/utils";
-import {
-  getUserReview,
-  insertReview,
-  updateReview,
-  deleteReview,
-  DbReview,
-} from "@/lib/db";
+import * as React from "react"
+import { z } from "zod"
+import { getErrorMessage } from "@/lib/utils"
+import { getUserReview, insertReview, updateReview, deleteReview, DbReview } from "@/lib/db"
 import {
   Dialog,
   DialogContent,
@@ -17,158 +11,166 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Star } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/hooks/useAuth";
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Star } from "lucide-react"
+import { Textarea } from "@/components/ui/textarea"
+import { useAuth } from "@/hooks/useAuth"
+
+// Espelha as constraints de `reviews` no banco (rating 1-5, comment <= 2000 chars)
+const reviewSchema = z.object({
+  rating: z.number().int().min(1, "Selecione uma avaliação entre 1 e 5 estrelas").max(5),
+  comment: z
+    .string()
+    .trim()
+    .max(2000, "O comentário pode ter no máximo 2000 caracteres")
+    .optional(),
+})
 
 interface ReviewModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
-export const ReviewModal: React.FC<ReviewModalProps> = ({
-  open,
-  onOpenChange,
-}) => {
-  const { user } = useAuth();
-  const [rating, setRating] = React.useState<number>(0);
-  const [comment, setComment] = React.useState<string>("");
-  const [userReview, setUserReview] = React.useState<DbReview | null>(null);
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string | null>(null);
-  const [success, setSuccess] = React.useState<string | null>(null);
+export const ReviewModal: React.FC<ReviewModalProps> = ({ open, onOpenChange }) => {
+  const { user } = useAuth()
+  const [rating, setRating] = React.useState<number>(0)
+  const [comment, setComment] = React.useState<string>("")
+  const [userReview, setUserReview] = React.useState<DbReview | null>(null)
+  const [loading, setLoading] = React.useState<boolean>(false)
+  const [error, setError] = React.useState<string | null>(null)
+  const [success, setSuccess] = React.useState<string | null>(null)
 
   // Load user's existing review when modal opens or user changes
   React.useEffect(() => {
     if (open && user) {
-      loadUserReview();
+      loadUserReview()
     }
-  }, [open, user]);
+  }, [open, user])
 
   const loadUserReview = async () => {
-    if (!user) return;
+    if (!user) return
 
-    setLoading(true);
+    setLoading(true)
     try {
-      const { data, error } = await getUserReview(user.id);
-      if (error) throw new Error(error);
+      const { data, error } = await getUserReview(user.id)
+      if (error) throw new Error(error)
       if (data) {
-        setUserReview(data);
-        setRating(data.rating);
-        setComment(data.comment || "");
+        setUserReview(data)
+        setRating(data.rating)
+        setComment(data.comment || "")
       } else {
-        setUserReview(null);
-        setRating(0);
-        setComment("");
+        setUserReview(null)
+        setRating(0)
+        setComment("")
       }
     } catch (err) {
-      setError(getErrorMessage(err, "Failed to load review"));
+      setError(getErrorMessage(err, "Failed to load review"))
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleRatingChange = (newRating: number) => {
-    setRating(newRating);
-    setError(null);
-    setSuccess(null);
-  };
+    setRating(newRating)
+    setError(null)
+    setSuccess(null)
+  }
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value);
-    setError(null);
-    setSuccess(null);
-  };
+    setComment(e.target.value)
+    setError(null)
+    setSuccess(null)
+  }
 
   const handleSubmit = async () => {
-    if (rating < 1 || rating > 5) {
-      setError("Please select a rating between 1 and 5 stars");
-      return;
+    const parsed = reviewSchema.safeParse({ rating, comment: comment.trim() || undefined })
+    if (!parsed.success) {
+      setError(parsed.error.issues[0]?.message ?? "Dados inválidos")
+      return
     }
 
     if (!user) {
-      setError("User not authenticated");
-      return;
+      setError("User not authenticated")
+      return
     }
 
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
+    setLoading(true)
+    setError(null)
+    setSuccess(null)
 
     try {
-      let result;
+      let result
       if (userReview) {
         // Update existing review
         result = await updateReview(userReview.id, user.id, {
           rating,
           comment: comment.trim() || null,
-        });
+        })
       } else {
         // Insert new review
         result = await insertReview(user.id, {
           rating,
           comment: comment.trim() || null,
-        });
+        })
       }
 
-      if (result.error) throw new Error(result.error);
+      if (result.error) throw new Error(result.error)
 
-      setSuccess("Thank you for your feedback!");
-      setUserReview(result.data);
+      setSuccess("Thank you for your feedback!")
+      setUserReview(result.data)
 
       // Reset form after successful submission
       setTimeout(() => {
-        setRating(0);
-        setComment("");
-        setSuccess(null);
-      }, 2000);
+        setRating(0)
+        setComment("")
+        setSuccess(null)
+      }, 2000)
     } catch (err) {
-      setError(getErrorMessage(err, "Failed to save review"));
+      setError(getErrorMessage(err, "Failed to save review"))
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleDelete = async () => {
-    if (!userReview) return;
+    if (!userReview) return
 
     if (!user) {
-      setError("User not authenticated");
-      return;
+      setError("User not authenticated")
+      return
     }
 
     if (!window.confirm("Are you sure you want to delete your review?")) {
-      return;
+      return
     }
 
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
+    setLoading(true)
+    setError(null)
+    setSuccess(null)
 
     try {
-      const result = await deleteReview(userReview.id, user.id);
-      if (result.error) throw new Error(result.error);
+      const result = await deleteReview(userReview.id, user.id)
+      if (result.error) throw new Error(result.error)
 
-      setSuccess("Review deleted successfully");
-      setUserReview(null);
-      setRating(0);
-      setComment("");
+      setSuccess("Review deleted successfully")
+      setUserReview(null)
+      setRating(0)
+      setComment("")
 
       // Reset form after successful deletion
       setTimeout(() => {
-        setSuccess(null);
-        onOpenChange(false);
-      }, 2000);
+        setSuccess(null)
+        onOpenChange(false)
+      }, 2000)
     } catch (err) {
-      setError(getErrorMessage(err, "Failed to delete review"));
+      setError(getErrorMessage(err, "Failed to delete review"))
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  const stars = Array.from({ length: 5 }, (_, i) => i + 1);
+  const stars = Array.from({ length: 5 }, (_, i) => i + 1)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -212,9 +214,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
                 </button>
               ))}
             </div>
-            <span className="text-sm text-muted-foreground ml-2">
-              {rating} / 5
-            </span>
+            <span className="text-sm text-muted-foreground ml-2">{rating} / 5</span>
           </div>
 
           <div className="space-y-2">
@@ -252,5 +252,5 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

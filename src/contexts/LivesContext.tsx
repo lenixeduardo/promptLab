@@ -5,8 +5,8 @@ import { LivesContext } from "./LivesState"
 
 interface Stored {
   lives: number
-  lastRechargeTime: number   // timestamp of the last full-hour recharge tick
-  lastPerfectDate: string | null  // "YYYY-MM-DD" – daily 100% bonus
+  lastRechargeTime: number // timestamp of the last full-hour recharge tick
+  lastPerfectDate: string | null // "YYYY-MM-DD" – daily 100% bonus
 }
 
 function storageKey(userId: string) {
@@ -36,7 +36,9 @@ export function LivesProvider({ children }: { children: React.ReactNode }) {
 
   // Keep a ref so callbacks can read current state without stale closure
   const ref = useRef(stored)
-  useEffect(() => { ref.current = stored }, [stored])
+  useEffect(() => {
+    ref.current = stored
+  }, [stored])
 
   // Load from localStorage and apply any offline recharge
   useEffect(() => {
@@ -63,7 +65,7 @@ export function LivesProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (stored.lives >= MAX_LIVES) return
     const msLeft = RECHARGE_MS - ((Date.now() - stored.lastRechargeTime) % RECHARGE_MS)
-    const t = setTimeout(() => setStored(prev => applyPassiveRecharge(prev)), msLeft + 200)
+    const t = setTimeout(() => setStored((prev) => applyPassiveRecharge(prev)), msLeft + 200)
     return () => clearTimeout(t)
   }, [stored.lives, stored.lastRechargeTime])
 
@@ -74,14 +76,14 @@ export function LivesProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const consumeLife = useCallback(() => {
-    setStored(prev => ({ ...prev, lives: Math.max(0, prev.lives - 1) }))
+    setStored((prev) => ({ ...prev, lives: Math.max(0, prev.lives - 1) }))
   }, [])
 
   const awardPerfectBonus = useCallback((): boolean => {
     const today = new Date().toISOString().slice(0, 10)
     const s = ref.current
     if (s.lastPerfectDate === today) return false
-    setStored(prev => ({
+    setStored((prev) => ({
       ...prev,
       lives: Math.min(prev.lives + 1, MAX_LIVES),
       lastPerfectDate: today,
@@ -90,14 +92,16 @@ export function LivesProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <LivesContext.Provider value={{
-      lives: stored.lives,
-      maxLives: MAX_LIVES,
-      canPlay: stored.lives > 0,
-      msUntilNextLife,
-      consumeLife,
-      awardPerfectBonus,
-    }}>
+    <LivesContext.Provider
+      value={{
+        lives: stored.lives,
+        maxLives: MAX_LIVES,
+        canPlay: stored.lives > 0,
+        msUntilNextLife,
+        consumeLife,
+        awardPerfectBonus,
+      }}
+    >
       {children}
     </LivesContext.Provider>
   )

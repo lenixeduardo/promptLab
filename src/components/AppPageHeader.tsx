@@ -1,20 +1,20 @@
-import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
-import { cn } from "@/lib/utils";
-import type { ReactNode } from "react";
+import { Link, useNavigate } from "react-router-dom"
+import { ArrowLeft } from "lucide-react"
+import { cn } from "@/lib/utils"
+import type { ReactNode } from "react"
 
 interface AppPageHeaderProps {
-  title: string;
-  subtitle?: string;
+  title: string
+  subtitle?: string
   /** Pass a path to use a <Link> back button, or omit to use navigate(-1) */
-  back?: string;
+  back?: string
   /** Override navigate(-1) with a custom callback (only used when back is not set) */
-  onBack?: () => void;
+  onBack?: () => void
   /** Right-side slot */
-  right?: ReactNode;
+  right?: ReactNode
   /** @deprecated use right */
-  rightSlot?: ReactNode;
-  className?: string;
+  rightSlot?: ReactNode
+  className?: string
 }
 
 export function AppPageHeader({
@@ -26,8 +26,8 @@ export function AppPageHeader({
   rightSlot,
   className,
 }: AppPageHeaderProps) {
-  const navigate = useNavigate();
-  const rightContent = right ?? rightSlot;
+  const navigate = useNavigate()
+  const rightContent = right ?? rightSlot
 
   const backBtn = back ? (
     <Link
@@ -45,10 +45,15 @@ export function AppPageHeader({
     >
       <ArrowLeft className="h-5 w-5" />
     </button>
-  );
+  )
 
   return (
-    <div className={cn("sticky top-0 z-10 border-b border-stroke-muted bg-card px-4 lg:px-8 py-3", className)}>
+    <div
+      className={cn(
+        "sticky top-0 z-10 border-b border-stroke-muted bg-card px-4 lg:px-8 py-3",
+        className
+      )}
+    >
       <div className="flex items-center gap-3 lg:max-w-5xl lg:mx-auto">
         {backBtn}
         <div className="flex-1">
@@ -58,5 +63,5 @@ export function AppPageHeader({
         {rightContent}
       </div>
     </div>
-  );
+  )
 }

@@ -44,12 +44,7 @@ export function WelcomeBackScreen({ active, name, onClose }: WelcomeBackScreenPr
         </h1>
       </div>
 
-      <Button
-        variant="primary"
-        size="lg"
-        onClick={close}
-        className="mb-4 w-full max-w-[420px]"
-      >
+      <Button variant="primary" size="lg" onClick={close} className="mb-4 w-full max-w-[420px]">
         É bom estar de volta!
       </Button>
     </div>

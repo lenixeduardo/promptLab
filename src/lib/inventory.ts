@@ -6,7 +6,7 @@ export interface StoredInventory {
 }
 
 const DEFAULT_INVENTORY: StoredInventory = {
-  powerUps: { "boost-xp": 0, "protection": 0, "focus-total": 0 },
+  powerUps: { "boost-xp": 0, protection: 0, "focus-total": 0 },
   ownedAvatarIds: ["cat-green"],
 }
 

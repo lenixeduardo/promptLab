@@ -17,18 +17,10 @@ vi.mock("@/lib/icons", () => {
     FlaskConical: (props: Record<string, unknown>) => (
       <svg data-testid="icon-FlaskConical" {...props} />
     ),
-    Target: (props: Record<string, unknown>) => (
-      <svg data-testid="icon-Target" {...props} />
-    ),
-    Bell: (props: Record<string, unknown>) => (
-      <svg data-testid="icon-Bell" {...props} />
-    ),
-    Trophy: (props: Record<string, unknown>) => (
-      <svg data-testid="icon-Trophy" {...props} />
-    ),
-    User: (props: Record<string, unknown>) => (
-      <svg data-testid="icon-User" {...props} />
-    ),
+    Target: (props: Record<string, unknown>) => <svg data-testid="icon-Target" {...props} />,
+    Bell: (props: Record<string, unknown>) => <svg data-testid="icon-Bell" {...props} />,
+    Trophy: (props: Record<string, unknown>) => <svg data-testid="icon-Trophy" {...props} />,
+    User: (props: Record<string, unknown>) => <svg data-testid="icon-User" {...props} />,
   }
 })
 

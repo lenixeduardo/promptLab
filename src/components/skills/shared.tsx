@@ -4,21 +4,18 @@
 
 import { memo, type ReactNode } from "react"
 import * as Icons from "@/lib/icons"
-import {
-  type TrendingSkill,
-  type SkillCategory,
-} from "@/data/trendingSkillsData"
+import { type TrendingSkill, type SkillCategory } from "@/data/trendingSkillsData"
 
 // ─── Category definitions ────────────────────────────────────────────────
 
 export const SKILL_CATEGORIES: { label: SkillCategory; icon: ReactNode }[] = [
-  { label: "Desenvolvimento",    icon: <Icons.Code2 className="h-4 w-4" /> },
-  { label: "Design & UI",        icon: <Icons.Palette className="h-4 w-4" /> },
-  { label: "IA & Media",         icon: <Icons.Image className="h-4 w-4" /> },
-  { label: "Cloud & Infra",      icon: <Icons.Server className="h-4 w-4" /> },
-  { label: "Marketing",          icon: <Icons.TrendingUp className="h-4 w-4" /> },
-  { label: "Produtividade",      icon: <Icons.ClipboardList className="h-4 w-4" /> },
-  { label: "Agentes & Workflows",icon: <Icons.GitBranch className="h-4 w-4" /> },
+  { label: "Desenvolvimento", icon: <Icons.Code2 className="h-4 w-4" /> },
+  { label: "Design & UI", icon: <Icons.Palette className="h-4 w-4" /> },
+  { label: "IA & Media", icon: <Icons.Image className="h-4 w-4" /> },
+  { label: "Cloud & Infra", icon: <Icons.Server className="h-4 w-4" /> },
+  { label: "Marketing", icon: <Icons.TrendingUp className="h-4 w-4" /> },
+  { label: "Produtividade", icon: <Icons.ClipboardList className="h-4 w-4" /> },
+  { label: "Agentes & Workflows", icon: <Icons.GitBranch className="h-4 w-4" /> },
 ]
 
 // ─── Skill Icon ──────────────────────────────────────────────────────────
@@ -55,15 +52,16 @@ export const SkillCard = memo(function SkillCard({
     <div className="group relative flex flex-col gap-2 rounded-2xl border border-stroke-muted bg-white p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md active:scale-95">
       {/* Favorite heart button */}
       <button
-        onClick={(e) => { e.stopPropagation(); onToggleFav() }}
+        onClick={(e) => {
+          e.stopPropagation()
+          onToggleFav()
+        }}
         className="absolute right-2.5 top-2.5 z-10 flex h-7 w-7 items-center justify-center rounded-full transition-colors hover:bg-red-100"
         aria-label={isFav ? "Remover dos favoritos" : "Favoritar"}
       >
         <Icons.Heart
           className={`h-4 w-4 transition-all ${
-            isFav
-              ? "fill-red-500 text-red-500"
-              : "text-stroke-light group-hover:text-red-300"
+            isFav ? "fill-red-500 text-red-500" : "text-stroke-light group-hover:text-red-300"
           }`}
           strokeWidth={isFav ? 2.5 : 2}
         />
@@ -86,15 +84,22 @@ export const SkillCard = memo(function SkillCard({
             <SkillIcon iconName={skill.icon} />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-bold leading-tight text-foregroundDark line-clamp-2">{skill.name}</p>
+            <p className="text-sm font-bold leading-tight text-foregroundDark line-clamp-2">
+              {skill.name}
+            </p>
             <p className="text-[11px] font-medium text-foregroundMuted">por {skill.author}</p>
           </div>
         </div>
-        <p className="text-xs leading-relaxed text-foregroundSecondary line-clamp-2">{skill.description}</p>
+        <p className="text-xs leading-relaxed text-foregroundSecondary line-clamp-2">
+          {skill.description}
+        </p>
         <div className="flex items-center justify-between">
           <div className="flex flex-wrap gap-1">
             {skill.tags.slice(0, 2).map((tag) => (
-              <span key={tag} className="rounded-full bg-[#F4F9F5] px-2 py-0.5 text-[10px] font-medium text-primary-dark">
+              <span
+                key={tag}
+                className="rounded-full bg-[#F4F9F5] px-2 py-0.5 text-[10px] font-medium text-primary-dark"
+              >
                 {tag}
               </span>
             ))}

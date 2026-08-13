@@ -84,7 +84,6 @@ export default function Hero() {
 
       {/* ── Seção 1: Hero ── */}
       <section className="relative bg-[#EEF9F4] overflow-hidden" style={{ minHeight: "520px" }}>
-
         {/* ── MOBILE layout ── */}
         <div className="lg:hidden">
           {/* Mascote posicionado à direita como background */}
@@ -131,9 +130,7 @@ export default function Hero() {
               disabled={transitioning}
               onClick={handleCTA}
             >
-              <span className="text-[13px]">
-                {hasAccount ? "CONTINUAR" : "COMEÇAR AGORA"}
-              </span>
+              <span className="text-[13px]">{hasAccount ? "CONTINUAR" : "COMEÇAR AGORA"}</span>
               <ArrowRight className="h-4 w-4 flex-shrink-0" />
             </Button>
           </div>
@@ -335,10 +332,8 @@ export default function Hero() {
           <div className="flex-1 min-w-0">
             <p className="text-xs lg:text-sm xl:text-base text-[#1A3B24] leading-snug mb-2">
               Junte-se aos alunos
-              <br className="lg:hidden" />
-              {" "}que já estão evoluindo
-              <br className="lg:hidden" />
-              {" "}com o{" "}
+              <br className="lg:hidden" /> que já estão evoluindo
+              <br className="lg:hidden" /> com o{" "}
               <span className="text-[#2A7A4B] font-bold">PromptLabz</span>
             </p>
             <div className="flex -space-x-2">
@@ -360,7 +355,9 @@ export default function Hero() {
                 <Star key={i} className="h-3.5 w-3.5 lg:h-5 lg:w-5 text-amber-400 fill-amber-400" />
               ))}
             </div>
-            <p className="text-lg lg:text-2xl xl:text-3xl font-extrabold text-[#1A3B24] leading-none">4.9/5</p>
+            <p className="text-lg lg:text-2xl xl:text-3xl font-extrabold text-[#1A3B24] leading-none">
+              4.9/5
+            </p>
             <p className="text-[10px] lg:text-xs text-[#4A6741] mt-0.5">de alunos</p>
           </div>
         </div>

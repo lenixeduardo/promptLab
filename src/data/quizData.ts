@@ -28,7 +28,10 @@ export const QUICK_QUIZ_QUESTIONS: Question[] = [
     question: "O que é um 'token' no contexto de LLMs?",
     options: [
       { letter: "A", text: "Uma senha de acesso ao modelo." },
-      { letter: "B", text: "Uma unidade de texto (palavra ou parte de palavra) processada pelo modelo." },
+      {
+        letter: "B",
+        text: "Uma unidade de texto (palavra ou parte de palavra) processada pelo modelo.",
+      },
       { letter: "C", text: "Um parâmetro de temperatura do modelo." },
       { letter: "D", text: "Um tipo de arquivo de configuração." },
     ],
@@ -94,7 +97,10 @@ export const QUICK_QUIZ_QUESTIONS: Question[] = [
     question: "Como o 'context window' (janela de contexto) afeta um LLM?",
     options: [
       { letter: "A", text: "Determina a velocidade de conexão com o servidor." },
-      { letter: "B", text: "Define a quantidade máxima de texto que o modelo processa de uma vez." },
+      {
+        letter: "B",
+        text: "Define a quantidade máxima de texto que o modelo processa de uma vez.",
+      },
       { letter: "C", text: "Controla o tamanho da janela do navegador." },
       { letter: "D", text: "Limita o número de usuários simultâneos." },
     ],

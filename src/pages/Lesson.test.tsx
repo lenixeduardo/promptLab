@@ -2,9 +2,23 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { MemoryRouter, Routes, Route } from "react-router-dom"
 import Lesson from "./Lesson"
+import { uploadLessonProof } from "@/lib/db"
+import { sileo } from "sileo"
 
 vi.mock("@/hooks/useAuth", () => ({
   useAuth: () => ({ user: { id: "user-1", email: "aluno@test.com" } }),
+}))
+
+vi.mock("@/lib/db", () => ({
+  uploadLessonProof: vi.fn().mockResolvedValue({ data: "user-1/a1-0.png", error: null }),
+}))
+
+vi.mock("sileo", () => ({
+  sileo: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+  },
 }))
 
 vi.mock("@/contexts/useLives", () => ({
@@ -90,9 +104,7 @@ describe("Lesson — fluxo de aprendizado", () => {
     renderLesson()
     skipSlides()
     // Click on option B (correct answer)
-    const optionB = screen.getAllByRole("button").find(
-      (el) => el.textContent?.includes(Q1_OPT_B)
-    )
+    const optionB = screen.getAllByRole("button").find((el) => el.textContent?.includes(Q1_OPT_B))
     expect(optionB).toBeTruthy()
     fireEvent.click(optionB!)
     expect(screen.getByText(/Mandou bem!/i)).toBeInTheDocument()
@@ -102,9 +114,9 @@ describe("Lesson — fluxo de aprendizado", () => {
     renderLesson()
     skipSlides()
     // Click on option A (wrong answer for q1 — a1bv0)
-    const optionA = screen.getAllByRole("button").find(
-      (el) => el.textContent?.includes("Uma plataforma para treinar modelos de IA do zero")
-    )
+    const optionA = screen
+      .getAllByRole("button")
+      .find((el) => el.textContent?.includes("Uma plataforma para treinar modelos de IA do zero"))
     expect(optionA).toBeTruthy()
     fireEvent.click(optionA!)
     expect(screen.getByText(/Quase lá!/i)).toBeInTheDocument()
@@ -113,9 +125,7 @@ describe("Lesson — fluxo de aprendizado", () => {
   it("exibe o botão 'Próxima atividade' após responder", () => {
     renderLesson()
     skipSlides()
-    const optionB = screen.getAllByRole("button").find(
-      (el) => el.textContent?.includes(Q1_OPT_B)
-    )
+    const optionB = screen.getAllByRole("button").find((el) => el.textContent?.includes(Q1_OPT_B))
     fireEvent.click(optionB!)
     expect(screen.getByRole("button", { name: /Próxima atividade/i })).toBeInTheDocument()
   })
@@ -124,9 +134,7 @@ describe("Lesson — fluxo de aprendizado", () => {
     renderLesson()
     skipSlides()
     // Answer q1 (now step 1 of 4 total)
-    const optionB = screen.getAllByRole("button").find(
-      (el) => el.textContent?.includes(Q1_OPT_B)
-    )
+    const optionB = screen.getAllByRole("button").find((el) => el.textContent?.includes(Q1_OPT_B))
     fireEvent.click(optionB!)
     fireEvent.click(screen.getByRole("button", { name: /Próxima atividade/i }))
     // step 2 of 4 (slide + q1 + q2 + q3)
@@ -164,16 +172,22 @@ describe("Lesson — fluxo de aprendizado", () => {
     renderLesson()
     skipSlides()
     // Answer q1 wrong (option A — a1bv0)
-    const wrongBtn = screen.getAllByRole("button").find((el) => el.textContent?.includes("Uma plataforma para treinar modelos de IA do zero"))
+    const wrongBtn = screen
+      .getAllByRole("button")
+      .find((el) => el.textContent?.includes("Uma plataforma para treinar modelos de IA do zero"))
     fireEvent.click(wrongBtn!)
     fireEvent.click(screen.getByRole("button", { name: /Próxima atividade/i }))
 
     // Answer rest correctly (a1bv1 and a1bv2)
-    let btn = screen.getAllByRole("button").find((el) => el.textContent?.includes("Escrever prompts claros, específicos e eficazes"))
+    let btn = screen
+      .getAllByRole("button")
+      .find((el) => el.textContent?.includes("Escrever prompts claros, específicos e eficazes"))
     fireEvent.click(btn!)
     fireEvent.click(screen.getByRole("button", { name: /Próxima atividade/i }))
 
-    btn = screen.getAllByRole("button").find((el) => el.textContent?.includes("prompts bem escritos multiplicam sua produtividade"))
+    btn = screen
+      .getAllByRole("button")
+      .find((el) => el.textContent?.includes("prompts bem escritos multiplicam sua produtividade"))
     fireEvent.click(btn!)
     fireEvent.click(screen.getByRole("button", { name: /Ver resultado/i }))
 
@@ -215,7 +229,9 @@ describe("Lesson — fluxo de aprendizado", () => {
       "Porque a IA não funciona sem prompts perfeitos",
     ]
     for (let i = 0; i < wrongAnswers.length; i++) {
-      const btn = screen.getAllByRole("button").find((el) => el.textContent?.includes(wrongAnswers[i]))
+      const btn = screen
+        .getAllByRole("button")
+        .find((el) => el.textContent?.includes(wrongAnswers[i]))
       fireEvent.click(btn!)
       const nextBtn = screen.queryByRole("button", { name: /Próxima atividade/i })
       const finishBtn = screen.queryByRole("button", { name: /Ver resultado/i })

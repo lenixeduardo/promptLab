@@ -31,7 +31,7 @@ function renderPage() {
         <Route path="/premium" element={<div>Página Premium</div>} />
         <Route path="/home" element={<div>Home Page</div>} />
       </Routes>
-    </MemoryRouter>,
+    </MemoryRouter>
   )
 }
 
@@ -43,19 +43,16 @@ async function uploadAndAnalyze() {
     "Você:\nCrie um texto persuasivo sobre marketing digital para pequenas empresas com foco em vendas online."
   const file = new File([content], "conversa.txt", { type: "text/plain" })
 
-  const input = screen.getByLabelText(
-    /Selecione um arquivo de conversação/i,
-  ) as HTMLInputElement
+  const input = screen.getByLabelText(/Selecione um arquivo de conversação/i) as HTMLInputElement
   await user.upload(input, file)
 
   const analyzeButton = await screen.findByRole("button", { name: /Analisar conversa/i })
   await user.click(analyzeButton)
 
   // The heuristic analysis runs after an internal 800ms setTimeout.
-  await waitFor(
-    () => expect(screen.getByText("Análise das solicitações")).toBeInTheDocument(),
-    { timeout: 3000 },
-  )
+  await waitFor(() => expect(screen.getByText("Análise das solicitações")).toBeInTheDocument(), {
+    timeout: 3000,
+  })
 
   return user
 }
@@ -89,7 +86,7 @@ describe("PromptAnalyzer — Análise com IA", () => {
     })
     expect(screen.getByText("Adicione um exemplo de tom de voz")).toBeInTheDocument()
     expect(
-      screen.getByText("Prompt aprimorado pela IA: seja mais específico sobre o público."),
+      screen.getByText("Prompt aprimorado pela IA: seja mais específico sobre o público.")
     ).toBeInTheDocument()
     expect(mockEvaluatePromptWithAI).toHaveBeenCalledTimes(1)
   })
@@ -125,7 +122,7 @@ describe("PromptAnalyzer — Análise com IA", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(/Você atingiu o limite diário gratuito de análises com IA\./i),
+        screen.getByText(/Você atingiu o limite diário gratuito de análises com IA\./i)
       ).toBeInTheDocument()
     })
     const premiumLink = screen.getByRole("link", { name: /Assine o Premium/i })

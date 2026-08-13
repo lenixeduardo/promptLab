@@ -39,10 +39,7 @@ export default function ForgotPassword() {
       />
       <div className="mx-auto flex w-full max-w-[420px] flex-col">
         {/* Back */}
-        <Link
-          to="/login"
-          className="mb-2 flex w-fit items-center text-link hover:text-primary"
-        >
+        <Link to="/login" className="mb-2 flex w-fit items-center text-link hover:text-primary">
           <ArrowLeft className="h-6 w-6" strokeWidth={2.2} />
         </Link>
 
@@ -99,7 +96,12 @@ export default function ForgotPassword() {
               </p>
             </div>
           ) : (
-            <form className="flex flex-col gap-4" onSubmit={handleSubmit} role="form" aria-label="Formulário de recuperação de senha">
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={handleSubmit}
+              role="form"
+              aria-label="Formulário de recuperação de senha"
+            >
               <Input
                 type="email"
                 placeholder="Digite seu e-mail cadastrado"

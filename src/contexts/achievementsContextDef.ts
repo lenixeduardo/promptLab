@@ -10,7 +10,7 @@ export interface AchievementsCtx {
   checkLessonComplete: (wasPerfect: boolean) => Achievement[]
   checkDailyVisit: (
     userId?: string,
-    favoritesCount?: number,
+    favoritesCount?: number
   ) => Promise<{ newUnlocks: Achievement[]; daysAbsent: number | null }>
   visitCategory: (categoryId: string) => void
   checkFavorites: (count: number) => Achievement[]

@@ -1,6 +1,6 @@
 export interface DailyTip {
-  id: string;
-  text: string;
+  id: string
+  text: string
 }
 
 export const DAILY_TIPS: DailyTip[] = [
@@ -124,4 +124,4 @@ export const DAILY_TIPS: DailyTip[] = [
     id: "final-review",
     text: "Antes de usar uma resposta, revise precisão, clareza e adequação ao seu objetivo.",
   },
-];
+]

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import { getLabCategories, getLabConfig, DbLabCategory, DbLabConfig } from "@/lib/db"
 import { LAB_CATEGORIES, PROMPT_OF_THE_DAY, LabCategory } from "@/data/labCategoriesData"
 import { errorLogger } from "@/lib/errorLogging"
+import { useErrorRecoveryContext } from "@/contexts/useErrorRecoveryContext"
 
 const MAX_RETRIES = 3
 const INITIAL_DELAY_MS = 1000
@@ -32,6 +33,7 @@ export function useLabCategories() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const errorRecovery = useErrorRecoveryContext()
 
   const fetchDataWithRetry = async (attemptNum = 0): Promise<void> => {
     try {
@@ -59,6 +61,9 @@ export function useLabCategories() {
           if (cfgRes.error) {
             errorLogger.logApiError("/db/getLabConfig", 500, cfgRes.error)
           }
+          errorRecovery?.addError(errorMsg, "API_ERROR", [
+            { label: "Tentar novamente", action: fetchData },
+          ])
         }
       } else {
         setError(null)
@@ -74,6 +79,9 @@ export function useLabCategories() {
         const errorMsg = err instanceof Error ? err.message : "Falha ao carregar categorias"
         setError(errorMsg)
         errorLogger.logError(err, "useLabCategories.fetchData")
+        errorRecovery?.addError(errorMsg, "API_ERROR", [
+          { label: "Tentar novamente", action: fetchData },
+        ])
       }
     } finally {
       setLoading(false)

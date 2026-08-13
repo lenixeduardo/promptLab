@@ -33,13 +33,7 @@ export function PillTabs<T extends string = string>({
   size = "sm",
 }: PillTabsProps<T>) {
   return (
-    <div
-      className={cn(
-        "flex gap-2",
-        scrollable && "no-scrollbar overflow-x-auto pb-1",
-        className,
-      )}
-    >
+    <div className={cn("flex gap-2", scrollable && "no-scrollbar overflow-x-auto pb-1", className)}>
       {items.map((item) => {
         const isActive = item.key === activeKey
         return (
@@ -48,12 +42,10 @@ export function PillTabs<T extends string = string>({
             onClick={() => onChange(item.key)}
             className={cn(
               "inline-flex shrink-0 items-center gap-1.5 rounded-full border font-semibold transition-colors",
-              size === "sm"
-                ? "px-3.5 py-1.5 text-xs"
-                : "px-5 py-2 text-sm",
+              size === "sm" ? "px-3.5 py-1.5 text-xs" : "px-5 py-2 text-sm",
               isActive
                 ? "border-primary-dark bg-primary-dark text-white"
-                : "border-stroke-light bg-white text-primary-dark hover:bg-pageBgLight",
+                : "border-stroke-light bg-white text-primary-dark hover:bg-pageBgLight"
             )}
           >
             {item.label}
@@ -61,9 +53,7 @@ export function PillTabs<T extends string = string>({
               <span
                 className={cn(
                   "ml-0.5 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full px-1 text-[10px] font-bold leading-none",
-                  isActive
-                    ? "bg-white/30 text-white"
-                    : "bg-pageBgLight text-primary-dark",
+                  isActive ? "bg-white/30 text-white" : "bg-pageBgLight text-primary-dark"
                 )}
               >
                 {item.count}

@@ -11,9 +11,7 @@ if (dsn) {
   Sentry.init({
     dsn,
     environment: import.meta.env.PROD ? "production" : "development",
-    integrations: [
-      Sentry.browserTracingIntegration(),
-    ],
+    integrations: [Sentry.browserTracingIntegration()],
     // Performance monitoring — sample rate in production
     tracesSampleRate: import.meta.env.PROD ? 0.25 : 1.0,
     // Session replay — only in production to save quota

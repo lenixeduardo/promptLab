@@ -1,8 +1,8 @@
-import { Check, Sparkles, Clock, Rocket } from "lucide-react";
-import { AppBottomNav } from "@/components/AppBottomNav";
-import { AppPageHeader } from "@/components/AppPageHeader";
+import { Check, Sparkles, Clock, Rocket } from "lucide-react"
+import { AppBottomNav } from "@/components/AppBottomNav"
+import { AppPageHeader } from "@/components/AppPageHeader"
 
-type Status = "done" | "now" | "next" | "future";
+type Status = "done" | "now" | "next" | "future"
 
 const PHASES: { status: Status; title: string; tag: string; items: string[] }[] = [
   {
@@ -31,21 +31,13 @@ const PHASES: { status: Status; title: string; tag: string; items: string[] }[] 
     status: "done",
     title: "v0.4 — Comunidade",
     tag: "Concluído",
-    items: [
-      "Expansão do Hall da Fama",
-      "Feed colaborativo de prompts",
-      "Grupos por interesse",
-    ],
+    items: ["Expansão do Hall da Fama", "Feed colaborativo de prompts", "Grupos por interesse"],
   },
   {
     status: "done",
     title: "v0.5 — Premium & Certificados",
     tag: "Concluído",
-    items: [
-      "Planos Premium",
-      "Emissão de certificados em PDF",
-      "Templates exclusivos Premium",
-    ],
+    items: ["Planos Premium", "Emissão de certificados em PDF", "Templates exclusivos Premium"],
   },
   {
     status: "now",
@@ -61,45 +53,37 @@ const PHASES: { status: Status; title: string; tag: string; items: string[] }[] 
     status: "next",
     title: "Pendente — Prompt Wars",
     tag: "Pendente",
-    items: [
-      "Arena 1v1 de prompts",
-      "Matchmaking e ranking ao vivo",
-      "Recompensas de temporada",
-    ],
+    items: ["Arena 1v1 de prompts", "Matchmaking e ranking ao vivo", "Recompensas de temporada"],
   },
   {
     status: "future",
     title: "Futuro",
     tag: "Em ideação",
-    items: [
-      "Novas mecânicas interativas",
-      "Modo cooperativo no Lab",
-      "Marketplace de templates",
-    ],
+    items: ["Novas mecânicas interativas", "Modo cooperativo no Lab", "Marketplace de templates"],
   },
-];
+]
 
 const STATUS_STYLE: Record<Status, { dot: string; chip: string; icon: typeof Check }> = {
   done: { dot: "bg-emerald", chip: "bg-surface-success text-emerald", icon: Check },
   now: { dot: "bg-luxury", chip: "bg-luxury/20 text-luxury", icon: Sparkles },
   next: { dot: "bg-emerald/40", chip: "bg-surface-soft text-forest", icon: Clock },
-  future: { dot: "bg-stroke-light", chip: "bg-surface-soft text-foreground-tertiary", icon: Rocket },
-};
+  future: {
+    dot: "bg-stroke-light",
+    chip: "bg-surface-soft text-foreground-tertiary",
+    icon: Rocket,
+  },
+}
 
 export default function RoadmapPage() {
   return (
     <div className="flex min-h-screen flex-col bg-white pb-24 lg:pb-8">
-      <AppPageHeader
-        title="Roadmap"
-        subtitle="O futuro do Laboratório"
-        back="/profile"
-      />
+      <AppPageHeader title="Roadmap" subtitle="O futuro do Laboratório" back="/profile" />
 
       <div className="mx-auto w-full max-w-lg lg:max-w-2xl px-4 py-5">
         <ol className="relative space-y-5 border-l-2 border-stroke-light pl-6">
           {PHASES.map((p) => {
-            const s = STATUS_STYLE[p.status];
-            const Icon = s.icon;
+            const s = STATUS_STYLE[p.status]
+            const Icon = s.icon
             return (
               <li key={p.title} className="relative">
                 <span
@@ -109,10 +93,10 @@ export default function RoadmapPage() {
                 </span>
                 <div className="rounded-2xl border-2 border-stroke-light bg-card p-4">
                   <div className="mb-2 flex items-center justify-between gap-2">
-                    <h3 className="text-sm font-extrabold text-foreground-dark">
-                      {p.title}
-                    </h3>
-                    <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase ${s.chip}`}>
+                    <h3 className="text-sm font-extrabold text-foreground-dark">{p.title}</h3>
+                    <span
+                      className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase ${s.chip}`}
+                    >
                       {p.tag}
                     </span>
                   </div>
@@ -126,12 +110,12 @@ export default function RoadmapPage() {
                   </ul>
                 </div>
               </li>
-            );
+            )
           })}
         </ol>
       </div>
 
       <AppBottomNav />
     </div>
-  );
+  )
 }

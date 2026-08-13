@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react"
 import { getErrorMessage } from "./supabase"
 
 export interface AuditEvent {
@@ -28,7 +29,12 @@ class ErrorLogger {
 
     // Log to console in development
     if (import.meta.env.DEV) {
-      const logFn = event.severity === "error" ? console.error : event.severity === "warning" ? console.warn : console.log
+      const logFn =
+        event.severity === "error"
+          ? console.error
+          : event.severity === "warning"
+            ? console.warn
+            : console.log
       logFn(`[${event.eventType.toUpperCase()}]`, event.message, event.metadata)
     }
 
@@ -109,7 +115,7 @@ class ErrorLogger {
 
   getEventsSince(timestamp: string) {
     const cutoff = new Date(timestamp).getTime()
-    return this.events.filter(e => new Date(e.timestamp).getTime() >= cutoff)
+    return this.events.filter((e) => new Date(e.timestamp).getTime() >= cutoff)
   }
 
   clearEvents() {
@@ -117,21 +123,18 @@ class ErrorLogger {
   }
 
   private sendToBackend(event: AuditEvent) {
-    // In production, this would send to Sentry or similar
-    // For now, just log important events
-    if (event.severity === "error" && typeof window !== "undefined" && window.Sentry) {
-      window.Sentry.captureMessage(event.message, event.severity)
+    if (event.severity === "error" || event.severity === "warning") {
+      Sentry.addBreadcrumb({
+        category: event.eventType,
+        message: event.message,
+        level: event.severity === "error" ? "error" : "warning",
+        data: event.metadata,
+      })
+    }
+    if (event.severity === "error") {
+      Sentry.captureMessage(event.message, "error")
     }
   }
 }
 
 export const errorLogger = new ErrorLogger()
-
-declare global {
-  interface Window {
-    Sentry?: {
-      captureMessage: (message: string, level: string) => void
-      captureException: (error: Error) => void
-    }
-  }
-}

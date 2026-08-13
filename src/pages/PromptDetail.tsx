@@ -95,7 +95,12 @@ export default function PromptDetail() {
   const { toggleFavoritePrompt, isFavoritePrompt } = useFavoritePrompts()
 
   // Resolve prompt: check location.state first, then look up by promptId in TEMPLATES
-  const statePrompt = (location.state as { promptText?: string; title?: string; category?: string; tags?: string[] } | null)
+  const statePrompt = location.state as {
+    promptText?: string
+    title?: string
+    category?: string
+    tags?: string[]
+  } | null
   const matchedTemplate = promptId ? TEMPLATES.find((t) => t.promptId === promptId) : null
 
   const prompt = statePrompt?.promptText
@@ -109,18 +114,18 @@ export default function PromptDetail() {
         steps: PROMPT_DATA.steps,
       }
     : matchedTemplate
-    ? {
-        id: matchedTemplate.promptId,
-        title: matchedTemplate.name,
-        category: matchedTemplate.category,
-        text: matchedTemplate.promptContent,
-        tags: matchedTemplate.tags,
-        howItWorks: PROMPT_DATA.howItWorks,
-        steps: PROMPT_DATA.steps,
-      }
-    : promptId && promptId !== PROMPT_DATA.id
-    ? null
-    : PROMPT_DATA
+      ? {
+          id: matchedTemplate.promptId,
+          title: matchedTemplate.name,
+          category: matchedTemplate.category,
+          text: matchedTemplate.promptContent,
+          tags: matchedTemplate.tags,
+          howItWorks: PROMPT_DATA.howItWorks,
+          steps: PROMPT_DATA.steps,
+        }
+      : promptId && promptId !== PROMPT_DATA.id
+        ? null
+        : PROMPT_DATA
 
   const isFav = isFavoritePrompt(prompt?.id ?? PROMPT_DATA.id)
 
@@ -176,7 +181,10 @@ export default function PromptDetail() {
             aria-label={isFav ? "Remover dos favoritos" : "Salvar nos favoritos"}
           >
             <Heart
-              className={cn("h-4 w-4 transition-colors", isFav ? "fill-red-500 text-red-500" : "text-foreground-tertiary")}
+              className={cn(
+                "h-4 w-4 transition-colors",
+                isFav ? "fill-red-500 text-red-500" : "text-foreground-tertiary"
+              )}
             />
           </button>
         </div>
@@ -230,8 +238,12 @@ export default function PromptDetail() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-dark text-sm font-bold text-white shadow-md">
                     {i + 1}
                   </div>
-                  <span className="text-[11px] font-semibold text-foregroundDark">{step.label}</span>
-                  <span className="text-[9px] text-center text-foregroundMuted">{step.description}</span>
+                  <span className="text-[11px] font-semibold text-foregroundDark">
+                    {step.label}
+                  </span>
+                  <span className="text-[9px] text-center text-foregroundMuted">
+                    {step.description}
+                  </span>
                 </div>
                 {i < prompt.steps.length - 1 && (
                   <div className="mx-1 mb-6 h-0.5 flex-1 bg-gradient-to-r from-primary-dark to-stroke-light" />

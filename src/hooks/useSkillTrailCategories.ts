@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react"
 import { getSkillTrailCategories, DbSkillTrailCategory, DbSkillTrailItem } from "@/lib/db"
-import { TRAIL_CATEGORY_SKILLS, TrailCategorySkills, TrailSkill } from "@/data/trailCategorySkillsData"
+import {
+  TRAIL_CATEGORY_SKILLS,
+  TrailCategorySkills,
+  TrailSkill,
+} from "@/data/trailCategorySkillsData"
 
 function mapDbItem(item: DbSkillTrailItem): TrailSkill {
   return {

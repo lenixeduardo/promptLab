@@ -3,6 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { MemoryRouter, Routes, Route } from "react-router-dom"
 import Notifications from "./Notifications"
+import { getNotifications } from "@/lib/db"
 
 const mockUser = { id: "user-1", email: "test@test.com" }
 
@@ -155,5 +156,62 @@ describe("Notifications — navegação", () => {
     await waitFor(() => {
       expect(screen.getByText("Home Page")).toBeInTheDocument()
     })
+  })
+})
+
+function makeNotification(id: string, title: string) {
+  return {
+    id,
+    user_id: "user-1",
+    type: "system" as const,
+    title,
+    description: "desc",
+    created_at: new Date().toISOString(),
+    read_at: new Date().toISOString(),
+    mention: false,
+    action_label: null,
+    href: null,
+  }
+}
+
+describe("Notifications — paginação (Carregar mais)", () => {
+  it("mostra 'Carregar mais' quando a primeira página vem cheia (50 itens) e busca a próxima página com o offset correto", async () => {
+    const firstPage = Array.from({ length: 50 }, (_, i) =>
+      makeNotification(`p1-${i}`, `Notificação ${i}`)
+    )
+    const secondPage = [makeNotification("p2-0", "Notificação extra")]
+
+    vi.mocked(getNotifications).mockImplementation(async (_userId, _limit, offset = 0) => {
+      return { data: offset === 0 ? firstPage : secondPage, error: null }
+    })
+
+    renderNotifications()
+    await screen.findByText("Notificação 0")
+
+    const loadMoreButton = await screen.findByText("Carregar mais")
+    expect(loadMoreButton).toBeInTheDocument()
+
+    await userEvent.click(loadMoreButton)
+
+    await waitFor(() => {
+      expect(screen.getByText("Notificação extra")).toBeInTheDocument()
+    })
+
+    // Segunda chamada deve pedir a partir do offset = itens já carregados (50)
+    expect(getNotifications).toHaveBeenLastCalledWith("user-1", 50, 50)
+    // Página seguinte veio incompleta (1 item) → não há mais páginas
+    expect(screen.queryByText("Carregar mais")).not.toBeInTheDocument()
+  })
+
+  it("não mostra 'Carregar mais' quando a primeira página já vem incompleta", async () => {
+    vi.mocked(getNotifications).mockResolvedValue({
+      data: [makeNotification("n1", "Única notificação")],
+      error: null,
+    })
+
+    renderNotifications()
+    await screen.findByText("Única notificação")
+
+    expect(screen.queryByText("Carregar mais")).not.toBeInTheDocument()
   })
 })

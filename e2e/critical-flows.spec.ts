@@ -7,7 +7,10 @@ test.describe("Critical User Flows", () => {
     await expect(page.locator("h1").first()).toBeVisible()
 
     // Click login link
-    await page.getByRole("link", { name: /entrar/i }).first().click()
+    await page
+      .getByRole("link", { name: /entrar/i })
+      .first()
+      .click()
     await expect(page).toHaveURL(/\/login/)
 
     // Verify form is present

@@ -1,6 +1,6 @@
 import Stripe from "npm:stripe@14"
 import { createClient } from "npm:@supabase/supabase-js@2"
-import { corsHeaders } from "../_shared/cors.ts"
+import { resolveCorsHeaders } from "../_shared/cors.ts"
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
   apiVersion: "2024-06-20",
@@ -8,7 +8,7 @@ const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
 const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET")!
 const supabaseAdmin = createClient(
   Deno.env.get("SUPABASE_URL")!,
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 )
 
 type PremiumStatus = "free" | "trial" | "active" | "cancelled"
@@ -81,13 +81,11 @@ async function recordSubscriptionHistory(params: {
       current_period_start: currentPeriodStart
         ? new Date(currentPeriodStart * 1000).toISOString()
         : null,
-      current_period_end: currentPeriodEnd
-        ? new Date(currentPeriodEnd * 1000).toISOString()
-        : null,
+      current_period_end: currentPeriodEnd ? new Date(currentPeriodEnd * 1000).toISOString() : null,
       cancel_at_period_end: cancelAtPeriodEnd ?? false,
       updated_at: new Date().toISOString(),
     },
-    { onConflict: "stripe_subscription_id" },
+    { onConflict: "stripe_subscription_id" }
   )
 
   if (error) {
@@ -101,7 +99,10 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     typeof session.subscription === "string" ? session.subscription : session.subscription?.id
 
   if (!customerId || !subscriptionId) {
-    console.error("stripe-webhook: checkout.session.completed missing customer/subscription", session.id)
+    console.error(
+      "stripe-webhook: checkout.session.completed missing customer/subscription",
+      session.id
+    )
     return
   }
 
@@ -159,7 +160,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     // Don't downgrade the user's access yet — log so it can be investigated /
     // followed up (e.g. dunning emails), but keep their current premium_status.
     console.warn(
-      `stripe-webhook: subscription ${subscription.id} for user ${user.id} is ${subscription.status}`,
+      `stripe-webhook: subscription ${subscription.id} for user ${user.id} is ${subscription.status}`
     )
   } else {
     const premiumStatus = mapSubscriptionStatus(subscription)
@@ -228,6 +229,8 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 }
 
 Deno.serve(async (req) => {
+  const corsHeaders = resolveCorsHeaders(req)
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders })
   }

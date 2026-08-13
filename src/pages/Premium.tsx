@@ -4,11 +4,7 @@ import { ChevronLeft, Sparkles, Loader2, Crown, Lock, Star } from "@/lib/icons"
 import { Button } from "@/components/ui/button"
 import { PremiumPlanCard } from "@/components/premium/PremiumPlanCard"
 import { PremiumBenefitCard } from "@/components/premium/PremiumBenefitCard"
-import {
-  PREMIUM_PLANS,
-  PREMIUM_FEATURES,
-  type BillingCycle,
-} from "@/data/premiumData"
+import { PREMIUM_PLANS, PREMIUM_FEATURES, type BillingCycle } from "@/data/premiumData"
 import { cn } from "@/lib/utils"
 import { AppBottomNav } from "@/components/AppBottomNav"
 import { sileo } from "sileo"
@@ -105,7 +101,10 @@ export default function Premium() {
                 aria-hidden
                 className="absolute -left-3 top-3 h-3.5 w-3.5 text-emerald opacity-40"
               />
-              <Star aria-hidden className="absolute right-0 top-0 h-3 w-3 text-emerald opacity-30" />
+              <Star
+                aria-hidden
+                className="absolute right-0 top-0 h-3 w-3 text-emerald opacity-30"
+              />
             </div>
           </div>
         </div>
@@ -126,7 +125,7 @@ export default function Premium() {
                     "flex flex-1 items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-colors",
                     isSelected
                       ? "border border-emerald bg-white text-emerald dark:border-transparent dark:bg-emerald dark:text-white"
-                      : "border border-transparent text-foregroundMuted hover:text-foregroundDark",
+                      : "border border-transparent text-foregroundMuted hover:text-foregroundDark"
                   )}
                 >
                   {plan.title}
@@ -141,7 +140,11 @@ export default function Premium() {
           </div>
 
           {/* Plan cards */}
-          <div className="mb-2 flex flex-col gap-3" role="radiogroup" aria-label="Ciclo de cobrança">
+          <div
+            className="mb-2 flex flex-col gap-3"
+            role="radiogroup"
+            aria-label="Ciclo de cobrança"
+          >
             {PREMIUM_PLANS.map((plan) => (
               <PremiumPlanCard
                 key={plan.id}
@@ -172,7 +175,9 @@ export default function Premium() {
               size="lg"
               className={cn(
                 "w-full shadow-lg shadow-emerald/20",
-                checkoutLoading ? "gap-2" : "h-auto flex-col gap-0.5 py-3 normal-case tracking-normal",
+                checkoutLoading
+                  ? "gap-2"
+                  : "h-auto flex-col gap-0.5 py-3 normal-case tracking-normal"
               )}
               onClick={handleStartPremium}
               disabled={checkoutLoading}

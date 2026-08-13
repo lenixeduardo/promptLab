@@ -1,6 +1,16 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { ArrowLeft, Award, BookMarked, Check, FileText, RefreshCw, Flame, Loader2, Zap } from "@/lib/icons"
+import {
+  ArrowLeft,
+  Award,
+  BookMarked,
+  Check,
+  FileText,
+  RefreshCw,
+  Flame,
+  Loader2,
+  Zap,
+} from "@/lib/icons"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { sileo } from "sileo"
@@ -195,7 +205,9 @@ export default function Subscription() {
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-pageBgLight">
                 <Icon className="h-4 w-4 text-emerald" />
               </div>
-              <span className="text-xs font-semibold leading-tight text-foregroundDark">{label}</span>
+              <span className="text-xs font-semibold leading-tight text-foregroundDark">
+                {label}
+              </span>
             </div>
           ))}
         </div>

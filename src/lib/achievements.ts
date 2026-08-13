@@ -8,19 +8,19 @@ export interface Achievement {
   id: string
   title: string
   description: string
-  icon: string    // lucide-react icon name
+  icon: string // lucide-react icon name
   category: "progress" | "performance" | "streak" | "exploration"
 }
 
 export interface AchievementsData {
-  unlocked: string[]                      // achievement IDs
+  unlocked: string[] // achievement IDs
   totalLessonsCompleted: number
   perfectCount: number
-  lastVisitDate: string | null            // "YYYY-MM-DD"
+  lastVisitDate: string | null // "YYYY-MM-DD"
   consecutiveDays: number
   longestStreak: number
-  visitedCategories: string[]             // category IDs visited
-  completedCategoryIds: string[]          // category IDs fully completed
+  visitedCategories: string[] // category IDs visited
+  completedCategoryIds: string[] // category IDs fully completed
 }
 
 // ─── Achievement Definitions ─────────────────────────────────────────────
@@ -132,13 +132,13 @@ export type CheckResult = { newUnlocks: Achievement[]; data: AchievementsData }
 export function checkAchievements(
   data: AchievementsData,
   params: {
-    totalLessonsCompleted?: number               // from progress
-    perfectCount?: number                         // from lesson results
-    consecutiveDays?: number                      // from streak
-    visitedCategories?: string[]                  // from page visits
-    completedCategoryIds?: string[]               // from progress
-    favoritesCount?: number                       // from favorites
-  },
+    totalLessonsCompleted?: number // from progress
+    perfectCount?: number // from lesson results
+    consecutiveDays?: number // from streak
+    visitedCategories?: string[] // from page visits
+    completedCategoryIds?: string[] // from progress
+    favoritesCount?: number // from favorites
+  }
 ): CheckResult {
   const newUnlocks: Achievement[] = []
   const next = { ...data }
@@ -157,7 +157,9 @@ export function checkAchievements(
     next.visitedCategories = [...new Set([...data.visitedCategories, ...params.visitedCategories])]
   }
   if (params.completedCategoryIds !== undefined) {
-    next.completedCategoryIds = [...new Set([...data.completedCategoryIds, ...params.completedCategoryIds])]
+    next.completedCategoryIds = [
+      ...new Set([...data.completedCategoryIds, ...params.completedCategoryIds]),
+    ]
   }
 
   const unlockedSet = new Set(data.unlocked)
@@ -200,7 +202,10 @@ export function checkAchievements(
 
 // ─── Streak Helper ───────────────────────────────────────────────────────
 
-export function updateStreak(lastVisitDate: string | null, consecutiveDays: number): {
+export function updateStreak(
+  lastVisitDate: string | null,
+  consecutiveDays: number
+): {
   newLastVisit: string
   newConsecutive: number
 } {
@@ -234,19 +239,33 @@ export function getDaysSinceLastVisit(lastVisitDate: string | null): number | nu
 
 export function getProgressCount(
   achId: string,
-  data: Pick<AchievementsData, "totalLessonsCompleted" | "perfectCount" | "consecutiveDays" | "visitedCategories">,
+  data: Pick<
+    AchievementsData,
+    "totalLessonsCompleted" | "perfectCount" | "consecutiveDays" | "visitedCategories"
+  >
 ): { current: number; max: number } | null {
   switch (achId) {
-    case "first-lesson":   return { current: Math.min(data.totalLessonsCompleted, 1),  max: 1  }
-    case "ten-lessons":    return { current: Math.min(data.totalLessonsCompleted, 10), max: 10 }
-    case "fifty-lessons":  return { current: Math.min(data.totalLessonsCompleted, 50), max: 50 }
-    case "first-perfect":  return { current: Math.min(data.perfectCount, 1),  max: 1  }
-    case "three-perfect":  return { current: Math.min(data.perfectCount, 3),  max: 3  }
-    case "ten-perfect":    return { current: Math.min(data.perfectCount, 10), max: 10 }
-    case "streak-3":       return { current: Math.min(data.consecutiveDays, 3),  max: 3  }
-    case "streak-7":       return { current: Math.min(data.consecutiveDays, 7),  max: 7  }
-    case "streak-30":      return { current: Math.min(data.consecutiveDays, 30), max: 30 }
-    case "first-category": return { current: Math.min(data.visitedCategories.length, 1), max: 1 }
-    default:               return null
+    case "first-lesson":
+      return { current: Math.min(data.totalLessonsCompleted, 1), max: 1 }
+    case "ten-lessons":
+      return { current: Math.min(data.totalLessonsCompleted, 10), max: 10 }
+    case "fifty-lessons":
+      return { current: Math.min(data.totalLessonsCompleted, 50), max: 50 }
+    case "first-perfect":
+      return { current: Math.min(data.perfectCount, 1), max: 1 }
+    case "three-perfect":
+      return { current: Math.min(data.perfectCount, 3), max: 3 }
+    case "ten-perfect":
+      return { current: Math.min(data.perfectCount, 10), max: 10 }
+    case "streak-3":
+      return { current: Math.min(data.consecutiveDays, 3), max: 3 }
+    case "streak-7":
+      return { current: Math.min(data.consecutiveDays, 7), max: 7 }
+    case "streak-30":
+      return { current: Math.min(data.consecutiveDays, 30), max: 30 }
+    case "first-category":
+      return { current: Math.min(data.visitedCategories.length, 1), max: 1 }
+    default:
+      return null
   }
 }

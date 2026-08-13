@@ -120,8 +120,8 @@ export default function Signup() {
         <h2 className="text-2xl font-bold text-primary-dark">Verifique seu e-mail</h2>
         <p className="max-w-sm text-base text-foregroundSecondary">
           Enviamos um link de confirmação para{" "}
-          <strong className="text-foregroundDark">{pendingEmail}</strong>.
-          Acesse seu e-mail e clique no link para ativar sua conta.
+          <strong className="text-foregroundDark">{pendingEmail}</strong>. Acesse seu e-mail e
+          clique no link para ativar sua conta.
         </p>
         <Link
           to="/login"
@@ -144,17 +144,12 @@ export default function Signup() {
       />
       <div className="mx-auto flex w-full max-w-[420px] flex-col">
         {/* Back */}
-        <Link
-          to="/login"
-          className="mb-2 flex w-fit items-center text-link hover:text-primary"
-        >
+        <Link to="/login" className="mb-2 flex w-fit items-center text-link hover:text-primary">
           <ArrowLeft className="h-6 w-6" strokeWidth={2.2} />
         </Link>
 
         {/* Title */}
-        <h1 className="mb-5 text-center text-4xl font-extrabold text-primary-dark">
-          Criar Conta
-        </h1>
+        <h1 className="mb-5 text-center text-4xl font-extrabold text-primary-dark">Criar Conta</h1>
 
         {/* Mascot + speech bubble */}
         <div className="mb-5 flex items-center justify-center gap-2">
@@ -195,8 +190,17 @@ export default function Signup() {
 
         {/* Form card */}
         <Card className="w-full border-stroke-muted bg-surface-success p-6 shadow-md sm:p-7">
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit} role="form" aria-label="Formulário de cadastro">
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handleSubmit}
+            role="form"
+            aria-label="Formulário de cadastro"
+          >
+            <label htmlFor="signup-name" className="sr-only">
+              Nome completo
+            </label>
             <Input
+              id="signup-name"
               type="text"
               placeholder="Nome completo"
               value={name}
@@ -204,10 +208,13 @@ export default function Signup() {
               icon={<User className="h-5 w-5" strokeWidth={2.2} />}
               autoComplete="name"
               disabled={loading}
-              aria-label="Nome completo"
               aria-required="false"
             />
+            <label htmlFor="signup-email" className="sr-only">
+              Endereço de e-mail
+            </label>
             <Input
+              id="signup-email"
               type="email"
               placeholder="E-mail"
               value={email}
@@ -216,14 +223,17 @@ export default function Signup() {
               autoComplete="email"
               required
               disabled={loading}
-              aria-label="Endereço de e-mail"
               aria-required="true"
               aria-describedby="email-help"
             />
             <small id="email-help" className="sr-only">
               Você usará este e-mail para fazer login
             </small>
+            <label htmlFor="signup-password" className="sr-only">
+              Senha
+            </label>
             <Input
+              id="signup-password"
               type="password"
               placeholder="Senha"
               value={password}
@@ -232,14 +242,17 @@ export default function Signup() {
               autoComplete="new-password"
               required
               disabled={loading}
-              aria-label="Senha"
               aria-required="true"
               aria-describedby="password-help"
             />
             <small id="password-help" className="sr-only">
               Mínimo 8 caracteres, pelo menos uma letra maiúscula e um número
             </small>
+            <label htmlFor="signup-confirm-password" className="sr-only">
+              Confirmar senha
+            </label>
             <Input
+              id="signup-confirm-password"
               type="password"
               placeholder="Confirmar senha"
               value={confirmPassword}
@@ -248,7 +261,6 @@ export default function Signup() {
               autoComplete="new-password"
               required
               disabled={loading}
-              aria-label="Confirmar senha"
               aria-required="true"
               aria-describedby="confirm-help"
             />
@@ -258,17 +270,11 @@ export default function Signup() {
 
             <p className="text-center text-xs text-foregroundSecondary">
               Ao criar a conta, você concorda com os{" "}
-              <Link
-                to="/terms"
-                className="font-medium text-link underline underline-offset-2"
-              >
+              <Link to="/terms" className="font-medium text-link underline underline-offset-2">
                 Termos de Uso
               </Link>{" "}
               e{" "}
-              <Link
-                to="/privacy"
-                className="font-medium text-link underline underline-offset-2"
-              >
+              <Link to="/privacy" className="font-medium text-link underline underline-offset-2">
                 Política de Privacidade
               </Link>
             </p>

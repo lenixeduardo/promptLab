@@ -22,7 +22,7 @@ export default function DailyMissions() {
   const progressPct = Math.round((completedCount / DAILY_MISSIONS.length) * 100)
   const earnedXp = DAILY_MISSIONS.filter((m) => completed.has(m.id)).reduce(
     (sum, m) => sum + m.xpReward,
-    0,
+    0
   )
 
   return (
@@ -83,13 +83,13 @@ export default function DailyMissions() {
                   "flex items-start gap-4 rounded-2xl border p-4 transition-colors",
                   isDone
                     ? "border-emerald/30 bg-surface-success/40"
-                    : "border-stroke-muted bg-white",
+                    : "border-stroke-muted bg-white"
                 )}
               >
                 <div
                   className={cn(
                     "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-2xl",
-                    isDone ? "bg-emerald/10" : "bg-pageBgLight",
+                    isDone ? "bg-emerald/10" : "bg-pageBgLight"
                   )}
                 >
                   {mission.icon}
@@ -100,7 +100,7 @@ export default function DailyMissions() {
                     <p
                       className={cn(
                         "text-sm font-bold leading-snug",
-                        isDone ? "text-emerald" : "text-foregroundDark",
+                        isDone ? "text-emerald" : "text-foregroundDark"
                       )}
                     >
                       {mission.title}
@@ -118,8 +118,7 @@ export default function DailyMissions() {
 
                   <div className="mt-1 flex items-center justify-between gap-2">
                     <span className="flex items-center gap-1 text-[11px] font-bold text-amber-500">
-                      <Zap className="h-3 w-3" />
-                      +{mission.xpReward} XP
+                      <Zap className="h-3 w-3" />+{mission.xpReward} XP
                     </span>
 
                     {!isDone && (

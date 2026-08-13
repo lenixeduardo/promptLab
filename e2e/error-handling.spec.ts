@@ -154,7 +154,6 @@ test.describe("Error Handling and Recovery", () => {
 
     // Should proceed or show success message
     await page.waitForTimeout(500)
-    const isValidated = !page.url().includes("invalid") && page.url().includes("forgot-password|reset|success")
     expect(page.url()).toContain("forgot-password")
   })
 

@@ -1,29 +1,21 @@
 import { createClient } from "npm:@supabase/supabase-js@2"
-import { corsHeaders } from "../_shared/cors.ts"
+import { resolveCorsHeaders } from "../_shared/cors.ts"
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!
 const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!
-const supabaseAdmin = createClient(
-  supabaseUrl,
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-)
+const supabaseAdmin = createClient(supabaseUrl, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!)
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 const ANTHROPIC_MODEL = "claude-sonnet-5"
 
 const MAX_PROMPT_LENGTH = 5000
 const FREE_DAILY_LIMIT = 5
+// Kept for the open-beta revert noted below, not used directly yet.
+void FREE_DAILY_LIMIT
 // Premium users are not truly "unlimited" — this is a guard rail against abuse.
 const PREMIUM_DAILY_LIMIT = 200
 
 const PREMIUM_STATUSES = new Set(["active", "trial"])
-
-function jsonResponse(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  })
-}
 
 function buildSystemPrompt(mode: string) {
   return `Você é um avaliador especialista em engenharia de prompts, ajudando usuários de uma plataforma de aprendizado (PromptLabz) a melhorar seus prompts para modelos de linguagem.
@@ -41,6 +33,15 @@ Responda em português do Brasil. Seja objetivo e prático.`
 }
 
 Deno.serve(async (req) => {
+  const corsHeaders = resolveCorsHeaders(req)
+
+  function jsonResponse(body: unknown, status = 200) {
+    return new Response(JSON.stringify(body), {
+      status,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    })
+  }
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders })
   }
@@ -81,7 +82,7 @@ Deno.serve(async (req) => {
     if (prompt.length > MAX_PROMPT_LENGTH) {
       return jsonResponse(
         { error: `Prompt muito longo. Máximo de ${MAX_PROMPT_LENGTH} caracteres.` },
-        400,
+        400
       )
     }
 
@@ -112,7 +113,7 @@ Deno.serve(async (req) => {
     // exceed the daily quota.
     const { data: newCount, error: usageError } = await supabaseAdmin.rpc(
       "increment_prompt_evaluation_usage",
-      { p_user_id: userId, p_usage_date: today, p_daily_limit: dailyLimit },
+      { p_user_id: userId, p_usage_date: today, p_daily_limit: dailyLimit }
     )
 
     if (usageError) {
@@ -122,10 +123,11 @@ Deno.serve(async (req) => {
     } else if (newCount === null) {
       return jsonResponse(
         {
-          error: "Limite diário de avaliações com IA atingido. Assine o Premium para análises ilimitadas.",
+          error:
+            "Limite diário de avaliações com IA atingido. Assine o Premium para análises ilimitadas.",
           quotaExceeded: true,
         },
-        429,
+        429
       )
     }
 

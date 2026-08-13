@@ -92,7 +92,12 @@ describe("NotificationsBell — conteúdo do popover", () => {
 
   it("exibe notificações com título e descrição", async () => {
     mockGetNotifications.mockResolvedValue({
-      data: [makeNotif({ title: "Conquista desbloqueada! 🏆", description: "Você completou sua primeira lição!" })],
+      data: [
+        makeNotif({
+          title: "Conquista desbloqueada! 🏆",
+          description: "Você completou sua primeira lição!",
+        }),
+      ],
       error: null,
     })
 

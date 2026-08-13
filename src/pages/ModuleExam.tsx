@@ -1,5 +1,5 @@
-import { useMemo, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useMemo, useState, useEffect } from "react"
+import { Link } from "react-router-dom"
 import {
   ArrowRight,
   Check,
@@ -11,19 +11,19 @@ import {
   XCircle,
   Star,
   PartyPopper,
-} from "lucide-react";
-import { AppBottomNav } from "@/components/AppBottomNav";
-import { cn } from "@/lib/utils";
-import { CelebrationCanvas } from "@/components/CelebrationCanvas";
+} from "lucide-react"
+import { AppBottomNav } from "@/components/AppBottomNav"
+import { cn } from "@/lib/utils"
+import { CelebrationCanvas } from "@/components/CelebrationCanvas"
 
-const PASS_THRESHOLD = 0.6;
+const PASS_THRESHOLD = 0.6
 
 type Question = {
-  prompt: string;
-  options: string[];
-  answer: number;
-  explanation: string;
-};
+  prompt: string
+  options: string[]
+  answer: number
+  explanation: string
+}
 
 const QUESTIONS: Question[] = [
   {
@@ -126,47 +126,50 @@ const QUESTIONS: Question[] = [
     answer: 1,
     explanation: "Pedir o entendimento antes da resposta evita retrabalho.",
   },
-];
+]
 
 export default function ModuleExamPage() {
-  const [step, setStep] = useState(0);
-  const [picked, setPicked] = useState<number | null>(null);
-  const [score, setScore] = useState(0);
-  const [showConfetti, setShowConfetti] = useState(false);
+  const [step, setStep] = useState(0)
+  const [picked, setPicked] = useState<number | null>(null)
+  const [score, setScore] = useState(0)
+  const [showConfetti, setShowConfetti] = useState(false)
 
-  const total = QUESTIONS.length;
-  const minToPass = useMemo(() => Math.ceil(total * PASS_THRESHOLD), [total]);
-  const q = QUESTIONS[step];
-  const finished = step >= total;
-  const isLast = step === total - 1;
-  const pct = Math.round(((step + (picked !== null ? 1 : 0)) / total) * 100);
+  const total = QUESTIONS.length
+  const minToPass = useMemo(() => Math.ceil(total * PASS_THRESHOLD), [total])
+  const q = QUESTIONS[step]
+  const finished = step >= total
+  const isLast = step === total - 1
+  const pct = Math.round(((step + (picked !== null ? 1 : 0)) / total) * 100)
 
-  const passed = score >= minToPass;
-  const perfect = finished && score === total;
+  const passed = score >= minToPass
+  const perfect = finished && score === total
 
   useEffect(() => {
     if (perfect) {
-      const t = setTimeout(() => setShowConfetti(true), 300);
-      const off = setTimeout(() => setShowConfetti(false), 5000);
-      return () => { clearTimeout(t); clearTimeout(off); };
+      const t = setTimeout(() => setShowConfetti(true), 300)
+      const off = setTimeout(() => setShowConfetti(false), 5000)
+      return () => {
+        clearTimeout(t)
+        clearTimeout(off)
+      }
     }
-  }, [perfect]);
+  }, [perfect])
 
   function pick(i: number) {
-    if (picked !== null) return;
-    setPicked(i);
-    if (i === q.answer) setScore((s) => s + 1);
+    if (picked !== null) return
+    setPicked(i)
+    if (i === q.answer) setScore((s) => s + 1)
   }
 
   function next() {
-    setPicked(null);
-    setStep((s) => s + 1);
+    setPicked(null)
+    setStep((s) => s + 1)
   }
 
   function restart() {
-    setStep(0);
-    setPicked(null);
-    setScore(0);
+    setStep(0)
+    setPicked(null)
+    setScore(0)
   }
 
   return (
@@ -210,9 +213,9 @@ export default function ModuleExamPage() {
 
               <div className="mt-5 flex flex-col gap-2.5">
                 {q.options.map((opt, i) => {
-                  const isPicked = picked === i;
-                  const isCorrect = i === q.answer;
-                  const revealed = picked !== null;
+                  const isPicked = picked === i
+                  const isCorrect = i === q.answer
+                  const revealed = picked !== null
                   return (
                     <button
                       key={i}
@@ -223,15 +226,23 @@ export default function ModuleExamPage() {
                         !revealed &&
                           "border-stroke-light bg-surface-soft text-foreground-dark hover:border-emerald hover:bg-emerald/10",
                         revealed && isCorrect && "border-emerald bg-emerald/15 text-emerald",
-                        revealed && isPicked && !isCorrect && "border-red-500 bg-red-500/10 text-red-400",
-                        revealed && !isPicked && !isCorrect && "border-stroke-light bg-surface-soft text-foreground-tertiary opacity-60",
+                        revealed &&
+                          isPicked &&
+                          !isCorrect &&
+                          "border-red-500 bg-red-500/10 text-red-400",
+                        revealed &&
+                          !isPicked &&
+                          !isCorrect &&
+                          "border-stroke-light bg-surface-soft text-foreground-tertiary opacity-60"
                       )}
                     >
                       <span>{opt}</span>
                       {revealed && isCorrect && <Check className="h-5 w-5" strokeWidth={3} />}
-                      {revealed && isPicked && !isCorrect && <X className="h-5 w-5" strokeWidth={3} />}
+                      {revealed && isPicked && !isCorrect && (
+                        <X className="h-5 w-5" strokeWidth={3} />
+                      )}
                     </button>
-                  );
+                  )
                 })}
               </div>
 
@@ -260,7 +271,7 @@ export default function ModuleExamPage() {
                 "rounded-2xl border-2 p-6 text-center",
                 passed
                   ? "border-emerald/50 bg-gradient-to-br from-emerald/10 to-card"
-                  : "border-red-500/40 bg-gradient-to-br from-red-500/10 to-card",
+                  : "border-red-500/40 bg-gradient-to-br from-red-500/10 to-card"
               )}
             >
               <div
@@ -270,7 +281,7 @@ export default function ModuleExamPage() {
                     ? "bg-gradient-to-br from-luxury/30 to-amber-400/30 text-luxury animate-bounce-slow"
                     : passed
                       ? "bg-emerald/20 text-emerald"
-                      : "bg-red-500/15 text-red-400",
+                      : "bg-red-500/15 text-red-400"
                 )}
               >
                 {perfect ? (
@@ -283,8 +294,14 @@ export default function ModuleExamPage() {
               </div>
               <h2 className="mt-4 flex items-center justify-center gap-2 text-2xl font-extrabold text-foreground-dark">
                 {perfect ? (
-                  <><PartyPopper className="h-6 w-6 text-luxury" /> Nota máxima!</>
-                ) : passed ? "Módulo concluído!" : "Quase lá!"}
+                  <>
+                    <PartyPopper className="h-6 w-6 text-luxury" /> Nota máxima!
+                  </>
+                ) : passed ? (
+                  "Módulo concluído!"
+                ) : (
+                  "Quase lá!"
+                )}
               </h2>
               <p className="mt-1 text-sm text-foreground-tertiary">
                 Você acertou {score} de {total} ({Math.round((score / total) * 100)}%)
@@ -324,9 +341,7 @@ export default function ModuleExamPage() {
                 </div>
                 <div className="rounded-xl border border-stroke-muted bg-surface-soft py-3">
                   <p className="text-[10px] font-semibold text-foreground-tertiary">Gemas</p>
-                  <p className="text-base font-extrabold text-luxury">
-                    +{passed ? 25 : 0}
-                  </p>
+                  <p className="text-base font-extrabold text-luxury">+{passed ? 25 : 0}</p>
                 </div>
               </div>
 
@@ -361,5 +376,5 @@ export default function ModuleExamPage() {
         <AppBottomNav />
       </div>
     </>
-  );
+  )
 }

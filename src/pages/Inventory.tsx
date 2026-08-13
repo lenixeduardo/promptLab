@@ -108,7 +108,9 @@ export default function Inventory() {
         {/* Avatares */}
         <section className="mb-6">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-primary-dark">Avatares</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wider text-primary-dark">
+              Avatares
+            </h2>
             <button
               onClick={() => navigate("/store")}
               className="text-xs font-semibold text-emerald hover:underline"
@@ -117,7 +119,9 @@ export default function Inventory() {
             </button>
           </div>
           {ownedAvatars.length === 0 ? (
-            <p className="text-center text-sm text-foregroundTertiary">Nenhum avatar desbloqueado ainda.</p>
+            <p className="text-center text-sm text-foregroundTertiary">
+              Nenhum avatar desbloqueado ainda.
+            </p>
           ) : (
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
               {ownedAvatars.map((avatar) => (

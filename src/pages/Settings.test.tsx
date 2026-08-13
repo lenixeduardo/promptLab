@@ -21,9 +21,7 @@ vi.mock("@/components/AppBottomNav", () => ({
 }))
 
 vi.mock("@/components/AppPageHeader", () => ({
-  AppPageHeader: ({ title }: { title: string }) => (
-    <div data-testid="app-page-header">{title}</div>
-  ),
+  AppPageHeader: ({ title }: { title: string }) => <div data-testid="app-page-header">{title}</div>,
 }))
 
 vi.mock("@/components/ReviewModal", () => ({
@@ -39,7 +37,7 @@ function renderSettings() {
   return render(
     <MemoryRouter>
       <Settings />
-    </MemoryRouter>,
+    </MemoryRouter>
   )
 }
 

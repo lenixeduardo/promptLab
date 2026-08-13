@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase"
+import { supabase, getErrorMessage } from "@/lib/supabase"
 import { useAuthContext } from "@/contexts/AuthContext"
 
 export function useAuth() {
@@ -12,8 +12,8 @@ export function useAuth() {
       })
       if (err) throw err
       return { success: true, user: data.user }
-    } catch (err: any) {
-      const errorMsg = err?.message || "Erro ao fazer login"
+    } catch (err: unknown) {
+      const errorMsg = getErrorMessage(err, "Erro ao fazer login")
       return { success: false, error: errorMsg }
     }
   }
@@ -30,8 +30,8 @@ export function useAuth() {
       })
       if (err) throw err
       return { success: true, user: data.user, needsConfirmation: !data.session }
-    } catch (err: any) {
-      const errorMsg = err?.message || "Erro ao criar conta"
+    } catch (err: unknown) {
+      const errorMsg = getErrorMessage(err, "Erro ao criar conta")
       return { success: false, error: errorMsg, needsConfirmation: false }
     }
   }
@@ -41,8 +41,8 @@ export function useAuth() {
       const { error: err } = await supabase.auth.signOut()
       if (err) throw err
       return { success: true }
-    } catch (err: any) {
-      const errorMsg = err?.message || "Erro ao fazer logout"
+    } catch (err: unknown) {
+      const errorMsg = getErrorMessage(err, "Erro ao fazer logout")
       return { success: false, error: errorMsg }
     }
   }
@@ -54,8 +54,8 @@ export function useAuth() {
       })
       if (err) throw err
       return { success: true }
-    } catch (err: any) {
-      const errorMsg = err?.message || "Erro ao enviar email de reset"
+    } catch (err: unknown) {
+      const errorMsg = getErrorMessage(err, "Erro ao enviar email de reset")
       return { success: false, error: errorMsg }
     }
   }
@@ -74,8 +74,8 @@ export function useAuth() {
       })
       if (err) throw err
       return { success: true, user: null }
-    } catch (err: any) {
-      const errorMsg = err?.message || fallback
+    } catch (err: unknown) {
+      const errorMsg = getErrorMessage(err, fallback)
       return { success: false, error: errorMsg }
     }
   }
@@ -87,8 +87,8 @@ export function useAuth() {
       })
       if (err) throw err
       return { success: true, user: data.user }
-    } catch (err: any) {
-      const errorMsg = err?.message || "Erro ao atualizar senha"
+    } catch (err: unknown) {
+      const errorMsg = getErrorMessage(err, "Erro ao atualizar senha")
       return { success: false, error: errorMsg }
     }
   }

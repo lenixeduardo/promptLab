@@ -7,6 +7,8 @@ import {
   loadProgress,
   syncLocalProgressToSupabase,
   getLeaderboard,
+  getNewsArticles,
+  getNotifications,
   updateUserXP,
   updateUserGems,
   saveModuleProgress,
@@ -50,6 +52,7 @@ function buildQuery(overrides: Record<string, unknown> = {}) {
     gte: vi.fn().mockReturnThis(),
     order: vi.fn().mockReturnThis(),
     limit: vi.fn().mockReturnThis(),
+    range: vi.fn().mockReturnThis(),
     ...overrides,
   }
   mockFrom.mockReturnValue(q)
@@ -78,7 +81,9 @@ describe("getUserProfile", () => {
   })
 
   it("retorna erro quando Supabase retorna erro", async () => {
-    buildQuery({ single: vi.fn().mockResolvedValue({ data: null, error: { message: "Not found" } }) })
+    buildQuery({
+      single: vi.fn().mockResolvedValue({ data: null, error: { message: "Not found" } }),
+    })
 
     const result = await getUserProfile("u1")
 
@@ -110,7 +115,9 @@ describe("updateUserProfile", () => {
   })
 
   it("retorna erro quando update falha", async () => {
-    buildQuery({ maybeSingle: vi.fn().mockResolvedValue({ data: null, error: { message: "Update failed" } }) })
+    buildQuery({
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: { message: "Update failed" } }),
+    })
 
     const result = await updateUserProfile("u1", "Ana Silva")
 
@@ -138,7 +145,11 @@ describe("updateUserAvatar", () => {
 describe("saveProgress", () => {
   const userId = "u1"
   const categoryId = "prompts-basicos"
-  const progress = { currentModuleIndex: 1, currentLessonIndex: 2, completedLessonIds: ["l1", "l2"] }
+  const progress = {
+    currentModuleIndex: 1,
+    currentLessonIndex: 2,
+    completedLessonIds: ["l1", "l2"],
+  }
 
   it("salva no localStorage mesmo sem Supabase configurado", async () => {
     import.meta.env.VITE_SUPABASE_URL = ""
@@ -183,7 +194,9 @@ describe("loadProgress", () => {
 
   it("retorna dados do localStorage quando Supabase não está configurado", async () => {
     import.meta.env.VITE_SUPABASE_URL = ""
-    const localData = { cat1: { currentModuleIndex: 0, currentLessonIndex: 1, completedLessonIds: [] } }
+    const localData = {
+      cat1: { currentModuleIndex: 0, currentLessonIndex: 1, completedLessonIds: [] },
+    }
     localStorage.setItem(`promptlabz_progress:${userId}`, JSON.stringify(localData))
 
     const result = await loadProgress(userId)
@@ -193,7 +206,12 @@ describe("loadProgress", () => {
 
   it("mescla dados do DB com localStorage quando Supabase está configurado", async () => {
     const dbRows = [
-      { category_id: "cat1", completed_lessons: ["l1"], current_module_index: 0, current_lesson_index: 1 },
+      {
+        category_id: "cat1",
+        completed_lessons: ["l1"],
+        current_module_index: 0,
+        current_lesson_index: 1,
+      },
     ]
     buildQuery({ eq: vi.fn().mockResolvedValue({ data: dbRows, error: null }) })
 
@@ -208,7 +226,9 @@ describe("loadProgress", () => {
 
   it("migra chave legada promptlab_progress automaticamente", async () => {
     import.meta.env.VITE_SUPABASE_URL = ""
-    const legacyData = { cat1: { currentModuleIndex: 1, currentLessonIndex: 0, completedLessonIds: ["l1"] } }
+    const legacyData = {
+      cat1: { currentModuleIndex: 1, currentLessonIndex: 0, completedLessonIds: ["l1"] },
+    }
     localStorage.setItem("promptlab_progress", JSON.stringify(legacyData))
 
     const result = await loadProgress(userId)
@@ -256,7 +276,9 @@ describe("syncLocalProgressToSupabase", () => {
   })
 
   it("retorna erro quando algum upsert falha", async () => {
-    const localData = { cat1: { currentModuleIndex: 0, currentLessonIndex: 0, completedLessonIds: [] } }
+    const localData = {
+      cat1: { currentModuleIndex: 0, currentLessonIndex: 0, completedLessonIds: [] },
+    }
     localStorage.setItem("promptlabz_progress:u1", JSON.stringify(localData))
     buildQuery({ upsert: vi.fn().mockResolvedValue({ error: { message: "Sync failed" } }) })
 
@@ -271,7 +293,7 @@ describe("syncLocalProgressToSupabase", () => {
 describe("getLeaderboard", () => {
   it("consulta a view leaderboard_entries (nunca a tabela users diretamente)", async () => {
     const entries = [{ id: "u1", full_name: "Ana", avatar_url: null, xp: 300 }]
-    buildQuery({ limit: vi.fn().mockResolvedValue({ data: entries, error: null }) })
+    buildQuery({ range: vi.fn().mockResolvedValue({ data: entries, error: null }) })
 
     const result = await getLeaderboard(10)
 
@@ -281,13 +303,53 @@ describe("getLeaderboard", () => {
     expect(result.error).toBeNull()
   })
 
+  it("pagina com .range(offset, offset+limit-1)", async () => {
+    const q = buildQuery({ range: vi.fn().mockResolvedValue({ data: [], error: null }) })
+
+    await getLeaderboard(20, 40)
+
+    expect(q.range).toHaveBeenCalledWith(40, 59)
+  })
+
   it("retorna erro quando a consulta falha", async () => {
-    buildQuery({ limit: vi.fn().mockResolvedValue({ data: null, error: { message: "Query failed" } }) })
+    buildQuery({
+      range: vi.fn().mockResolvedValue({ data: null, error: { message: "Query failed" } }),
+    })
 
     const result = await getLeaderboard()
 
     expect(result.data).toBeNull()
     expect(result.error).toBe("Query failed")
+  })
+})
+
+// ── Paginação real (.range()) ────────────────────────────────────────────
+
+describe("getNewsArticles", () => {
+  it("usa .range(offset, offset+limit-1) em vez de .limit() fixo", async () => {
+    const q = buildQuery({ range: vi.fn().mockResolvedValue({ data: [], error: null }) })
+
+    await getNewsArticles(30, 60)
+
+    expect(q.range).toHaveBeenCalledWith(60, 89)
+  })
+
+  it("por padrão busca a primeira página (offset 0)", async () => {
+    const q = buildQuery({ range: vi.fn().mockResolvedValue({ data: [], error: null }) })
+
+    await getNewsArticles(30)
+
+    expect(q.range).toHaveBeenCalledWith(0, 29)
+  })
+})
+
+describe("getNotifications", () => {
+  it("usa .range(offset, offset+limit-1) para paginar notificações do usuário", async () => {
+    const q = buildQuery({ range: vi.fn().mockResolvedValue({ data: [], error: null }) })
+
+    await getNotifications("user-1", 50, 100)
+
+    expect(q.range).toHaveBeenCalledWith(100, 149)
   })
 })
 
@@ -313,7 +375,10 @@ describe("updateUserXP", () => {
   })
 
   it("retorna erro quando o RPC rejeita (ex: delta acima do permitido)", async () => {
-    mockRpc.mockResolvedValue({ data: null, error: { message: "sync_user_xp: xp increase too large" } })
+    mockRpc.mockResolvedValue({
+      data: null,
+      error: { message: "sync_user_xp: xp increase too large" },
+    })
 
     const result = await updateUserXP("u1", 999999)
 
@@ -335,7 +400,9 @@ describe("updateUserGems", () => {
   })
 
   it("retorna erro quando não consegue ler o xp atual", async () => {
-    buildQuery({ single: vi.fn().mockResolvedValue({ data: null, error: { message: "Profile not found" } }) })
+    buildQuery({
+      single: vi.fn().mockResolvedValue({ data: null, error: { message: "Profile not found" } }),
+    })
 
     const result = await updateUserGems("u1", 40)
 
@@ -345,7 +412,10 @@ describe("updateUserGems", () => {
 
   it("retorna erro quando o RPC rejeita", async () => {
     buildQuery({ single: vi.fn().mockResolvedValue({ data: { xp: 300 }, error: null }) })
-    mockRpc.mockResolvedValue({ data: null, error: { message: "sync_user_xp: gems increase too large" } })
+    mockRpc.mockResolvedValue({
+      data: null,
+      error: { message: "sync_user_xp: gems increase too large" },
+    })
 
     const result = await updateUserGems("u1", 999999)
 
@@ -396,7 +466,9 @@ describe("fetchModuleProgress", () => {
   })
 
   it("retorna erro quando a consulta falha", async () => {
-    buildQuery({ eq: vi.fn().mockResolvedValue({ data: null, error: { message: "Query failed" } }) })
+    buildQuery({
+      eq: vi.fn().mockResolvedValue({ data: null, error: { message: "Query failed" } }),
+    })
 
     const result = await fetchModuleProgress("u1")
 
@@ -503,7 +575,9 @@ describe("fetchInventoryFromServer", () => {
   })
 
   it("retorna erro quando a consulta falha", async () => {
-    buildQuery({ maybeSingle: vi.fn().mockResolvedValue({ data: null, error: { message: "Query failed" } }) })
+    buildQuery({
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: { message: "Query failed" } }),
+    })
 
     const result = await fetchInventoryFromServer(userId)
 

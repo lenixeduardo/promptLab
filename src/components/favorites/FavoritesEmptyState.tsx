@@ -36,19 +36,13 @@ export function FavoritesEmptyState({
       </div>
 
       <div className="max-w-xs space-y-1">
-        <h2 className="text-lg font-extrabold text-foregroundDark">
-          Você ainda não tem favoritos
-        </h2>
+        <h2 className="text-lg font-extrabold text-foregroundDark">Você ainda não tem favoritos</h2>
         <p className="text-sm leading-relaxed text-foregroundMuted">
           Salve prompts, templates e conteúdos favoritos para acessar rápido depois.
         </p>
       </div>
 
-      <Button
-        size="lg"
-        className="px-8 shadow-md"
-        onClick={() => navigate(ctaTo)}
-      >
+      <Button size="lg" className="px-8 shadow-md" onClick={() => navigate(ctaTo)}>
         <FileText className="h-5 w-5" />
         {ctaLabel}
       </Button>

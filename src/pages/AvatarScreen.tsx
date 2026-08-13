@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { ChevronLeft, Gem, Crown, Lock } from "lucide-react"
-import { useAvatar, AVATAR_OPTIONS, type AvatarOption, type AvatarTier } from "@/components/AvatarProvider"
+import { useAvatar, type AvatarOption, type AvatarTier } from "@/components/AvatarProvider"
 import { AppBottomNav } from "@/components/AppBottomNav"
 import { cn } from "@/lib/utils"
 import { sileo } from "sileo"
@@ -10,18 +10,18 @@ import { tryCompleteSpecialQuest } from "@/lib/missions"
 type FilterValue = "Todos" | AvatarTier
 
 const FILTER_TABS: { label: string; value: FilterValue }[] = [
-  { label: "Todos",    value: "Todos" },
-  { label: "Grátis",  value: "Grátis" },
-  { label: "Raro",    value: "Raro" },
-  { label: "Épico",   value: "Épico" },
+  { label: "Todos", value: "Todos" },
+  { label: "Grátis", value: "Grátis" },
+  { label: "Raro", value: "Raro" },
+  { label: "Épico", value: "Épico" },
   { label: "Lendário", value: "Lendário" },
 ]
 
 const TIER_BADGE: Record<AvatarTier, { label: string; className: string }> = {
-  "Grátis":   { label: "GRÁTIS",   className: "bg-gray-800 text-white" },
-  "Raro":     { label: "RARO",     className: "bg-amber-500 text-white" },
-  "Épico":    { label: "ÉPICO",    className: "bg-purple-600 text-white" },
-  "Lendário": { label: "LENDÁRIO", className: "bg-yellow-500 text-white" },
+  Grátis: { label: "GRÁTIS", className: "bg-gray-800 text-white" },
+  Raro: { label: "RARO", className: "bg-amber-500 text-white" },
+  Épico: { label: "ÉPICO", className: "bg-purple-600 text-white" },
+  Lendário: { label: "LENDÁRIO", className: "bg-yellow-500 text-white" },
 }
 
 export default function AvatarScreen() {
@@ -65,18 +65,16 @@ export default function AvatarScreen() {
           </div>
         </div>
         <h1 className="text-2xl font-extrabold text-foregroundDark">Loja de Avatares</h1>
-        <p className="mb-5 mt-0.5 text-sm text-foregroundSecondary">Desbloqueie seu visual lendário</p>
+        <p className="mb-5 mt-0.5 text-sm text-foregroundSecondary">
+          Desbloqueie seu visual lendário
+        </p>
       </div>
 
       {/* Featured: currently equipped avatar */}
       <div className="mx-4 mb-5 overflow-hidden rounded-3xl bg-emerald p-6">
         <div className="flex flex-col items-center gap-3">
           <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-white/30 bg-white/20">
-            <img
-              src={equipped.image}
-              alt={equipped.name}
-              className="h-full w-full object-cover"
-            />
+            <img src={equipped.image} alt={equipped.name} className="h-full w-full object-cover" />
           </div>
           <div className="text-center">
             <h2 className="text-xl font-extrabold text-white">{equipped.name}</h2>
@@ -156,7 +154,9 @@ export default function AvatarScreen() {
                 {locked && avatar.cost > 0 && (
                   <div className="mt-1 flex items-center gap-1">
                     <Gem className="h-3 w-3 fill-sky-400 text-sky-400" />
-                    <span className="text-xs font-bold text-foregroundDark">{avatar.cost.toLocaleString("pt-BR")}</span>
+                    <span className="text-xs font-bold text-foregroundDark">
+                      {avatar.cost.toLocaleString("pt-BR")}
+                    </span>
                   </div>
                 )}
               </div>

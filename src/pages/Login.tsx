@@ -51,7 +51,7 @@ export default function Login() {
 
   useEffect(() => {
     if (rateLimitCooldown > 0) {
-      const timer = setTimeout(() => setRateLimitCooldown(c => c - 1), 1000)
+      const timer = setTimeout(() => setRateLimitCooldown((c) => c - 1), 1000)
       return () => clearTimeout(timer)
     }
   }, [rateLimitCooldown])
@@ -62,7 +62,8 @@ export default function Login() {
       errorLogger.logRateLimit("/auth/login", rateLimitCooldown)
       sileo.error({
         title: `Aguarde ${rateLimitCooldown}s`,
-        description: "Você tentou fazer login muitas vezes. Por favor, tente novamente em alguns segundos."
+        description:
+          "Você tentou fazer login muitas vezes. Por favor, tente novamente em alguns segundos.",
       })
       return
     }
@@ -77,7 +78,7 @@ export default function Login() {
       sileo.success({ title: "Login realizado com sucesso!" })
       navigate("/home")
     } else {
-      errorLogger.logAuthEvent("login", email, false)
+      errorLogger.logAuthEvent("login", "unknown", false)
       sileo.error({ title: result.error || "Erro ao fazer login" })
     }
     setLoading(false)
@@ -88,7 +89,8 @@ export default function Login() {
       errorLogger.logRateLimit("/auth/google", rateLimitCooldown)
       sileo.error({
         title: `Aguarde ${rateLimitCooldown}s`,
-        description: "Você tentou fazer login muitas vezes. Por favor, tente novamente em alguns segundos."
+        description:
+          "Você tentou fazer login muitas vezes. Por favor, tente novamente em alguns segundos.",
       })
       return
     }
@@ -146,7 +148,11 @@ export default function Login() {
             role="form"
             aria-label="Formulário de login"
           >
+            <label htmlFor="login-email" className="sr-only">
+              E-mail ou nome de usuário
+            </label>
             <Input
+              id="login-email"
               type="text"
               placeholder="E-mail ou nome de usuário"
               value={email}
@@ -155,7 +161,6 @@ export default function Login() {
               autoComplete="username"
               required
               disabled={loading}
-              aria-label="E-mail ou nome de usuário"
               aria-required="true"
               aria-describedby="email-help-login"
             />
@@ -164,7 +169,11 @@ export default function Login() {
             </small>
 
             <div className="relative">
+              <label htmlFor="login-password" className="sr-only">
+                Senha
+              </label>
               <Input
+                id="login-password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Senha"
                 value={password}
@@ -173,7 +182,6 @@ export default function Login() {
                 autoComplete="current-password"
                 required
                 disabled={loading}
-                aria-label="Senha"
                 aria-required="true"
                 aria-describedby="password-help-login"
                 className="pr-12"
@@ -206,7 +214,11 @@ export default function Login() {
               disabled={loading || rateLimitCooldown > 0}
             >
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {loading ? "Entrando..." : rateLimitCooldown > 0 ? `Tente em ${rateLimitCooldown}s` : "Entrar"}
+              {loading
+                ? "Entrando..."
+                : rateLimitCooldown > 0
+                  ? `Tente em ${rateLimitCooldown}s`
+                  : "Entrar"}
             </Button>
 
             {/* Divider */}
@@ -234,7 +246,10 @@ export default function Login() {
         {/* Footer */}
         <p className="mt-7 text-center text-base text-foregroundDark">
           Ainda não tem uma conta?{" "}
-          <Link to="/signup" className="font-semibold text-link underline underline-offset-2 hover:text-primary">
+          <Link
+            to="/signup"
+            className="font-semibold text-link underline underline-offset-2 hover:text-primary"
+          >
             Criar conta
           </Link>
         </p>

@@ -38,7 +38,9 @@ describe("useFavorites — toggleFavorite", () => {
   it("adiciona skill aos favoritos quando não está favoritada", () => {
     const { result } = renderHook(() => useFavorites())
 
-    act(() => { result.current.toggleFavorite("Skill A") })
+    act(() => {
+      result.current.toggleFavorite("Skill A")
+    })
 
     expect(result.current.favorites).toContain("Skill A")
   })
@@ -47,7 +49,9 @@ describe("useFavorites — toggleFavorite", () => {
     localStorage.setItem(FAVORITES_KEY, JSON.stringify(["Skill A"]))
     const { result } = renderHook(() => useFavorites())
 
-    act(() => { result.current.toggleFavorite("Skill A") })
+    act(() => {
+      result.current.toggleFavorite("Skill A")
+    })
 
     expect(result.current.favorites).not.toContain("Skill A")
   })
@@ -55,7 +59,9 @@ describe("useFavorites — toggleFavorite", () => {
   it("persiste favoritos no localStorage após toggle", () => {
     const { result } = renderHook(() => useFavorites())
 
-    act(() => { result.current.toggleFavorite("Skill A") })
+    act(() => {
+      result.current.toggleFavorite("Skill A")
+    })
 
     const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]")
     expect(stored).toContain("Skill A")
@@ -65,7 +71,9 @@ describe("useFavorites — toggleFavorite", () => {
     localStorage.setItem(FAVORITES_KEY, JSON.stringify(["Skill A"]))
     const { result } = renderHook(() => useFavorites())
 
-    act(() => { result.current.toggleFavorite("Skill A") })
+    act(() => {
+      result.current.toggleFavorite("Skill A")
+    })
 
     const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]")
     expect(stored).not.toContain("Skill A")
@@ -74,8 +82,12 @@ describe("useFavorites — toggleFavorite", () => {
   it("pode favoritar múltiplas skills independentes", () => {
     const { result } = renderHook(() => useFavorites())
 
-    act(() => { result.current.toggleFavorite("Skill A") })
-    act(() => { result.current.toggleFavorite("Skill B") })
+    act(() => {
+      result.current.toggleFavorite("Skill A")
+    })
+    act(() => {
+      result.current.toggleFavorite("Skill B")
+    })
 
     expect(result.current.favorites).toHaveLength(2)
     expect(result.current.favorites).toContain("Skill A")
@@ -89,11 +101,17 @@ describe("useFavorites — completeMission", () => {
 
     const { result } = renderHook(() => useFavorites())
 
-    act(() => { result.current.toggleFavorite("Skill A") })
-    act(() => { result.current.toggleFavorite("Skill B") })
+    act(() => {
+      result.current.toggleFavorite("Skill A")
+    })
+    act(() => {
+      result.current.toggleFavorite("Skill B")
+    })
     expect(completeMission).not.toHaveBeenCalled()
 
-    act(() => { result.current.toggleFavorite("Skill C") })
+    act(() => {
+      result.current.toggleFavorite("Skill C")
+    })
     expect(completeMission).toHaveBeenCalledWith("skill")
   })
 
@@ -102,7 +120,9 @@ describe("useFavorites — completeMission", () => {
     localStorage.setItem(FAVORITES_KEY, JSON.stringify(["Skill A", "Skill B", "Skill C"]))
 
     const { result } = renderHook(() => useFavorites())
-    act(() => { result.current.toggleFavorite("Skill A") })
+    act(() => {
+      result.current.toggleFavorite("Skill A")
+    })
 
     expect(completeMission).not.toHaveBeenCalled()
   })
@@ -138,9 +158,13 @@ describe("useFavorites — isFavorite", () => {
     const { result } = renderHook(() => useFavorites())
 
     expect(result.current.isFavorite("Skill A")).toBe(false)
-    act(() => { result.current.toggleFavorite("Skill A") })
+    act(() => {
+      result.current.toggleFavorite("Skill A")
+    })
     expect(result.current.isFavorite("Skill A")).toBe(true)
-    act(() => { result.current.toggleFavorite("Skill A") })
+    act(() => {
+      result.current.toggleFavorite("Skill A")
+    })
     expect(result.current.isFavorite("Skill A")).toBe(false)
   })
 })

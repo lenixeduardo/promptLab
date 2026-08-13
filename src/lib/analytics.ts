@@ -90,7 +90,11 @@ export function pageView(path: string): void {
 }
 
 /** Group users (e.g., by plan). */
-export function group(groupType: string, groupKey: string, properties?: Record<string, unknown>): void {
+export function group(
+  groupType: string,
+  groupKey: string,
+  properties?: Record<string, unknown>
+): void {
   if (!isAnalyticsEnabled()) return
   posthog.group(groupType, groupKey, properties)
 }
@@ -104,7 +108,11 @@ export function trackLessonStarted(lessonId: string, props?: EventProperties): v
   capture("lesson_started", { lessonId, ...props })
 }
 
-export function trackLessonCompleted(lessonId: string, score: number, props?: EventProperties): void {
+export function trackLessonCompleted(
+  lessonId: string,
+  score: number,
+  props?: EventProperties
+): void {
   capture("lesson_completed", { lessonId, score, ...props })
 }
 

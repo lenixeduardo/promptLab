@@ -25,7 +25,16 @@ describe("usePrompts", () => {
 
   it("sets loading to false when prompts load", async () => {
     mockGetPrompts.mockResolvedValue({
-      data: [{ title: "Test", difficulty: "Iniciante", color: "blue", category: "test", prompt_text: "test", description: "test" }],
+      data: [
+        {
+          title: "Test",
+          difficulty: "Iniciante",
+          color: "blue",
+          category: "test",
+          prompt_text: "test",
+          description: "test",
+        },
+      ],
       error: null,
     })
 

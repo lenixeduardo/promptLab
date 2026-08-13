@@ -13,6 +13,10 @@ vi.mock("@/lib/supabase", () => ({
       signInWithOAuth: vi.fn(),
     },
   },
+  getErrorMessage: (err: unknown, fallback: string) =>
+    err && typeof err === "object" && "message" in err
+      ? String((err as { message: unknown }).message)
+      : fallback,
 }))
 
 // Mock AuthContext
@@ -35,7 +39,9 @@ describe("useAuth — login", () => {
 
     const { result } = renderHook(() => useAuth())
     let res: any
-    await act(async () => { res = await result.current.login("test@test.com", "senha123") })
+    await act(async () => {
+      res = await result.current.login("test@test.com", "senha123")
+    })
 
     expect(res.success).toBe(true)
     expect(res.user?.email).toBe("test@test.com")
@@ -49,7 +55,9 @@ describe("useAuth — login", () => {
 
     const { result } = renderHook(() => useAuth())
     let res: any
-    await act(async () => { res = await result.current.login("test@test.com", "errada") })
+    await act(async () => {
+      res = await result.current.login("test@test.com", "errada")
+    })
 
     expect(res.success).toBe(false)
     expect(res.error).toBe("Invalid login credentials")
@@ -60,13 +68,14 @@ describe("useAuth — login", () => {
 
     const { result } = renderHook(() => useAuth())
     let res: any
-    await act(async () => { res = await result.current.login("test@test.com", "senha") })
+    await act(async () => {
+      res = await result.current.login("test@test.com", "senha")
+    })
 
     expect(res.success).toBe(false)
     expect(res.error).toBe("Erro ao fazer login")
   })
 })
-
 
 describe("useAuth — signup", () => {
   it("retorna sucesso ao criar conta com dados válidos", async () => {
@@ -77,7 +86,9 @@ describe("useAuth — signup", () => {
 
     const { result } = renderHook(() => useAuth())
     let res: any
-    await act(async () => { res = await result.current.signup("novo@test.com", "senha123", "Novo User") })
+    await act(async () => {
+      res = await result.current.signup("novo@test.com", "senha123", "Novo User")
+    })
 
     expect(res.success).toBe(true)
     expect(res.user.email).toBe("novo@test.com")
@@ -101,7 +112,9 @@ describe("useAuth — signup", () => {
 
     const { result } = renderHook(() => useAuth())
     let res: any
-    await act(async () => { res = await result.current.signup("novo@test.com", "senha123") })
+    await act(async () => {
+      res = await result.current.signup("novo@test.com", "senha123")
+    })
 
     expect(res.success).toBe(true)
   })
@@ -114,7 +127,9 @@ describe("useAuth — signup", () => {
 
     const { result } = renderHook(() => useAuth())
     let res: any
-    await act(async () => { res = await result.current.signup("existente@test.com", "senha123") })
+    await act(async () => {
+      res = await result.current.signup("existente@test.com", "senha123")
+    })
 
     expect(res.success).toBe(false)
     expect(res.error).toBe("User already registered")
@@ -127,7 +142,9 @@ describe("useAuth — logout", () => {
 
     const { result } = renderHook(() => useAuth())
     let res: any
-    await act(async () => { res = await result.current.logout() })
+    await act(async () => {
+      res = await result.current.logout()
+    })
 
     expect(res.success).toBe(true)
   })
@@ -137,7 +154,9 @@ describe("useAuth — logout", () => {
 
     const { result } = renderHook(() => useAuth())
     let res: any
-    await act(async () => { res = await result.current.logout() })
+    await act(async () => {
+      res = await result.current.logout()
+    })
 
     expect(res.success).toBe(false)
     expect(res.error).toBe("Logout failed")
@@ -150,7 +169,9 @@ describe("useAuth — resetPassword", () => {
 
     const { result } = renderHook(() => useAuth())
     let res: any
-    await act(async () => { res = await result.current.resetPassword("test@test.com") })
+    await act(async () => {
+      res = await result.current.resetPassword("test@test.com")
+    })
 
     expect(res.success).toBe(true)
     expect(mockAuth.resetPasswordForEmail).toHaveBeenCalledWith(
@@ -166,7 +187,9 @@ describe("useAuth — resetPassword", () => {
 
     const { result } = renderHook(() => useAuth())
     let res: any
-    await act(async () => { res = await result.current.resetPassword("nao@existe.com") })
+    await act(async () => {
+      res = await result.current.resetPassword("nao@existe.com")
+    })
 
     expect(res.success).toBe(false)
     expect(res.error).toBe("Email not found")
@@ -179,7 +202,9 @@ describe("useAuth — loginWithGoogle", () => {
 
     const { result } = renderHook(() => useAuth())
     let res: any
-    await act(async () => { res = await result.current.loginWithGoogle() })
+    await act(async () => {
+      res = await result.current.loginWithGoogle()
+    })
 
     expect(res.success).toBe(true)
     expect(mockAuth.signInWithOAuth).toHaveBeenCalledWith({
@@ -195,7 +220,9 @@ describe("useAuth — loginWithGoogle", () => {
 
     const { result } = renderHook(() => useAuth())
     let res: any
-    await act(async () => { res = await result.current.loginWithGoogle() })
+    await act(async () => {
+      res = await result.current.loginWithGoogle()
+    })
 
     expect(res.success).toBe(false)
     expect(res.error).toBe("OAuth error")

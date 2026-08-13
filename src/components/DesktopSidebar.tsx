@@ -1,21 +1,14 @@
 import { Link, useLocation } from "react-router-dom"
-import {
-  LayoutGrid,
-  GraduationCap,
-  FlaskConical,
-  Target,
-  Trophy,
-  User,
-} from "lucide-react"
+import { LayoutGrid, GraduationCap, FlaskConical, Target, Trophy, User } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const NAV_ITEMS = [
-  { key: "home",       label: "Início",       href: "/home",     Icon: LayoutGrid     },
-  { key: "tracks",     label: "Trilha",        href: "/learn",    Icon: GraduationCap  },
-  { key: "lab",        label: "Laboratório",   href: "/lab",      Icon: FlaskConical   },
-  { key: "challenges", label: "Missões",       href: "/missions", Icon: Target         },
-  { key: "achievements", label: "Conquistas",  href: "/achievements", Icon: Trophy     },
-  { key: "profile",    label: "Perfil",        href: "/profile",  Icon: User           },
+  { key: "home", label: "Início", href: "/home", Icon: LayoutGrid },
+  { key: "tracks", label: "Trilha", href: "/learn", Icon: GraduationCap },
+  { key: "lab", label: "Laboratório", href: "/lab", Icon: FlaskConical },
+  { key: "challenges", label: "Missões", href: "/missions", Icon: Target },
+  { key: "achievements", label: "Conquistas", href: "/achievements", Icon: Trophy },
+  { key: "profile", label: "Perfil", href: "/profile", Icon: User },
 ]
 
 /**
@@ -59,7 +52,7 @@ export function DesktopSidebar() {
                 "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                 isActive
                   ? "bg-primary/10 text-primary-dark"
-                  : "text-foreground-muted hover:bg-surface-soft hover:text-forest",
+                  : "text-foreground-muted hover:bg-surface-soft hover:text-forest"
               )}
               aria-current={isActive ? "page" : undefined}
             >
@@ -68,9 +61,7 @@ export function DesktopSidebar() {
                 strokeWidth={isActive ? 2.5 : 2}
               />
               {label}
-              {isActive && (
-                <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary-dark" />
-              )}
+              {isActive && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary-dark" />}
             </Link>
           )
         })}

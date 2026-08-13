@@ -52,7 +52,9 @@ export function saveAchievements(data: AchievementsData): void {
  * Load achievements from Supabase for a given user.
  * Returns null if no row exists yet (new user).
  */
-export async function loadAchievementsFromDb(userId: string): Promise<DbResult<AchievementsData | null>> {
+export async function loadAchievementsFromDb(
+  userId: string
+): Promise<DbResult<AchievementsData | null>> {
   if (!isSupabaseConfigured()) {
     return { data: null, error: "Supabase não configurado" }
   }
@@ -96,7 +98,7 @@ export async function loadAchievementsFromDb(userId: string): Promise<DbResult<A
  */
 export async function saveAchievementsToDb(
   userId: string,
-  data: AchievementsData,
+  data: AchievementsData
 ): Promise<DbResult<null>> {
   if (!isSupabaseConfigured()) {
     return { data: null, error: "Supabase não configurado" }

@@ -13,7 +13,7 @@ export function OrderCard({ activity, answered, onAnswer }: Props) {
   const [shuffledRight] = useState(() =>
     [...activity.rightItems]
       .map((item) => ({ ...item, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort),
+      .sort((a, b) => a.sort - b.sort)
   )
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null)
   const [connections, setConnections] = useState<Record<string, string>>({}) // leftId → rightId
@@ -29,7 +29,6 @@ export function OrderCard({ activity, answered, onAnswer }: Props) {
 
     // Se o left já tem conexão, remove
     if (newConn[selectedLeft]) {
-      const oldRight = newConn[selectedLeft]
       delete newConn[selectedLeft]
       // Se o right clicado já estava conectado a outro left, remove também
       const otherLeft = Object.entries(newConn).find(([, r]) => r === id)?.[0]
@@ -91,11 +90,17 @@ export function OrderCard({ activity, answered, onAnswer }: Props) {
                 onClick={() => handleLeftClick(item.id)}
                 className={cn(
                   "rounded-xl border-2 px-3 py-2.5 text-left text-sm font-semibold transition-all",
-                  !answered && selectedLeft === item.id && "border-emerald bg-emerald/10 ring-2 ring-emerald/30",
-                  !answered && selectedLeft !== item.id && "border-stroke-light bg-card hover:border-emerald",
+                  !answered &&
+                    selectedLeft === item.id &&
+                    "border-emerald bg-emerald/10 ring-2 ring-emerald/30",
+                  !answered &&
+                    selectedLeft !== item.id &&
+                    "border-stroke-light bg-card hover:border-emerald",
                   answered && isLeftCorrect(item.id) && "border-emerald bg-emerald/15",
-                  answered && isLeftWrong(item.id) && "border-red-400 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300",
-                  answered && !connections[item.id] && "border-stroke-light bg-card opacity-50",
+                  answered &&
+                    isLeftWrong(item.id) &&
+                    "border-red-400 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300",
+                  answered && !connections[item.id] && "border-stroke-light bg-card opacity-50"
                 )}
               >
                 <div className="flex items-center gap-1.5">
@@ -128,9 +133,8 @@ export function OrderCard({ activity, answered, onAnswer }: Props) {
           {shuffledRight.map((item) => {
             const connectedLeft = getConnectedLeft(item.id)
             const isUsed = !!connectedLeft
-            const isItemCorrect = answered && connectedLeft
-              ? activity.correctPairs[connectedLeft] === item.id
-              : false
+            const isItemCorrect =
+              answered && connectedLeft ? activity.correctPairs[connectedLeft] === item.id : false
             return (
               <button
                 key={item.id}
@@ -138,12 +142,18 @@ export function OrderCard({ activity, answered, onAnswer }: Props) {
                 onClick={() => handleRightClick(item.id)}
                 className={cn(
                   "rounded-xl border-2 px-3 py-2.5 text-left text-xs leading-relaxed transition-all",
-                  !answered && selectedLeft && !isUsed && "border-emerald/50 bg-emerald/5 cursor-pointer",
+                  !answered &&
+                    selectedLeft &&
+                    !isUsed &&
+                    "border-emerald/50 bg-emerald/5 cursor-pointer",
                   !answered && !selectedLeft && "border-stroke-light bg-card",
                   !answered && isUsed && "border-forest bg-forest/10",
                   answered && isItemCorrect && "border-emerald bg-emerald/15",
-                  answered && isUsed && !isItemCorrect && "border-red-400 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300",
-                  answered && !isUsed && "border-stroke-light bg-card opacity-50",
+                  answered &&
+                    isUsed &&
+                    !isItemCorrect &&
+                    "border-red-400 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300",
+                  answered && !isUsed && "border-stroke-light bg-card opacity-50"
                 )}
               >
                 <div className="flex items-center gap-1.5">

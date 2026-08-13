@@ -2,11 +2,7 @@
 // Notifications — Types & Helpers
 // ═══════════════════════════════════════════════════════════════════════════
 
-export type NotificationType =
-  | "achievement"
-  | "mention"
-  | "system"
-  | "reminder"
+export type NotificationType = "achievement" | "mention" | "system" | "reminder"
 
 export interface AppNotification {
   id: string
@@ -25,7 +21,7 @@ export interface AppNotification {
 export type NotificationsFilter = "all" | "unread" | "mentions"
 
 export function getNotificationsCounts(
-  notifications: AppNotification[],
+  notifications: AppNotification[]
 ): Record<NotificationsFilter, number> {
   const all = notifications.length
   const unread = notifications.filter((n) => n.unread).length
@@ -35,7 +31,7 @@ export function getNotificationsCounts(
 
 export function filterNotifications(
   notifications: AppNotification[],
-  filter: NotificationsFilter,
+  filter: NotificationsFilter
 ): AppNotification[] {
   switch (filter) {
     case "unread":
