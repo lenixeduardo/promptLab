@@ -457,26 +457,26 @@ export default function PromptEnhancerPage() {
                 <p
                   className={cn(
                     "mt-3 text-sm font-extrabold",
-                    result.enhancedScore >= 85
+                    result.enhancedScore >= 8.5
                       ? "text-emerald"
-                      : result.enhancedScore >= 65
+                      : result.enhancedScore >= 6.5
                         ? "text-yellow-500"
-                        : result.enhancedScore >= 40
+                        : result.enhancedScore >= 4.5
                           ? "text-orange-400"
                           : "text-red-400"
                   )}
                 >
-                  {result.enhancedScore >= 85 ? (
+                  {result.enhancedScore >= 8.5 ? (
                     <span className="flex items-center gap-1">
                       Excelente! <Sparkles className="h-4 w-4" />
                     </span>
-                  ) : result.enhancedScore >= 65 ? (
+                  ) : result.enhancedScore >= 6.5 ? (
                     <span className="flex items-center gap-1">
                       Bom trabalho! <ThumbsUp className="h-4 w-4" />
                     </span>
-                  ) : result.enhancedScore >= 40 ? (
+                  ) : result.enhancedScore >= 4.5 ? (
                     <span className="flex items-center gap-1">
-                      Pode melhorar <FileText className="h-4 w-4" />
+                      Regular <FileText className="h-4 w-4" />
                     </span>
                   ) : (
                     <span className="flex items-center gap-1">
@@ -485,12 +485,12 @@ export default function PromptEnhancerPage() {
                   )}
                 </p>
                 <p className="mt-1 px-1 text-[9px] leading-tight text-foreground-tertiary text-center">
-                  {result.enhancedScore >= 85
+                  {result.enhancedScore >= 8.5
                     ? "Seu prompt está com ótima qualidade."
-                    : result.enhancedScore >= 65
+                    : result.enhancedScore >= 6.5
                       ? "Seu prompt tem boas práticas, mas pode melhorar."
-                      : result.enhancedScore >= 40
-                        ? "Seu prompt precisa de ajustes para ser mais eficaz."
+                      : result.enhancedScore >= 4.5
+                        ? "Seu prompt é razoável, mas precisa de mais detalhes."
                         : "Revise a estrutura do seu prompt seguindo as sugestões."}
                 </p>
               </div>
