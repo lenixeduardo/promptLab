@@ -34,7 +34,7 @@ supabase link --project-ref SEU_PROJECT_REF
 supabase db push
 ```
 
-As migrations em `supabase/migrations/` serão aplicadas em ordem (24 arquivos atualmente, de `20260610_000` a `20260813_024`) — algumas das mais recentes:
+As migrations em `supabase/migrations/` serão aplicadas em ordem (26 arquivos atualmente, de `20260610_000` a `20260813_024`) — algumas das mais recentes:
 - `20260610_000_initial_schema.sql` — tabelas base, RLS, trigger
 - `20260610_001_users_premium.sql` — campos premium, indexes Stripe
 - `20260610_002_community_tables.sql` — tabelas de comunidade (futuro)
@@ -201,7 +201,16 @@ Adicione `VITE_SENTRY_DSN` no Vercel com o DSN do seu projeto Sentry.
 
 ### Health Check
 
-Para verificar se o banco está acessível, monitore o status pelo [Supabase Status Page](https://status.supabase.com).
+A Edge Function `health` (`supabase/functions/health/index.ts`) expõe um endpoint público e sem autenticação que confirma se a function está no ar e se ela consegue alcançar o Postgres (uma query `HEAD`/`count` sem ler dados nenhuma linha real):
+
+```bash
+supabase functions deploy health --no-verify-jwt
+
+curl https://SEU_PROJECT.supabase.co/functions/v1/health
+# { "status": "ok", "db": "reachable", "latencyMs": 42, "timestamp": "..." }
+```
+
+Aponte seu serviço de monitoramento (UptimeRobot, Better Uptime, cron simples etc.) para essa URL. Complementarmente, monitore incidentes de infraestrutura pelo [Supabase Status Page](https://status.supabase.com).
 
 ---
 
@@ -224,7 +233,7 @@ Os secrets `DAILY_NEWS_SECRET` e `SUPABASE_URL` são lidos pelo workflow `.githu
 ## 6. Checklist Pré-Deploy
 
 ```
-[ ] supabase db push rodou sem erros (todas as 24+ migrations aplicadas)
+[ ] supabase db push rodou sem erros (todas as migrations de `supabase/migrations/` aplicadas — confira a contagem com `ls supabase/migrations/ | wc -l`)
 [ ] Edge Function send-auth-email deployada e testada
 [ ] Hook de email configurado no Supabase Auth
 [ ] VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY configurados no Vercel

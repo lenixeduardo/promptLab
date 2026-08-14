@@ -38,12 +38,18 @@ BEGIN
       WHEN v_now - login_attempts.window_start > (p_window_ms || ' milliseconds')::interval
         THEN v_now
       ELSE login_attempts.window_start
-    END
+    END,
+    -- Sempre limpa um locked_until antigo aqui: se este e-mail merece um
+    -- novo lockout, o IF logo abaixo o define de novo a partir de v_now.
+    -- Sem isso, um locked_until já expirado ficava travado para sempre e
+    -- o e-mail nunca mais podia ser bloqueado de novo (bug corrigido nesta
+    -- mesma migration antes de qualquer deploy).
+    locked_until = NULL
   RETURNING * INTO v_row;
 
   -- Segundo UPDATE só para computar locked_until a partir do attempt_count
   -- já resolvido acima, evitando duplicar a mesma expressão CASE três vezes.
-  IF v_row.attempt_count >= p_max_attempts AND v_row.locked_until IS NULL THEN
+  IF v_row.attempt_count >= p_max_attempts THEN
     UPDATE public.login_attempts
     SET locked_until = v_now + (p_lockout_ms || ' milliseconds')::interval
     WHERE email = p_email
