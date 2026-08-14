@@ -14,12 +14,12 @@ import { cn } from "@/lib/utils"
 const MOCK_ENTRIES: LeaderboardEntry[] = [
   { id: "mock-1", full_name: "Ana Lima", avatar_url: "cat-scientist", xp: 4200 },
   { id: "mock-2", full_name: "Pedro Silva", avatar_url: "cat-rocker", xp: 3800 },
-  { id: "mock-3", full_name: "Julia Mendes", avatar_url: "cat-void", xp: 3500 },
-  { id: "mock-4", full_name: "Carlos Rocha", avatar_url: "cat-ninja", xp: 2900 },
-  { id: "mock-5", full_name: "Beatriz Costa", avatar_url: "cat-astronaut", xp: 2200 },
-  { id: "mock-6", full_name: "Lucas Ferreira", avatar_url: "cat-purple", xp: 1950 },
+  { id: "mock-3", full_name: "Julia Mendes", avatar_url: "cat-wizard", xp: 3500 },
+  { id: "mock-4", full_name: "Carlos Rocha", avatar_url: "cat-neon", xp: 2900 },
+  { id: "mock-5", full_name: "Beatriz Costa", avatar_url: "cat-crown", xp: 2200 },
+  { id: "mock-6", full_name: "Lucas Ferreira", avatar_url: "cat-crystal", xp: 1950 },
   { id: "mock-7", full_name: "Mariana Alves", avatar_url: "cat-punk", xp: 1700 },
-  { id: "mock-8", full_name: "Rafael Sousa", avatar_url: "cat-blue", xp: 1450 },
+  { id: "mock-8", full_name: "Rafael Sousa", avatar_url: "cat-graduation", xp: 1450 },
 ]
 
 interface RankedUser extends LeaderboardEntry {

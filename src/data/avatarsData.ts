@@ -1,3 +1,11 @@
+import avatarVR from "@/assets/avatar-vr.png"
+import avatarGraduation from "@/assets/avatar-graduation.png"
+import avatarDJ from "@/assets/avatar-dj.png"
+import avatarCrystal from "@/assets/avatar-crystal.png"
+import avatarCrown from "@/assets/avatar-crown.png"
+import avatarLegendaryCape from "@/assets/avatar-legendary-cape.png"
+import avatarNeon from "@/assets/avatar-neon.png"
+
 export interface Avatar {
   id: string
   name: string
@@ -6,8 +14,11 @@ export interface Avatar {
   rarity: "common" | "rare" | "epic" | "legendary"
 }
 
+// Every entry below is backed by its own hand-drawn art (src/assets/avatar-*.png).
+// Don't add placeholder entries that reuse mascot/other-avatar images — a store
+// full of visually identical "avatars" is worse than a shorter, real catalog.
 export const AVATARS: Avatar[] = [
-  // Common (Free or cheap)
+  // Common (Free)
   {
     id: "cat-green",
     name: "Gato Verde",
@@ -15,115 +26,59 @@ export const AVATARS: Avatar[] = [
     price: 0,
     rarity: "common",
   },
-  {
-    id: "cat-happy",
-    name: "Gato Feliz",
-    image: "/assets/mascot-teacher.png",
-    price: 50,
-    rarity: "common",
-  },
-  {
-    id: "cat-cool",
-    name: "Gato Legal",
-    image: "/assets/mascot-home.png",
-    price: 75,
-    rarity: "common",
-  },
-  {
-    id: "cat-smile",
-    name: "Gato Sorridente",
-    image: "/assets/mascot-login-new.png",
-    price: 100,
-    rarity: "common",
-  },
 
   // Rare
   {
-    id: "cat-golden",
-    name: "Gato Dourado",
-    image: "/assets/avatar-cat.png",
+    id: "cat-vr",
+    name: "Gato Visionário",
+    image: avatarVR,
     price: 150,
     rarity: "rare",
   },
   {
-    id: "cat-purple",
-    name: "Gato Roxo",
-    image: "/assets/mascot-teacher.png",
+    id: "cat-graduation",
+    name: "Gato Formado",
+    image: avatarGraduation,
     price: 180,
-    rarity: "rare",
-  },
-  {
-    id: "cat-pink",
-    name: "Gato Rosa",
-    image: "/assets/mascot-home.png",
-    price: 200,
-    rarity: "rare",
-  },
-  {
-    id: "cat-blue",
-    name: "Gato Azul",
-    image: "/assets/mascot-login-new.png",
-    price: 220,
     rarity: "rare",
   },
 
   // Epic
   {
-    id: "cat-dragon",
-    name: "Dragão Gato",
-    image: "/assets/avatar-cat.png",
-    price: 270,
-    rarity: "epic",
-  },
-  {
-    id: "cat-ninja",
-    name: "Gato Ninja",
-    image: "/assets/mascot-teacher.png",
-    price: 300,
-    rarity: "epic",
-  },
-  {
-    id: "cat-astronaut",
-    name: "Gato Astronauta",
-    image: "/assets/mascot-home.png",
-    price: 320,
-    rarity: "epic",
-  },
-  {
-    id: "cat-wizard",
-    name: "Gato Feiticeiro",
-    image: "/assets/mascot-login-new.png",
+    id: "cat-dj",
+    name: "Gato DJ",
+    image: avatarDJ,
     price: 350,
     rarity: "epic",
   },
 
   // Legendary
   {
-    id: "cat-phoenix",
-    name: "Fênix Gato",
-    image: "/assets/avatar-cat.png",
-    price: 500,
-    rarity: "legendary",
-  },
-  {
-    id: "cat-cyber",
-    name: "Gato Cibernético",
-    image: "/assets/mascot-teacher.png",
-    price: 550,
-    rarity: "legendary",
-  },
-  {
-    id: "cat-cosmic",
-    name: "Gato Cósmico",
-    image: "/assets/mascot-home.png",
+    id: "cat-crystal",
+    name: "Gato Cristal",
+    image: avatarCrystal,
     price: 600,
     rarity: "legendary",
   },
   {
-    id: "cat-void",
-    name: "Gato do Vazio",
-    image: "/assets/mascot-login-new.png",
-    price: 999,
+    id: "cat-crown",
+    name: "Gato Coroado",
+    image: avatarCrown,
+    price: 700,
+    rarity: "legendary",
+  },
+  {
+    id: "cat-wizard",
+    name: "Gato Arquimago",
+    image: avatarLegendaryCape,
+    price: 800,
+    rarity: "legendary",
+  },
+  {
+    id: "cat-neon",
+    name: "Gato Neon",
+    image: avatarNeon,
+    price: 900,
     rarity: "legendary",
   },
   {

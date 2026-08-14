@@ -35,17 +35,17 @@ describe("AvatarProvider — estado inicial", () => {
 
   it("hidrata a partir do avatar_url do Supabase quando disponível", async () => {
     vi.mocked(getUserProfile).mockResolvedValue({
-      data: { avatar_url: "cat-golden" } as never,
+      data: { avatar_url: "cat-vr" } as never,
       error: null,
     })
     vi.mocked(loadInventory).mockReturnValue({
       powerUps: {},
-      ownedAvatarIds: ["cat-green", "cat-golden"],
+      ownedAvatarIds: ["cat-green", "cat-vr"],
     })
 
     const { result } = renderHook(() => useAvatar(), { wrapper: AvatarProvider })
 
-    await waitFor(() => expect(result.current.equippedId).toBe("cat-golden"))
+    await waitFor(() => expect(result.current.equippedId).toBe("cat-vr"))
   })
 
   it("ignora avatar_url do servidor que não existe no catálogo real", async () => {
@@ -65,17 +65,17 @@ describe("AvatarProvider — setEquipped", () => {
   it("equipa um avatar já possuído e persiste no Supabase", async () => {
     vi.mocked(loadInventory).mockReturnValue({
       powerUps: {},
-      ownedAvatarIds: ["cat-green", "cat-golden"],
+      ownedAvatarIds: ["cat-green", "cat-vr"],
     })
     const { result } = renderHook(() => useAvatar(), { wrapper: AvatarProvider })
 
     act(() => {
-      result.current.setEquipped("cat-golden")
+      result.current.setEquipped("cat-vr")
     })
 
-    expect(result.current.equippedId).toBe("cat-golden")
+    expect(result.current.equippedId).toBe("cat-vr")
     await waitFor(() => {
-      expect(updateUserAvatar).toHaveBeenCalledWith("user-1", "cat-golden")
+      expect(updateUserAvatar).toHaveBeenCalledWith("user-1", "cat-vr")
     })
   })
 
@@ -84,7 +84,7 @@ describe("AvatarProvider — setEquipped", () => {
     const { result } = renderHook(() => useAvatar(), { wrapper: AvatarProvider })
 
     act(() => {
-      result.current.setEquipped("cat-golden")
+      result.current.setEquipped("cat-vr")
     })
 
     expect(result.current.equippedId).toBe("cat-green")

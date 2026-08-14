@@ -56,7 +56,7 @@ function renderStore() {
 
 beforeEach(() => {
   vi.clearAllMocks()
-  vi.mocked(getLocalGems).mockReturnValue(100)
+  vi.mocked(getLocalGems).mockReturnValue(200)
   vi.mocked(loadInventory).mockReturnValue(structuredClone(baseInventory))
 })
 
@@ -64,13 +64,13 @@ describe("Store — compra de avatar", () => {
   it("confirma a compra e chama updateUserGems/syncInventoryToServer quando ambos têm sucesso", async () => {
     vi.mocked(addAvatar).mockReturnValue({
       ...structuredClone(baseInventory),
-      ownedAvatarIds: ["cat-green", "cat-happy"],
+      ownedAvatarIds: ["cat-green", "cat-vr"],
     })
     vi.mocked(updateUserGems).mockResolvedValue({ data: null, error: null })
     vi.mocked(syncInventoryToServer).mockResolvedValue({ data: null, error: null })
 
     renderStore()
-    await userEvent.click(screen.getByText("Gato Feliz"))
+    await userEvent.click(screen.getByText("Gato Visionário"))
 
     await waitFor(() => {
       expect(sileo.success).toHaveBeenCalledWith(
@@ -78,19 +78,19 @@ describe("Store — compra de avatar", () => {
       )
     })
     expect(updateUserGems).toHaveBeenCalledWith("user-1", 50)
-    expect(saveLocalGems).not.toHaveBeenCalledWith("user-1", 100)
+    expect(saveLocalGems).not.toHaveBeenCalledWith("user-1", 200)
   })
 
   it("reverte gemas e inventário quando o servidor rejeita a compra, sem mostrar sucesso falso", async () => {
     vi.mocked(addAvatar).mockReturnValue({
       ...structuredClone(baseInventory),
-      ownedAvatarIds: ["cat-green", "cat-happy"],
+      ownedAvatarIds: ["cat-green", "cat-vr"],
     })
     vi.mocked(updateUserGems).mockResolvedValue({ data: null, error: "Erro no servidor" })
     vi.mocked(syncInventoryToServer).mockResolvedValue({ data: null, error: null })
 
     renderStore()
-    await userEvent.click(screen.getByText("Gato Feliz"))
+    await userEvent.click(screen.getByText("Gato Visionário"))
 
     await waitFor(() => {
       expect(sileo.error).toHaveBeenCalledWith(
@@ -99,23 +99,23 @@ describe("Store — compra de avatar", () => {
     })
     expect(sileo.success).not.toHaveBeenCalled()
     // Rolled back to the pre-purchase gem balance and inventory.
-    expect(saveLocalGems).toHaveBeenCalledWith("user-1", 100)
+    expect(saveLocalGems).toHaveBeenCalledWith("user-1", 200)
     expect(saveInventory).toHaveBeenCalledWith("user-1", baseInventory)
   })
 
   it("reverte quando a sincronização do inventário falha mesmo com as gemas salvas", async () => {
     vi.mocked(addAvatar).mockReturnValue({
       ...structuredClone(baseInventory),
-      ownedAvatarIds: ["cat-green", "cat-happy"],
+      ownedAvatarIds: ["cat-green", "cat-vr"],
     })
     vi.mocked(updateUserGems).mockResolvedValue({ data: null, error: null })
     vi.mocked(syncInventoryToServer).mockResolvedValue({ data: null, error: "Falha de rede" })
 
     renderStore()
-    await userEvent.click(screen.getByText("Gato Feliz"))
+    await userEvent.click(screen.getByText("Gato Visionário"))
 
     await waitFor(() => {
-      expect(saveLocalGems).toHaveBeenCalledWith("user-1", 100)
+      expect(saveLocalGems).toHaveBeenCalledWith("user-1", 200)
     })
     expect(sileo.success).not.toHaveBeenCalled()
   })
@@ -124,7 +124,7 @@ describe("Store — compra de avatar", () => {
     vi.mocked(getLocalGems).mockReturnValue(10)
 
     renderStore()
-    await userEvent.click(screen.getByText("Gato Feliz"))
+    await userEvent.click(screen.getByText("Gato Visionário"))
 
     await waitFor(() => {
       expect(sileo.error).toHaveBeenCalledWith(
